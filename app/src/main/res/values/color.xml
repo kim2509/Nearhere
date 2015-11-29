@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#0000</color>  <!--Tried #00000000 as well // -->
+    
+    <color name="progressing">#2E6DC3</color>
+    <color name="finished">#636363</color>
+</resources>

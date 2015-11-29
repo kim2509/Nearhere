@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    android:padding="10dp">
+    
+    <Button 
+        android:id="@+id/btnGoFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:background="@drawable/bt_gray"
+        android:text="Go Facebook"
+        android:textSize="13sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:onClick="goFacebook"
+        android:layout_marginRight="10dp"/>
+    
+    <Button 
+        android:id="@+id/btnViewProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:background="@drawable/bt_gray"
+        android:text="프로필보기"
+        android:textSize="13sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginRight="10dp"/>
+    
+    <Button 
+        android:id="@+id/btnSendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:background="@drawable/bt_gray"
+        android:text="메시지"
+        android:textSize="13sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:onClick="goUserMessageActivity"
+        android:layout_marginRight="10dp"/>
+    
+    <Button 
+        android:id="@+id/btnHideMap"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:background="@drawable/bt_gray"
+        android:text="경로 보기"
+        android:textSize="13sp"
+        android:onClick="toggleMapVisibility"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+    
+</LinearLayout>

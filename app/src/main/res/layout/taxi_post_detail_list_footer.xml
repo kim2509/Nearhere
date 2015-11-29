@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <View
+        android:id="@+id/viewSeperator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="#DDDDDD" />
+    
+    <EditText
+        android:id="@+id/edtPostReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/btnAddPostReply"
+        android:layout_below="@+id/viewSeperator"
+        android:hint="@string/input_post_reply" />
+
+    <Button
+        android:id="@+id/btnAddPostReply"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/edtPostReply"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/bt_orange"
+        android:text="@string/send"
+        android:onClick="addPostReply"/>
+    
+</RelativeLayout>

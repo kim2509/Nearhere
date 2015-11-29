@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.tessoft.nearhere"
+        applicationId "com.com.tessoft.nearhere"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -18,6 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES'
+    }
 }
 
 repositories {
@@ -29,17 +38,19 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.google.android.gms:play-services:8.3.0'
+    //compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
+    compile 'com.google.android.gms:play-services-location:8.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
 
-    compile group: 'com.kakao.sdk', name: 'kakaolink', version: '1.1.7'
+//    compile group: 'com.kakao.sdk', name: 'kakaolink', version: '1.1.7'
 
     // 카카오스토리 sdk를 사용하기 위해 필요.
-    compile group: 'com.kakao.sdk', name: 'kakaostory', version: '1.1.7'
+//    compile group: 'com.kakao.sdk', name: 'kakaostory', version: '1.1.7'
 
     // 카카오톡 sdk를 사용하기 위해 필요.
     compile group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.1.7'
 
     // push sdk를 사용하기 위해 필요.
-    compile group: 'com.kakao.sdk', name: 'push', version: '1.1.7'
+//    compile group: 'com.kakao.sdk', name: 'push', version: '1.1.7'
 }

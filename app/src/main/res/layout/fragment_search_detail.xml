@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="20dp">
+    
+    <TextView android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="상세조회"
+        android:textColor="#FFFFFF"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:background="#F66C3C"/>
+    
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="20dp">
+        
+        <Button android:id="@+id/btnSelectDeparture" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/btn_style"
+            android:singleLine="false"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/spDepartureDistance"
+            android:layout_centerVertical="true"
+            android:padding="2dp"
+            android:text="출발지 설정"/>
+        
+        <Spinner 
+            android:id="@+id/spDepartureDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/spinner_bg"
+            android:layout_alignParentRight="true"/>
+        
+    </RelativeLayout>
+    
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="10dp">
+        
+        <Button 
+            android:id="@+id/btnSelectDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/btn_style"
+            android:singleLine="false"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/spDestinationDistance"
+            android:padding="2dp"
+            android:text="도착지 설정"/>
+        
+        <Spinner
+            android:id="@+id/spDestinationDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/spinner_bg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+        
+    </RelativeLayout>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:text="조건을 설정해서 조회하실 수 있습니다."/>
+    
+    <TextView 
+        android:id="@+id/txtWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:textColor="#ff0000"/>
+</LinearLayout>

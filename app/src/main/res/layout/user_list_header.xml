@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+    
+    <TextView android:id="@+id/txtNumOfUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="사용자의 마지막 위치에 따라 달라질 수 있으며,GPS장치를 활성화 시켜두지 않는 사용자는 나타나지 않을 수 있습니다."
+        android:textSize="14sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/layout_blue_bg" 
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+    
+</RelativeLayout>

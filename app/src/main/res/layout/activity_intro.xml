@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="IntroActivity">
+    
+    <RelativeLayout
+        android:id="@+id/layoutLogin"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="120dp"
+        android:layout_centerHorizontal="true"
+        android:background="#F66C3C">
+
+        <EditText
+            android:id="@+id/edtUserID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="아이디 입력"
+            android:layout_marginBottom="5dp"
+            android:layout_above="@+id/edtPassword" 
+            android:textColor="#ffffff"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호 입력"
+            android:layout_above="@+id/layoutBtn"
+            android:textColor="#ffffff"
+            android:password="true"
+            android:singleLine="true"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:id="@+id/layoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnRegisterUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="goRegisterActivity"
+                android:layout_weight="1"
+                android:textColor="#ffffff"
+                android:text="회원가입" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="login"
+                android:textColor="#ffffff"
+                android:text="로그인" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

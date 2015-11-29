@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">이근처 합승</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_user_profile">사용자 정보</string>
+    <string name="title_activity_intro">이근처 합승</string>
+    <string name="title_activity_main">이근처 합승</string>
+    <string name="title_activity_register_user">시작하기</string>
+    <string name="title_activity_taxi_main">이근처 합승</string>
+    <string name="title_activity_taxi_tutorial">합승하기란?</string>
+    <string name="title_activity_terms_agreement">약관</string>
+    <string name="title_activity_select_home_location">집 위치 선택</string>
+    <string name="title_activity_taxi_post_detail">상세정보</string>
+    <string name="title_activity_user_chat">쪽지</string>
+    <string name="title_activity_set_destination">위치 선택</string>
+    <string name="title_activity_new_taxi_post">합승정보등록</string>
+    <string name="title_activity_more_user_info">사용자 정보입력</string>
+    
+    <string name="send">전송</string>
+    <string name="user_id">사용자 아이디</string>
+    <string name="user_name">사용자 이름</string>
+    <string name="password">비밀번호</string>
+    <string name="next">다음</string>
+    <string name="agree">예, 위 사항들을 동의합니다.</string>
+    <string name="select">선택</string>
+    <string name="show_detail">상세보기</string>
+    <string name="message">쪽지</string>
+    <string name="register">등록하기</string>
+    <string name="register_user">회원가입</string>
+    <string name="departure">출발지</string>
+	<string name="destination">도착지</string>
+	<string name="refresh">refresh</string>
+	<string name="input_post_reply">댓글을 입력하세요.</string>
+	<string name="facebook_authorized">페이스북 인증</string>
+
+	<string name="input_user_id">아이디를 입력해 주십시오.</string>
+    <string name="input_user_name">이름을 입력해 주십시오.</string>
+    
+    
+    <string-array name="menu_list">
+        <item>홈</item>
+        <item>내 정보</item>
+        <item>알림메시지</item>
+        <item>쪽지함</item>
+        <item>공지사항</item>
+        <item>설정</item>
+        <item>로그아웃</item>
+    </string-array>
+    
+    <string-array name="distance_list">
+        <item>전체</item>
+        <item>500m</item>
+        <item>1km</item>
+        <item>3km</item>
+        <item>5km</item>
+        <item>10km</item>
+    </string-array>
+    
+    <string-array name="sex_list">
+        <item>미지정</item>
+        <item>남</item>
+        <item>여</item>
+    </string-array>
+    
+    <string-array name="status_list">
+        <item>전체</item>
+        <item>진행중</item>
+        <item>종료됨</item>
+    </string-array>
+    
+    <string-array name="sex_select_list">
+        <item>상관없음</item>
+        <item>남자만</item>
+        <item>여자만</item>
+    </string-array>
+    <string-array name="nou_list">
+        <item>상관없음</item>
+        <item>1명</item>
+        <item>2명</item>
+        <item>3명</item>
+    </string-array>
+
+    <string name="drawer_open">메뉴 선택</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="set_destination_guide1">출발지를 선택해 주십시오.</string>
+    <string name="set_destination_guide2">원하는 지점을 터치하면 위치가 선택됩니다.</string>
+    <string name="taxi_main_guide1">근처에 등록된 합승내역입니다.\r\n도착지가 비슷한 합승을 선택해 보세요.</string>
+    <string name="taxi_post_detail_guide1">님의 합승정보입니다. \r\n도착지가 고객님과 비슷하면, 아래 댓글을 통해 연락해보세요.</string>
+
+</resources>

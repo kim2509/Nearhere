@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+    
+    <TextView android:id="@+id/txtGuide1" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="이근처 합승 훑어보기"
+        android:textSize="17sp"
+        />
+
+    <TextView 
+        android:id="@+id/txtSubGuide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/txtGuide1"
+        android:layout_marginTop="10dp"
+        android:text="이근처 합승에 오신것을 환영합니다.\n오른쪽으로 슬라이드 해보세요."
+        android:textColor="#3B5D98"
+        android:textSize="14sp"
+        />
+    
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtSubGuide"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="90dp"
+        android:src="@drawable/hand"
+        android:layout_above="@+id/layoutBottom"
+        android:scaleType="fitXY"/>
+    
+    <LinearLayout 
+        android:id="@+id/layoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="투토리얼을 종료하시려면 우측 버튼을 누르세요. "/>
+        
+        <Button android:layout_width="wrap_content"
+            android:onClick="closeTutorial"
+            android:layout_marginLeft="10dp"
+            style="@style/btn_style"
+            android:text="종료"/>
+        
+    </LinearLayout>
+    
+</RelativeLayout>

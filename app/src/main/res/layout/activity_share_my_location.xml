@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/titlebar_for_activity" />
+
+    <RelativeLayout
+        android:id="@+id/layoutCurLocation"
+        android:layout_below="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/txtLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_cur_loc"
+            android:drawablePadding="5dp"
+            android:text="현재위치"
+            android:textColor="#505255"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtCurrentAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/txtLabel"
+            android:singleLine="false"
+            android:textColor="#505255" />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/layoutBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutCurLocation"
+        android:layout_margin="10dp"
+        android:background="@drawable/layout_rounded_border" >
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="10dp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnShare"
+        android:layout_below="@+id/layoutBackground"
+        style="@style/btn_style"
+        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="공유하기" />
+    
+    <TextView android:id="@+id/txtURL"
+        android:layout_below="@+id/btnShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:text="http://www.hereby.co.kr/location/userLocation.do?fdjkafldsjk"
+        android:background="@drawable/layout_rounded_border"
+        android:textSize="16sp"
+        android:textColor="#0000ff"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:onClick="shareURL"/>
+    
+    <TextView android:id="@+id/txtLocationGuide"
+        android:layout_below="@+id/txtURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:text="공유 URL 은 24시간동안 유지됩니다."
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"/>
+
+</RelativeLayout>
