@@ -868,6 +868,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			}
 		});
 		*/
+
+		goKaKaoLoginActivity();
 	}
 	
 	@Override
