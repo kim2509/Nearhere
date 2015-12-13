@@ -240,7 +240,7 @@ public class SafetyKeeperActivity extends BaseActivity implements OnClickListene
 					return;
 				}
 				
-				Intent intent = new Intent("com.com.tessoft.nearhere.safetyKeeperService");
+				Intent intent = new Intent("com.tessoft.nearhere.safetyKeeperService");
 				stopService(intent);
 			}
 		}

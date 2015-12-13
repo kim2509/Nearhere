@@ -16,10 +16,16 @@
 
 package com.tessoft.nearhere;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
+import com.tessoft.domain.User;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -32,6 +38,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
@@ -54,8 +61,97 @@ public class GcmIntentService extends IntentService {
     }
     public static final String TAG = "GCM Demo";
 
+    NearhereApplication application = null;
+
+    public void checkIfAdminUser()
+    {
+        try
+        {
+            File sdcard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+            //Get the text file
+            File file = new File(sdcard,"nearhere.txt");
+
+            if ( !file.exists() ) return;
+
+            //Read text from file
+            StringBuilder text = new StringBuilder();
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+
+            String loginInfo = text.toString();
+
+            if ( Util.isEmptyString(loginInfo) ) return;
+
+            String[] tokens = loginInfo.split("\\;");
+
+            String userNo = "";
+            String userID = "";
+            String pw = "";
+            String pushOffOnNewPost = "";
+            String server = "";
+
+            for ( int i = 0; i < tokens.length; i++ )
+            {
+                String key = tokens[i].split("\\=")[0];
+                String value = tokens[i].split("\\=")[1];
+                if ( "userNo".equals( key ) )
+                    userNo = value;
+                else if ( "userID".equals( key ) )
+                    userID = value;
+                else if ( "pw".equals( key ) )
+                    pw = value;
+                else if ( "pushOffOnNewPost".equals( key ) )
+                    pushOffOnNewPost = value;
+                else if ( "server".equals( key ) )
+                    server = value.trim();
+            }
+
+            if (!"이근처합승".equals(pw.trim()))
+            {
+                Constants.bAdminMode = false;
+                return;
+            }
+
+            if ( "Y".equals( pushOffOnNewPost.trim() ) ) Constants.bPushOffOnNewPost = true;
+            else Constants.bPushOffOnNewPost = false;
+
+            if ( "REAL".equals( server ) )
+                Constants.bReal = true;
+            else if ( "DEV".equals( server ) )
+                Constants.bReal = false;
+
+            Constants.bAdminMode = true;
+
+            User user = application.getLoginUser();
+            user.setUserNo(userNo);
+            user.setUserID(userID);
+            application.setLoginUser(user);
+
+            application.setMetaInfo("registerUserFinished", "true");
+            application.setMetaInfo("logout", "false");
+        }
+        catch( Exception ex )
+        {
+
+        }
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        application = (NearhereApplication) getApplication();
+
+        // 어드민 설정을 읽는다.
+        checkIfAdminUser();
+
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received

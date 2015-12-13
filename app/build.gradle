@@ -36,7 +36,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
-    //compile 'com.google.android.gms:play-services:8.3.0'
+//    compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.google.android.gms:play-services-location:8.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
@@ -44,7 +44,11 @@ dependencies {
     // 카카오스토리 sdk를 사용하기 위해 필요.
     //    compile group: 'com.kakao.sdk', name: 'kakaostory', version: '1.1.7'
     // 카카오톡 sdk를 사용하기 위해 필요.
-    compile 'com.kakao.sdk:kakaotalk:1.1.7'
+    //compile 'com.kakao.sdk:kakaotalk:1.1.7'
     // push sdk를 사용하기 위해 필요.
     //    compile group: 'com.kakao.sdk', name: 'push', version: '1.1.7'
+
+    compile project(':sdk')
+
+    //compile project('')
 }

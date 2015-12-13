@@ -25,6 +25,9 @@ import com.kakao.LogoutResponseCallback;
 import com.kakao.UserManagement;
 */
 
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.UserManagement;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -855,7 +858,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 
 	public void kakaoLogout() {
 
-		/*
 		UserManagement.requestLogout(new LogoutResponseCallback() {
 			@Override
 			protected void onSuccess(final long userId) {
@@ -867,9 +869,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 				goKaKaoLoginActivity();
 			}
 		});
-		*/
-
-		goKaKaoLoginActivity();
 	}
 	
 	@Override

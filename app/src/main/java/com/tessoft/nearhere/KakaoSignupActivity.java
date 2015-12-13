@@ -27,6 +27,11 @@ import com.kakao.UserProfile;
 import com.kakao.template.loginbase.SampleSignupActivity;
 */
 
+import com.kakao.APIErrorResult;
+import com.kakao.MeResponseCallback;
+import com.kakao.Session;
+import com.kakao.UserManagement;
+import com.kakao.UserProfile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -38,7 +43,7 @@ import com.tessoft.common.UploadTask;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 
-public class KakaoSignupActivity extends BaseActivity{ //SampleSignupActivity{
+public class KakaoSignupActivity extends KakaoSampleSignupActivity{
 
 	NearhereApplication application = null;
 	private final int HTTP_REQUEST_GET_RANDOM_ID_V2 = 2;
@@ -82,42 +87,37 @@ public class KakaoSignupActivity extends BaseActivity{ //SampleSignupActivity{
     	
     	application.debug(this, "starting UserManagement.requestMe ...");
 
-		/*
     	UserManagement.requestMe(new MeResponseCallback() {
 
-            @Override
-            protected void onSuccess(final UserProfile userProfile) {
-            	
-            	application.debug(this, "onSuccess");
-            	
-            	try
-            	{
-                    getRandomIDV2( userProfile.getId() + "", userProfile.getNickname(),
-                    		userProfile.getThumbnailImagePath(), userProfile.getProfileImagePath() );
-            	}
-            	catch( Exception ex )
-            	{
-            		
-            	}
-            }
+			@Override
+			protected void onSuccess(final UserProfile userProfile) {
 
-            @Override
-            protected void onNotSignedUp() {
-            	application.debug(this, "onNotSignedUp");
-            }
+				application.debug(this, "onSuccess");
 
-            @Override
-            protected void onSessionClosedFailure(final APIErrorResult errorResult) {
-            	application.debug(this, "onSessionClosedFailure : " + errorResult );
-            }
+				try {
+					getRandomIDV2(userProfile.getId() + "", userProfile.getNickname(),
+							userProfile.getThumbnailImagePath(), userProfile.getProfileImagePath());
+				} catch (Exception ex) {
 
-            @Override
-            protected void onFailure(final APIErrorResult errorResult) {
-                String message = "failed to get user info. msg=" + errorResult;
-                application.debug(this, "onFailure : " + message );
-            }
-        });
-        */
+				}
+			}
+
+			@Override
+			protected void onNotSignedUp() {
+				application.debug(this, "onNotSignedUp");
+			}
+
+			@Override
+			protected void onSessionClosedFailure(final APIErrorResult errorResult) {
+				application.debug(this, "onSessionClosedFailure : " + errorResult);
+			}
+
+			@Override
+			protected void onFailure(final APIErrorResult errorResult) {
+				String message = "failed to get user info. msg=" + errorResult;
+				application.debug(this, "onFailure : " + message);
+			}
+		});
 
     }
     
@@ -222,7 +222,7 @@ public class KakaoSignupActivity extends BaseActivity{ //SampleSignupActivity{
 											@Override
 											public void okClicked(Object param) {
 												// TODO Auto-generated method stub
-												//Session.getCurrentSession().close();
+												Session.getCurrentSession().close();
 												redirectLoginActivity();
 											}
 										}, null );
