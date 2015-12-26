@@ -44,8 +44,6 @@ public class UserMessageActivity extends BaseActivity {
 		{
 			super.onCreate(savedInstanceState);
 
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 			setContentView(R.layout.activity_user_message);
 
 			header = getLayoutInflater().inflate(R.layout.list_header_user_message, null);

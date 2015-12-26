@@ -22,6 +22,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import java.util.HashMap;
+
 public class LocationUpdateService extends Service 
 	implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, AddressTaskDelegate{
 
@@ -172,19 +174,22 @@ public class LocationUpdateService extends Service
 		// TODO Auto-generated method stub
 		try
 		{
-			if ( result != null && result instanceof String )
+			if ( result != null && result instanceof HashMap)
 			{
-				address = Util.getDongAddressString( result );
-
-				User user = application.getLoginUser();
-				UserLocation userLocation = new UserLocation();
-				userLocation.setUser( user );
-				userLocation.setLocationName("현재위치");
-				userLocation.setLatitude( latitude );
-				userLocation.setLongitude( longitude );
-				userLocation.setAddress( address );
-				application.sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ), 
-						Constants.HTTP_UPDATE_LOCATION, null );
+				HashMap resultMap = (HashMap) result;
+				if ( resultMap.containsKey("address") && resultMap.get("address") != null )
+				{
+					address = Util.getDongAddressString( resultMap.get("address").toString() );
+					User user = application.getLoginUser();
+					UserLocation userLocation = new UserLocation();
+					userLocation.setUser( user );
+					userLocation.setLocationName("현재위치");
+					userLocation.setLatitude( latitude );
+					userLocation.setLongitude( longitude );
+					userLocation.setAddress( address );
+					application.sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ),
+							Constants.HTTP_UPDATE_LOCATION, null );
+				}
 			}
 		}
 		catch( Exception ex )

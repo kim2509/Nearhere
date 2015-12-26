@@ -28,6 +28,9 @@ import android.widget.Toast;
 public class NearhereApplication extends Application{
 
 	ObjectMapper mapper = new ObjectMapper();
+
+	public static boolean bLocationServiceExecuting = false;
+	public static String strRealtimeLocationID = "";
 	
 	public int getMetaInfoInt( String key )
 	{

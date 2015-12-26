@@ -37,8 +37,6 @@ public class TermsAgreementActivity extends BaseActivity {
 		{
 			super.onCreate(savedInstanceState);
 
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 			setContentView(R.layout.activity_terms_agreement);
 
 			webView1 = (WebView) findViewById(R.id.webView1);

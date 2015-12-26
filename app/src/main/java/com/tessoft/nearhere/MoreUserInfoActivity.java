@@ -36,8 +36,6 @@ public class MoreUserInfoActivity extends BaseActivity {
 		{
 			super.onCreate(savedInstanceState);
 			
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-			
 			setContentView(R.layout.activity_more_user_info);
 			
 			options = new DisplayImageOptions.Builder()
@@ -75,6 +73,9 @@ public class MoreUserInfoActivity extends BaseActivity {
 				spSex.setSelection( 1 );
 			else if ( "F".equals( application.getLoginUser().getSex() ) )
 				spSex.setSelection( 2 );
+
+			setTitle("사용자 정보입력");
+			findViewById(R.id.btnRefresh).setVisibility(ViewGroup.GONE);
 		}
 		catch( Exception ex )
 		{

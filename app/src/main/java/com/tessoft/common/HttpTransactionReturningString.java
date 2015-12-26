@@ -70,34 +70,26 @@ public class HttpTransactionReturningString extends AsyncTask<Object, Integer, S
 
 		try
 		{
-//			HttpClient client = new DefaultHttpClient();
-			HttpClient client = getHttpClient();
-			HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
-			HttpResponse response;
-			
-			Object json = ( data == null || data.length == 0 || data[0] == null ) ? "" : data[0];
-			
-			String serverURL = getServerURL();
-			
-			Log.d("HTTPRequest", "Connecting to URL:" + serverURL );
-			
-			HttpPost post = new HttpPost( serverURL );
-			
-			Log.d("HTTPRequest", "Request String:" + json.toString() );
-			
-			StringEntity se = new StringEntity( json.toString(), "UTF-8");
-			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8"));
-			post.setEntity(se);
-			response = client.execute(post);
+			int retryCount = 2;
+			String responseString = "";
 
-			String responseString = EntityUtils.toString(response.getEntity());
+			for ( int i = 0; i < retryCount; i++ )
+			{
+				try {
+					responseString = executeHTTPRequest(data);
+				}
+				catch( Exception ex )
+				{
+					if ( i == 0 )
+						continue;
+					else
+						throw ex;
+				}
 
-			Log.d("HTTPRequest", "Successfully got response!!" );
-			
-			Log.d("HTTPRequest", "ResponseString:" + responseString );
-			
+				break;
+			}
+
 			return responseString;
-
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -108,6 +100,34 @@ public class HttpTransactionReturningString extends AsyncTask<Object, Integer, S
 
 			return Constants.FAIL;
 		}
+	}
+
+	private String executeHTTPRequest(Object[] data) throws Exception {
+		HttpClient client = getHttpClient();
+		HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+		HttpResponse response;
+
+		Object json = ( data == null || data.length == 0 || data[0] == null ) ? "" : data[0];
+
+		String serverURL = getServerURL();
+
+		Log.d("HTTPRequest", "Connecting to URL:" + serverURL);
+
+		HttpPost post = new HttpPost( serverURL );
+
+		Log.d("HTTPRequest", "Request String:" + json.toString() );
+
+		StringEntity se = new StringEntity( json.toString(), "UTF-8");
+		se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8"));
+		post.setEntity(se);
+		response = client.execute(post);
+
+		String responseString = EntityUtils.toString(response.getEntity());
+
+		Log.d("HTTPRequest", "Successfully got response!!" );
+
+		Log.d("HTTPRequest", "ResponseString:" + responseString );
+		return responseString;
 	}
 
 	private String getServerURL() throws Exception 

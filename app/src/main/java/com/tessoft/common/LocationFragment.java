@@ -1,62 +1,45 @@
-package com.tessoft.nearhere.fragment;
+package com.tessoft.common;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.astuetz.PagerSlidingTabStrip;
-import com.tessoft.common.MainPagerAdapter;
-import com.tessoft.nearhere.BaseActivity;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.ShareMyLocationActivity;
+import com.tessoft.nearhere.ShareRealtimeMyLocationActivity;
+import com.tessoft.nearhere.fragment.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link LocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends BaseFragment {
+public class LocationFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View rootView = null;
 
     private OnFragmentInteractionListener mListener;
 
-    View rootView = null;
-
-    public MainFragment() {
+    public LocationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
+    public static LocationFragment newInstance() {
+        LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -64,8 +47,6 @@ public class MainFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -73,19 +54,13 @@ public class MainFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView =  inflater.inflate(R.layout.fragment_location, container, false);
 
-        // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) rootView.findViewById(R.id.pagerMain);
-        pager.setAdapter(new MainPagerAdapter( getChildFragmentManager() ));
+        Button btnOneTime = (Button) rootView.findViewById(R.id.btnOneTime);
+        btnOneTime.setOnClickListener(this);
 
-        // Bind the tabs to the ViewPager
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) rootView.findViewById(R.id.tabs);
-        tabs.setViewPager(pager);
-
-        // continued from above
-        //tabs.setOnPageChangeListener(mPageChangeListener);
-
+        Button btnRealTime = (Button) rootView.findViewById(R.id.btnRealTime);
+        btnRealTime.setOnClickListener(this);
         return rootView;
     }
 
@@ -107,6 +82,14 @@ public class MainFragment extends BaseFragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        if ( v.getId() == R.id.btnOneTime )
+            goShareMyLocationActivity();
+        else if ( v.getId() == R.id.btnRealTime )
+            goShareRealtimeMyLocationActivity();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -120,5 +103,18 @@ public class MainFragment extends BaseFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void goShareMyLocationActivity()
+    {
+        Intent intent = new Intent( getActivity(), ShareMyLocationActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    public void goShareRealtimeMyLocationActivity() {
+        Intent intent = new Intent( getActivity(), ShareRealtimeMyLocationActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 }

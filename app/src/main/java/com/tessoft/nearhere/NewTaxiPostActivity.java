@@ -57,8 +57,6 @@ public class NewTaxiPostActivity extends BaseActivity implements OnClickListener
 		{
 			super.onCreate(savedInstanceState);
 			
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-			
 			setContentView(R.layout.activity_new_taxi_post);
 
 			txtDeparture = (TextView) findViewById(R.id.txtDeparture);

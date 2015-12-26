@@ -1,6 +1,7 @@
 package com.tessoft.nearhere;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -176,12 +177,18 @@ implements OnMapReadyCallback, AddressTaskDelegate {
 	@Override
 	public void onAddressTaskPostExecute(int requestCode, Object result) {
 		// TODO Auto-generated method stub
-		
+
+		if ( result != null && result instanceof HashMap)
+		{
+			HashMap resultMap = (HashMap) result;
+			if ( resultMap.containsKey("address") && resultMap.get("address") != null )
+			{
+				selectedAddress = Util.getDongAddressString( resultMap.get("address").toString() );
+			}
+		}
+
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 		String title = "";
-		
-		selectedAddress = Util.getDongAddressString( result );
-		
 		title = "위치 : " + Util.getDongAddressString( result );
 		txtTitle.setText( title );
 		

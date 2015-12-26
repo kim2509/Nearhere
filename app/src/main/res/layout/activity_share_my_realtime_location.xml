@@ -76,17 +76,5 @@
         android:layout_margin="10dp"
         android:onClick="shareURL"
         android:visibility="gone"/>
-    
-    <TextView android:id="@+id/txtLocationGuide"
-        android:layout_below="@+id/txtURL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="false"
-        android:text="공유 URL 은 24시간동안 유지됩니다."
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center_horizontal"
-        android:visibility="gone"/>
 
 </RelativeLayout>

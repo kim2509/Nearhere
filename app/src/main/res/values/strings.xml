@@ -153,4 +153,7 @@
     <string name="go_facebook"><u><b>Facebook 으로 이동</b></u></string>
     <string name="title_activity_facebook_connect">FacebookConnect</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

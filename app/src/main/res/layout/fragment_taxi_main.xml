@@ -5,13 +5,10 @@
     android:background="#EEEEEE"
     tools:context="BaseListActivity" >
 
-    <include layout="@layout/titlebar" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/layoutAddPost"
-        android:layout_below="@+id/titleBar" >
+        android:layout_above="@+id/layoutAddPost">
 
         <ListView
             android:id="@+id/listMain"
@@ -33,19 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp" >
-
-        <Button
-            android:id="@+id/btnKeeper"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginRight="3dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:text="안심귀가 알리미"
-            android:textSize="17sp"
-            android:background="#2E6DC3"
-            android:textColor="#ffffff"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnAddPost"

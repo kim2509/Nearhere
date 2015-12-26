@@ -288,7 +288,7 @@ public class SafetyKeeperService extends Service
     	}
     	
     	resultMessage = resultMessage.substring(0, resultMessage.length() - 1 );
-    	showToastMessage( resultMessage + "님께 메시지를 전송했습니다.");
+    	showToastMessage(resultMessage + "님께 메시지를 전송했습니다.");
     }
     
 	/**
@@ -387,9 +387,13 @@ public class SafetyKeeperService extends Service
 	@Override
 	public void onAddressTaskPostExecute(int requestCode, Object result) {
 		// TODO Auto-generated method stub
-		if ( result != null && result instanceof String )
+		if ( result != null && result instanceof HashMap)
 		{
-			address = result.toString();
+			HashMap resultMap = (HashMap) result;
+			if ( resultMap.containsKey("address") && resultMap.get("address") != null )
+			{
+				address = resultMap.get("address").toString();
+			}
 			
 			if ( bStarted == false )
 			{

@@ -27,15 +27,15 @@ import com.tessoft.nearhere.R.array;
 import com.tessoft.nearhere.R.id;
 import com.tessoft.nearhere.R.layout;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,15 +72,19 @@ public class TaxiFragment extends BaseFragment
 	int pageNo = 1;
 	
 	Post moreFlag = new Post();
-	
+
+	public static TaxiFragment newInstance() {
+		TaxiFragment fragment = new TaxiFragment();
+		Bundle args = new Bundle();
+		return fragment;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		try
 		{
-			getActivity().setTitle("이근처 합승");
-			
 			rootView = inflater.inflate(layout.fragment_taxi_main, container, false);
 
 //			fbHeader = getActivity().getLayoutInflater().inflate(R.layout.taxi_main_list_header_fb, null);
@@ -229,14 +233,8 @@ public class TaxiFragment extends BaseFragment
 		Button btnSearchDetail = (Button) header3.findViewById(id.btnSearchDetail);
 		btnSearchDetail.setOnClickListener(this);
 		
-		Button btnKeeper = (Button) rootView.findViewById(id.btnKeeper);
-		btnKeeper.setOnClickListener(this);
-		
 		TextView txtNumOfUsers = (TextView) rootView.findViewById(id.txtNumOfUsers);
 		txtNumOfUsers.setOnClickListener(this);
-		
-		Button btnRefresh = (Button) rootView.findViewById(id.btnRefresh);
-		btnRefresh.setOnClickListener(this);
 	}
 
 	@Override
@@ -465,7 +463,17 @@ public class TaxiFragment extends BaseFragment
 	@Override
 	public void onAddressTaskPostExecute(int requestCode, Object result) {
 		// TODO Auto-generated method stub
-		String address = Util.getDongAddressString( result );
+		String address = "";
+
+		if ( result != null && result instanceof HashMap)
+		{
+			HashMap resultMap = (HashMap) result;
+			if ( resultMap.containsKey("address") && resultMap.get("address") != null )
+			{
+				address = Util.getDongAddressString( resultMap.get("address").toString() );
+			}
+		}
+
 		TextView txtCurrentAddress = (TextView) header3.findViewById(id.txtCurrentAddress);
 		txtCurrentAddress.setText( address );
 		header3.findViewById(id.layoutCurLocation).setVisibility(ViewGroup.VISIBLE);
@@ -671,19 +679,6 @@ public class TaxiFragment extends BaseFragment
 		{
 			if ( v.getId() == id.btnSearchDetail )
 				showDialog();
-			else if ( v.getId() == id.btnKeeper )
-			{
-				/*
-				Intent intent = new Intent( getActivity(), SafetyKeeperActivity.class);
-				startActivity(intent);
-				getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-				
-				sendHttp("/taxi/statistics.do?name=safetyKeeper", mapper.writeValueAsString( application.getLoginUser() ), HTTP_SAFETY_KEEPER_CLICKED );
-				*/
-				Intent intent = new Intent( getActivity(), ShareMyLocationActivity.class);
-				startActivity(intent);
-				getActivity().overridePendingTransition(anim.slide_in_from_bottom, anim.stay);
-			}
 			else if ( v.getId() == id.txtNumOfUsers )
 			{
 				Intent intent = new Intent( getActivity(), UserListActivity.class);
@@ -721,7 +716,7 @@ public class TaxiFragment extends BaseFragment
 	
 	public void showDialog() {
 
-	    FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 	    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 	    if (prev != null) {
 	        ft.remove(prev);

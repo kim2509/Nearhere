@@ -25,6 +25,9 @@ import com.kakao.LogoutResponseCallback;
 import com.kakao.UserManagement;
 */
 
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.UserManagement;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -38,6 +41,7 @@ import com.tessoft.domain.MainMenuItem;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserLocation;
 
+import com.tessoft.nearhere.fragment.MainFragment;
 import com.tessoft.nearhere.fragment.MessageBoxFragment;
 import com.tessoft.nearhere.fragment.MyInfoFragment;
 import com.tessoft.nearhere.fragment.NoticeListFragment;
@@ -45,10 +49,10 @@ import com.tessoft.nearhere.fragment.PushMessageListFragment;
 import com.tessoft.nearhere.fragment.TaxiFragment;
 
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -119,17 +123,15 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		{
 			super.onCreate(savedInstanceState);
 
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 			setContentView(R.layout.activity_main);
 
 			initLeftMenu();
 
-//			currentFragment = new MainFragment();
-			currentFragment = new TaxiFragment();
+			currentFragment = new MainFragment();
+//			currentFragment = new TaxiFragment();
 
 			// Insert the fragment by replacing any existing fragment
-			FragmentManager fragmentManager = getFragmentManager();
+			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
 			.add(R.id.content_frame, currentFragment)
 			.commit();
@@ -191,13 +193,13 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		reloadProfile();
 
 		// Set the list's click listener
-		mDrawerList.setOnItemClickListener( new OnItemClickListener() {
+		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 
 				MainMenuItem item = (MainMenuItem) view.getTag();
-				selectItem( item );
+				selectItem(item);
 			}
 		});
 
@@ -241,7 +243,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		if ( !"Guest".equals( application.getLoginUser().getType() ) )
 			adapter.add(new MainMenuItem("로그아웃"));
 
-		mDrawerList.setAdapter( adapter );
+		mDrawerList.setAdapter(adapter);
 	}
 
 	public void reloadProfile() {
@@ -346,7 +348,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		HashMap hash = application.getDefaultRequest();
 		hash.put("userID", application.getLoginUser().getUserID() );
 		hash.put("lastNoticeID", application.getMetaInfoString("lastNoticeID"));
-		sendHttp("/taxi/getUnreadCount.do", mapper.writeValueAsString(hash), GET_UNREAD_COUNT );
+		sendHttp("/taxi/getUnreadCount.do", mapper.writeValueAsString(hash), GET_UNREAD_COUNT);
 	}
 
 	//This is the handler that will manager to process the broadcast intent
@@ -404,7 +406,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		int position = adapter.getPosition(item);
 
 		if ( "홈".equals( item.getMenuName() ) )
-			currentFragment = new TaxiFragment();
+			currentFragment = new MainFragment();
 		else if ( "header".equals( item.getMenuName() ) || "내 정보".equals( item.getMenuName() ) )
 		{
 			if ( "Guest".equals( application.getLoginUser().getType() ) )
@@ -429,10 +431,9 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		}
 
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 		.replace(R.id.content_frame, currentFragment)
-		.addToBackStack(null)
 		.commit();
 
 		setTitle( item.getMenuName() );
@@ -520,7 +521,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		// TODO Auto-generated method stub
 		try
 		{
-			application.debug("[MainActivity] onLocationChanged: " + location );
+			application.debug("[MainActivity] onLocationChanged: " + location);
 			
 			MainActivity.latitude = String.valueOf( location.getLatitude() );
 			MainActivity.longitude = String.valueOf( location.getLongitude() );
@@ -547,17 +548,24 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 
 		try
 		{
-			MainActivity.address = Util.getDongAddressString( result );
-			MainActivity.fullAddress = result.toString();
+			if ( result != null && result instanceof HashMap)
+			{
+				HashMap resultMap = (HashMap) result;
+				if ( resultMap.containsKey("address") && resultMap.get("address") != null )
+				{
+					MainActivity.address = Util.getDongAddressString( resultMap.get("address").toString() );
+					MainActivity.fullAddress = result.toString();
 
-			Intent intent = new Intent("currentLocationChanged");
-			intent.putExtra("latitude", MainActivity.latitude );
-			intent.putExtra("longitude", MainActivity.longitude );
-			intent.putExtra("fullAddress", result.toString() );
-			sendBroadcast(intent);
+					Intent intent = new Intent("currentLocationChanged");
+					intent.putExtra("latitude", MainActivity.latitude );
+					intent.putExtra("longitude", MainActivity.longitude );
+					intent.putExtra("fullAddress", result.toString() );
+					sendBroadcast(intent);
 
-			if ( bMyLocationUpdated == false )
-				updateMyLocation();			
+					if ( bMyLocationUpdated == false )
+						updateMyLocation();
+				}
+			}
 		}
 		catch( Exception ex )
 		{
@@ -855,7 +863,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 
 	public void kakaoLogout() {
 
-		/*
 		UserManagement.requestLogout(new LogoutResponseCallback() {
 			@Override
 			protected void onSuccess(final long userId) {
@@ -867,7 +874,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 				goKaKaoLoginActivity();
 			}
 		});
-		*/
 	}
 	
 	@Override
@@ -901,7 +907,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			e.printStackTrace();
 		}
 		
-		if ( currentFragment instanceof TaxiFragment == false )
+		if ( currentFragment instanceof MainFragment == false )
 		{
 			reloadProfile();
 			selectItem(new MainMenuItem("홈"));
@@ -957,6 +963,11 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		});
 		final AlertDialog alert = builder.create();
 		alert.show();
+	}
+
+	@Override
+	public double getMetaInfoDouble(String key) {
+		return super.getMetaInfoDouble(key);
 	}
 
 	@Override

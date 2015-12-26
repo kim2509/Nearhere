@@ -39,6 +39,9 @@ import com.kakao.UserManagement;
 import com.kakao.template.loginbase.SampleLoginActivity;
 */
 
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.UserManagement;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -51,7 +54,7 @@ import com.tessoft.common.UploadTask;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 
-public class KakaoLoginActivity extends BaseActivity{ //SampleLoginActivity{
+public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 
 	static NearhereApplication application = null;
 	
@@ -172,7 +175,7 @@ public class KakaoLoginActivity extends BaseActivity{ //SampleLoginActivity{
 	}
 
 	public static void onClickLogout() {
-		/*
+
 		UserManagement.requestLogout(new LogoutResponseCallback() {
 			@Override
 			protected void onSuccess(final long userId) {
@@ -182,7 +185,7 @@ public class KakaoLoginActivity extends BaseActivity{ //SampleLoginActivity{
 			protected void onFailure(final APIErrorResult apiErrorResult) {
 			}
 		});
-		*/
+
 	}
 	
 	@Override

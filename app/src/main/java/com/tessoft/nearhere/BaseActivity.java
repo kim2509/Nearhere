@@ -19,12 +19,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class BaseActivity extends ActionBarActivity implements TransactionDelegate, AdapterDelegate {
+public class BaseActivity extends FragmentActivity implements TransactionDelegate, AdapterDelegate {
 
 	ObjectMapper mapper = new ObjectMapper();
 	NearhereApplication application = null;

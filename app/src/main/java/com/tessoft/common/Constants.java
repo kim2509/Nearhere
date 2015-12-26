@@ -21,6 +21,9 @@ public class Constants {
 	public static final int HTTP_GET_RANDOM_ID_V2 = 1050;
 	public static final int HTTP_PROFILE_IMAGE_UPLOAD = 1060;
 	public static final int HTTP_UPDATE_FACEBOOK_INFO = 1070;
+	public static final int HTTP_GET_NEW_LOCATION = 1080;
+	public static final int HTTP_ADD_LOCATION = 1090;
+	public static final int HTTP_FINISH_LOCATION_TRACKING = 1100;
 	
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
 	

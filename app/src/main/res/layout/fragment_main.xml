@@ -1,16 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    tools:context="com.tessoft.nearhere.fragment.MainFragment">
 
     <include layout="@layout/titlebar" />
-    
-    <WebView 
-        android:id="@+id/webView"
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/titleBar"
+        android:layout_height="48dip"
+        app:pstsShouldExpand="true"/>
+
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/titleBar"
-        />
+        android:layout_below="@+id/tabs"
+        android:id="@+id/pagerMain">
+
+    </android.support.v4.view.ViewPager>
 
 </RelativeLayout>

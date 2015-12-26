@@ -30,8 +30,6 @@ public class RegisterUserActivity extends BaseActivity {
 		{
 			super.onCreate(savedInstanceState);
 
-			supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 			setContentView(R.layout.activity_register_user);
 			
 			getRandomIDV2();

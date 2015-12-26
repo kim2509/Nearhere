@@ -1,5 +1,11 @@
 package com.tessoft.nearhere;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -8,21 +14,14 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.User;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.codehaus.jackson.type.TypeReference;
 
 import java.util.HashMap;
 
-public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyCallback, View.OnClickListener{
+public class ShareRealtimeMyLocationActivity extends BaseActivity implements OnMapReadyCallback , View.OnClickListener{
 
 	int ZoomLevel = 14;
 	
@@ -32,7 +31,7 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 		try
 		{
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.activity_share_my_location);
+			setContentView(R.layout.activity_share_my_realtime_location);
 			
 			setTitle("내 위치 공유");
 			findViewById(R.id.btnRefresh).setVisibility(ViewGroup.GONE);
@@ -43,16 +42,20 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 
 			Button btnShare = (Button) findViewById(R.id.btnShare);
 			btnShare.setOnClickListener(this);
+
+			if ( NearhereApplication.bLocationServiceExecuting && !Util.isEmptyString( NearhereApplication.strRealtimeLocationID ) )
+			{
+				btnShare.setText("종료하기");
+				TextView txtURL = (TextView) findViewById(R.id.txtURL);
+				txtURL.setVisibility(ViewGroup.VISIBLE);
+				txtURL.setText(Constants.getServerURL() + "/ul.do?ID=" +
+						java.net.URLEncoder.encode( NearhereApplication.strRealtimeLocationID, "utf-8"));
+			}
 		}
 		catch( Exception ex )
 		{
 			application.catchException(this, ex);
 		}
-	}
-
-	@Override
-	public void showOKDialog(String message, Object param) {
-		super.showOKDialog(message, param);
 	}
 
 	@Override
@@ -63,11 +66,11 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 			double latitude = Double.parseDouble(MainActivity.latitude);
 			double longitude = Double.parseDouble(MainActivity.longitude);
 			
-			LatLng location = new LatLng( latitude , longitude); 
+			LatLng location = new LatLng( latitude , longitude);
 			CameraUpdate center=
 					CameraUpdateFactory.newLatLng( location );
 			map.moveCamera(center);
-			CameraUpdate zoom=CameraUpdateFactory.zoomTo(ZoomLevel);
+			CameraUpdate zoom= CameraUpdateFactory.zoomTo(ZoomLevel);
 			map.animateCamera(zoom);
 			
 			map.setMyLocationEnabled(true);
@@ -106,6 +109,13 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 				Intent intent = new Intent( getApplicationContext(), LocationService.class );
 				stopService(intent);
 				btn.setText("공유하기");
+
+				if ( !Util.isEmptyString( NearhereApplication.strRealtimeLocationID ) )
+				{
+					HashMap hash = new HashMap();
+					hash.put("locationID", NearhereApplication.strRealtimeLocationID);
+					sendHttp("/location/finishLocationTracking.do", mapper.writeValueAsString(hash), Constants.HTTP_FINISH_LOCATION_TRACKING);
+				}
 			}
 		}
 		catch( Exception ex )
@@ -131,19 +141,28 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 
 			if ( "0000".equals( response.getResCode() ) )
 			{
-				String userString = mapper.writeValueAsString(response.getData());
-				HashMap data = mapper.readValue(userString, new TypeReference<HashMap>() {});
+				if ( requestCode == Constants.HTTP_GET_NEW_LOCATION ) {
 
-				findViewById(R.id.txtLocationGuide).setVisibility(ViewGroup.VISIBLE);
+					String userString = mapper.writeValueAsString(response.getData());
+					HashMap data = mapper.readValue(userString, new TypeReference<HashMap>() {});
 
-				TextView txtURL = (TextView) findViewById(R.id.txtURL);
-				txtURL.setVisibility(ViewGroup.VISIBLE);
+					TextView txtURL = (TextView) findViewById(R.id.txtURL);
+					txtURL.setVisibility(ViewGroup.VISIBLE);
 
-				txtURL.setText( Constants.getServerURL() + "/location/userLocation.do?locationID=" + data.get("locationID"));
+					NearhereApplication.strRealtimeLocationID = data.get("locationID").toString();
 
-				Intent intent = new Intent( getApplicationContext(), LocationService.class );
-				intent.putExtra("locationID", data.get("locationID").toString());
-				startService(intent);
+					txtURL.setText(Constants.getServerURL() + "/ul.do?ID=" +
+							java.net.URLEncoder.encode( NearhereApplication.strRealtimeLocationID, "utf-8"));
+
+					Intent intent = new Intent( getApplicationContext(), LocationService.class );
+					intent.putExtra("locationID", NearhereApplication.strRealtimeLocationID);
+					startService(intent);
+				}
+				else if ( requestCode == Constants.HTTP_FINISH_LOCATION_TRACKING ) {
+					findViewById(R.id.txtURL).setVisibility(ViewGroup.GONE);
+					NearhereApplication.strRealtimeLocationID = "";
+				}
+
 			}
 		}
 		catch( Exception ex )

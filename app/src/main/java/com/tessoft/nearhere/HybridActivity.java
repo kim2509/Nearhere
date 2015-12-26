@@ -22,7 +22,7 @@ public class HybridActivity extends BaseActivity{
 		{
 			super.onCreate(savedInstanceState);
 			
-			setContentView(R.layout.fragment_main);
+			setContentView(R.layout.fragment_web);
 			
 			webView = (WebView) findViewById(R.id.webView);
 			webView.getSettings().setJavaScriptEnabled(true);

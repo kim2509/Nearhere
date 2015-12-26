@@ -18,6 +18,7 @@ import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 //import com.kakao.Session;
+import com.kakao.Session;
 import com.tessoft.common.Constants;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
@@ -40,7 +41,7 @@ public class IntroActivity extends BaseActivity {
 			checkIfAdminUser();
 			
 			// 카카오톡 세션을 초기화 한다.
-//			Session.initialize(this);
+			Session.initialize(this);
 			
 			// 페이스북 sdk 를 초기화한다.
 			FacebookSdk.sdkInitialize(getApplicationContext());

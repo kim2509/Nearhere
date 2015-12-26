@@ -8,11 +8,12 @@
     
     <Button 
         android:id="@+id/btnGoFacebook"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="35dp"
         android:layout_gravity="right"
         android:background="@drawable/bt_gray"
-        android:text="Go Facebook"
+        android:text="Facebook"
         android:textSize="13sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -21,11 +22,12 @@
     
     <Button 
         android:id="@+id/btnViewProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="35dp"
         android:layout_gravity="right"
         android:background="@drawable/bt_gray"
-        android:text="프로필보기"
+        android:text="프로필"
         android:textSize="13sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -33,7 +35,8 @@
     
     <Button 
         android:id="@+id/btnSendMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="35dp"
         android:layout_gravity="right"
         android:background="@drawable/bt_gray"
@@ -46,7 +49,8 @@
     
     <Button 
         android:id="@+id/btnHideMap"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="35dp"
         android:layout_gravity="right"
         android:background="@drawable/bt_gray"
