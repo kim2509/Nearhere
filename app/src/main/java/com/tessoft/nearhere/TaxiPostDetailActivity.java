@@ -560,6 +560,9 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 				else if ( requestCode == DELETE_POST_REPLY || requestCode == HTTP_UPDATE_POST_AS_FINISHED )
 				{
 					inquiryPostDetail();
+					Intent intent = new Intent( Constants.BROADCAST_TAXI_REFRESH );
+					getApplicationContext().sendBroadcast(intent);
+					finish();
 				}
 				else if ( requestCode == Constants.HTTP_PROFILE_IMAGE_UPLOAD )
 				{
@@ -803,9 +806,8 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 			{
 				inquiryPostDetail();
 
-				Intent result = new Intent();
-				result.putExtra("reload", true);
-				setResult(RESULT_OK, result);	
+				Intent intent = new Intent( Constants.BROADCAST_TAXI_REFRESH );
+				getApplicationContext().sendBroadcast(intent);
 			}
 		}
 		catch( Exception ex )

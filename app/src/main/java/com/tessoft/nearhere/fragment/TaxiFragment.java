@@ -18,6 +18,7 @@ import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.Post;
 import com.tessoft.nearhere.MainActivity;
 import com.tessoft.nearhere.NewTaxiPostActivity;
+import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.ShareMyLocationActivity;
 import com.tessoft.nearhere.TaxiPostDetailActivity;
 import com.tessoft.nearhere.UserListActivity;
@@ -52,7 +53,7 @@ import android.widget.TextView;
 public class TaxiFragment extends BaseFragment 
 	implements AddressTaskDelegate, AdapterDelegate, TransactionDelegate, OnItemSelectedListener, OnClickListener{
 
-	protected static final int REQUEST_POST_DETAIL = 0;
+	protected static final int REQUEST_POST_DETAIL = 2001;
 	private static final int GET_POSTS = 1;
 	protected static final int REQUEST_SET_DEPARTURE= 10;
 	protected static final int REQUEST_SET_DESTINATION = 20;
@@ -77,6 +78,12 @@ public class TaxiFragment extends BaseFragment
 		TaxiFragment fragment = new TaxiFragment();
 		Bundle args = new Bundle();
 		return fragment;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_TAXI_REFRESH));
 	}
 
 	@Override
@@ -143,7 +150,7 @@ public class TaxiFragment extends BaseFragment
 						intent.putExtra("toLongitude", String.valueOf(destination.longitude) );	
 					}
 					
-					startActivityForResult(intent, REQUEST_POST_DETAIL );
+					startActivity(intent);
 					getActivity().overridePendingTransition(anim.slide_in_from_right, anim.slide_out_to_left);
 				}
 			});
@@ -250,12 +257,7 @@ public class TaxiFragment extends BaseFragment
 				{
 					if ( data.getExtras().getBoolean("reload") )
 					{
-						listMain.setVisibility(ViewGroup.GONE);
-						rootView.findViewById(id.marker_progress).setVisibility(ViewGroup.VISIBLE);
-						adapter.clear();
-						pageNo = 1;
-						
-						inquiryPosts();
+						reloadContents();
 						MainActivity mainActivity = (MainActivity) getActivity();
 						mainActivity.loadMenuItems();
 						mainActivity.reloadProfile();
@@ -549,12 +551,7 @@ public class TaxiFragment extends BaseFragment
 						spSearchOrder.setSelection(1);//거리순
 					else
 					{
-						listMain.setVisibility(ViewGroup.GONE);
-						rootView.findViewById(id.marker_progress).setVisibility(ViewGroup.VISIBLE);
-						
-						adapter.clear();
-						pageNo = 1;
-						inquiryPosts();
+						reloadContents();
 					}
 				}
 				else if ( departure == null && destination == null )
@@ -588,12 +585,7 @@ public class TaxiFragment extends BaseFragment
 		public void onReceive(Context context, Intent intent) {
 			try
 			{
-				listMain.setVisibility(ViewGroup.GONE);
-				rootView.findViewById(id.marker_progress).setVisibility(ViewGroup.VISIBLE);
-				
-				adapter.clear();
-				pageNo = 1;
-				inquiryPosts();
+				reloadContents();
 			}
 			catch( Exception ex )
 			{
@@ -601,21 +593,34 @@ public class TaxiFragment extends BaseFragment
 			}
 		}
 	};
-	
+
+	public void reloadContents() throws Exception {
+		listMain.setVisibility(ViewGroup.GONE);
+		rootView.findViewById(id.marker_progress).setVisibility(ViewGroup.VISIBLE);
+
+		adapter.clear();
+		pageNo = 1;
+		inquiryPosts();
+	}
+
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		getActivity().registerReceiver(mMessageReceiver, new IntentFilter("refreshContents"));
 	}
 	
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 		getActivity().unregisterReceiver(mMessageReceiver);
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -652,13 +657,8 @@ public class TaxiFragment extends BaseFragment
 					}
 				}
 			}
-			
-			listMain.setVisibility(ViewGroup.GONE);
-			rootView.findViewById(id.marker_progress).setVisibility(ViewGroup.VISIBLE);
-			
-			adapter.clear();
-			pageNo = 1;
-			inquiryPosts();
+
+			reloadContents();
 		}
 		catch( Exception ex )
 		{

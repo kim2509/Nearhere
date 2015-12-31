@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +7,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/layoutAddPost">
+        android:layout_height="match_parent">
 
         <ListView
             android:id="@+id/listMain"
@@ -24,24 +23,13 @@
             android:indeterminate="true" />
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/layoutAddPost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp" >
+    <Button
+        android:id="@+id/btnAddPost"
+        android:background="@drawable/btn_plus_selector"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="bottom|right" />
 
-        <Button
-            android:id="@+id/btnAddPost"
-            style="@style/btn_important_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="1"
-            android:textSize="17sp"
-            android:layout_gravity="center_vertical"
-            android:text="@string/register"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-</RelativeLayout>
+</FrameLayout>

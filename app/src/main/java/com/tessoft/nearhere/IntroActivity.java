@@ -36,9 +36,6 @@ public class IntroActivity extends BaseActivity {
 		try
 		{
 			super.onCreate(savedInstanceState);
-
-			// 어드민 설정을 읽는다.
-			checkIfAdminUser();
 			
 			// 카카오톡 세션을 초기화 한다.
 			Session.initialize(this);

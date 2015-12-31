@@ -37,8 +37,8 @@ import android.widget.TimePicker;
 public class NewTaxiPostActivity extends BaseActivity implements OnClickListener, OnTimeSetListener, OnDateSetListener{
 
 	private static final int MODIFY_POST = 2;
-	private int SELECT_DEPARTURE = 1;
-	private int SELECT_DESTINATION = 2;
+	private int SELECT_DEPARTURE = 1001;
+	private int SELECT_DESTINATION = 1002;
 	TextView txtDeparture = null;
 	TextView txtDestination = null;
 	Post post = null;
@@ -237,8 +237,8 @@ public class NewTaxiPostActivity extends BaseActivity implements OnClickListener
 		Intent intent = new Intent( this, SetDestinationActivity.class);
 		intent.putExtra("title", "출발지 선택");
 		intent.putExtra("subTitle", "출발지를 선택해 주십시오.");
-		intent.putExtra("departure", departure );
-		startActivityForResult(intent, SELECT_DEPARTURE  );
+		intent.putExtra("departure", departure);
+		startActivityForResult(intent, SELECT_DEPARTURE);
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay);
 	}
 	
@@ -247,7 +247,7 @@ public class NewTaxiPostActivity extends BaseActivity implements OnClickListener
 		Intent intent = new Intent( this, SetDestinationActivity.class);
 		intent.putExtra("title", "도착지 선택");
 		intent.putExtra("subTitle", "도착지를 선택해 주십시오.");
-		startActivityForResult(intent, 2);
+		startActivityForResult(intent, SELECT_DESTINATION);
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay);
 	}
 	
@@ -388,9 +388,9 @@ public class NewTaxiPostActivity extends BaseActivity implements OnClickListener
 
 			if ( "0000".equals( response.getResCode() ) )
 			{
-				Intent intent = new Intent();
-				intent.putExtra("reload", true);
-				setResult( RESULT_OK , intent);
+				Intent intent = new Intent( Constants.BROADCAST_TAXI_REFRESH );
+				getApplicationContext().sendBroadcast(intent);
+				setResult(RESULT_OK);
 				finish();
 			}
 			else

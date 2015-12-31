@@ -78,7 +78,6 @@
         <activity
             android:name=".UserProfileActivity"
             android:label="@string/title_activity_user_profile"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
@@ -96,12 +95,10 @@
         <activity
             android:name=".TermsAgreementActivity"
             android:label="@string/title_activity_terms_agreement"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SelectHomeLocationActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_activity_select_home_location" >
         </activity>
         <activity
@@ -111,7 +108,6 @@
         <activity
             android:name=".TaxiPostDetailActivity"
             android:label="@string/title_activity_taxi_post_detail"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
@@ -123,7 +119,6 @@
         </activity>
         <activity
             android:name=".SetDestinationActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_activity_set_destination"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
@@ -132,28 +127,24 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity
             android:name=".NewTaxiPostActivity"
             android:label="@string/title_activity_new_taxi_post"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity
             android:name=".MoreUserInfoActivity"
             android:label="@string/title_activity_more_user_info"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme">
         </activity>
         <activity
             android:name=".SafetyKeeperActivity"
             android:label="@string/title_activity_safety_keeper"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden" >
         </activity>
 
@@ -176,12 +167,10 @@
 
         <activity
             android:name=".EventViewerActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_activity_event_viewer" >
         </activity>
         <activity
             android:name=".UserListActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_activity_user_list"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
@@ -196,13 +185,11 @@
         </activity>
         <activity
             android:name=".KakaoLoginActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity
             android:name=".KakaoSignupActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
@@ -220,13 +207,11 @@
         <activity
             android:name=".ShareMyLocationActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity
             android:name=".ShareRealtimeMyLocationActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
     </application>

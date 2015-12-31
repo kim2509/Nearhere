@@ -24,7 +24,10 @@ public class Constants {
 	public static final int HTTP_GET_NEW_LOCATION = 1080;
 	public static final int HTTP_ADD_LOCATION = 1090;
 	public static final int HTTP_FINISH_LOCATION_TRACKING = 1100;
-	
+
+	public static final String BROADCAST_TAXI_REFRESH = "BROADCAST_TAXI_REFRESH";
+	public static final String BROADCAST_SET_DESTINATION = "BROADCAST_SET_DESTINATION";
+
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
 	
 	public static String getServerURL()

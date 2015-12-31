@@ -12,28 +12,30 @@ import com.tessoft.nearhere.fragment.TaxiFragment;
  */
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
+    Fragment[] fragments = null;
+
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
+
+        fragments = new Fragment[2];
+        fragments[0] = LocationFragment.newInstance();
+        fragments[1] = TaxiFragment.newInstance();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         if ( position == 0 ) return "위치";
-        else if ( position == 1 ) return "카풀";
-        else return "합승";
+        else  if( position == 1 ) return "카풀/합승";
+        else return "";
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return fragments.length;
     }
 
     @Override
     public Fragment getItem(int position) {
-        if ( position == 0 )
-            return LocationFragment.newInstance();
-        else
-            return TaxiFragment.newInstance();
+        return fragments[position];
     }
-
 }

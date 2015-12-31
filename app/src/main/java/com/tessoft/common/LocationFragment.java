@@ -108,13 +108,18 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
     public void goShareMyLocationActivity()
     {
         Intent intent = new Intent( getActivity(), ShareMyLocationActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1111);
         getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     public void goShareRealtimeMyLocationActivity() {
         Intent intent = new Intent( getActivity(), ShareRealtimeMyLocationActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1112);
         getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

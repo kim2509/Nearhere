@@ -10,20 +10,28 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
 import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
+import com.tessoft.common.Util;
+import com.tessoft.domain.User;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 public class BaseActivity extends FragmentActivity implements TransactionDelegate, AdapterDelegate {
 
@@ -35,7 +43,91 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 		super.onCreate(savedInstanceState);
 		
 		application = (NearhereApplication) getApplication();
+
+		checkIfAdminUser();
+
 		initImageLoader();
+	}
+
+	public void checkIfAdminUser()
+	{
+		try
+		{
+			File sdcard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+			//Get the text file
+			File file = new File(sdcard,"nearhere.txt");
+
+			if ( !file.exists() ) return;
+
+			//Read text from file
+			StringBuilder text = new StringBuilder();
+
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				text.append(line);
+				text.append('\n');
+			}
+			br.close();
+
+			String loginInfo = text.toString();
+
+			if ( Util.isEmptyString(loginInfo) ) return;
+
+			String[] tokens = loginInfo.split("\\;");
+
+			String userNo = "";
+			String userID = "";
+			String pw = "";
+			String pushOffOnNewPost = "";
+			String server = "";
+
+			for ( int i = 0; i < tokens.length; i++ )
+			{
+				String key = tokens[i].split("\\=")[0];
+				String value = tokens[i].split("\\=")[1];
+				if ( "userNo".equals( key ) )
+					userNo = value;
+				else if ( "userID".equals( key ) )
+					userID = value;
+				else if ( "pw".equals( key ) )
+					pw = value;
+				else if ( "pushOffOnNewPost".equals( key ) )
+					pushOffOnNewPost = value;
+				else if ( "server".equals( key ) )
+					server = value.trim();
+			}
+
+			if (!"이근처합승".equals(pw.trim()))
+			{
+				Constants.bAdminMode = false;
+				return;
+			}
+
+			if ( "Y".equals( pushOffOnNewPost.trim() ) ) Constants.bPushOffOnNewPost = true;
+			else Constants.bPushOffOnNewPost = false;
+
+			if ( "REAL".equals( server ) )
+				Constants.bReal = true;
+			else if ( "DEV".equals( server ) )
+				Constants.bReal = false;
+
+			Constants.bAdminMode = true;
+
+			User user = application.getLoginUser();
+			user.setUserNo(userNo);
+			user.setUserID(userID);
+			application.setLoginUser(user);
+
+			application.setMetaInfo("registerUserFinished", "true");
+			application.setMetaInfo("logout", "false");
+		}
+		catch( Exception ex )
+		{
+
+		}
 	}
 
 	public void showOKDialog( String message, final Object param )

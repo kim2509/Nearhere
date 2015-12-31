@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tessoft.common.AdapterDelegate;
 import com.tessoft.common.AddressTaskDelegate;
+import com.tessoft.common.Constants;
 import com.tessoft.common.GetAddressTask;
 import com.tessoft.common.GoogleMapkiUtil;
 import com.tessoft.common.Util;
@@ -205,9 +206,16 @@ implements OnMapReadyCallback, AddressTaskDelegate {
 				return;
 			}
 			
-			Intent data = new Intent();
+			Intent data = new Intent(Constants.BROADCAST_SET_DESTINATION);
 			data.putExtra("address", selectedAddress);
 			data.putExtra("location", selectedLocation);
+
+			if ( getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("param") )
+			{
+				data.putExtra("param", getIntent().getExtras().getString("param") );
+			}
+
+			sendBroadcast( data );
 			setResult( RESULT_OK, data);
 			finish();
 		}

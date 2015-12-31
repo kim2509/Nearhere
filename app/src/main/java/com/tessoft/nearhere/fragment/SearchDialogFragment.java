@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
 import com.tessoft.common.Util;
 import com.tessoft.nearhere.SetDestinationActivity;
 import com.tessoft.nearhere.R.anim;
@@ -13,9 +14,12 @@ import com.tessoft.nearhere.R.layout;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -34,14 +38,31 @@ public class SearchDialogFragment extends DialogFragment implements OnClickListe
 	View rootView = null;
 	AdapterDelegate delegate;
 	HashMap initData = null;
-	
+
+	public SearchDialogFragment()
+	{
+
+	}
+
 	public SearchDialogFragment( AdapterDelegate delegate, HashMap data ) {
 		// TODO Auto-generated constructor stub
 		this.delegate = delegate;
 		this.initData = data;
 	}
-	
-    @Override
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_SET_DESTINATION));
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		getActivity().unregisterReceiver(mMessageReceiver);
+	}
+
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) 
     {
@@ -248,15 +269,19 @@ public class SearchDialogFragment extends DialogFragment implements OnClickListe
 				
 				if ( v.getId() == id.btnSelectDeparture )
 				{
+					intent.putExtra("param", "DEPARTURE");
+
 					if ( departure != null )
 						intent.putExtra("initLocation", departure);
-					startActivityForResult(intent, REQUEST_SET_DEPARTURE );
+					startActivity(intent);
 				}
 				else
 				{
+					intent.putExtra("param", "DESTINATION");
+
 					if ( destination != null )
 						intent.putExtra("initLocation", destination);
-					startActivityForResult(intent, REQUEST_SET_DESTINATION );
+					startActivity(intent);
 				}
 				
 				getActivity().overridePendingTransition(anim.slide_in_from_right, anim.stay);
@@ -267,44 +292,34 @@ public class SearchDialogFragment extends DialogFragment implements OnClickListe
 			
 		}
 	}
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		try
-		{
-			if ( resultCode == getActivity().RESULT_OK )
+
+	//This is the handler that will manager to process the broadcast intent
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			if ( intent != null && !Util.isEmptyString( intent.getExtras().getString("param") ) )
 			{
-				if ( data.getExtras() == null ) return;
-				
-				if ( requestCode == REQUEST_SET_DEPARTURE )
+				if ( "DEPARTURE".equals( intent.getExtras().getString("param") ) )
 				{
-					if ( !data.getExtras().containsKey("location") || !data.getExtras().containsKey("address") ) return;
-					
-					departure = (LatLng) data.getExtras().get("location");
-					departureAddress = data.getExtras().getString("address");
+					if ( !intent.getExtras().containsKey("location") || !intent.getExtras().containsKey("address") ) return;
+
+					departure = (LatLng) intent.getExtras().get("location");
+					departureAddress = intent.getExtras().getString("address");
 					btnSelectDeparture.setText(departureAddress);
 				}
-				else if ( requestCode == REQUEST_SET_DESTINATION )
+				else if ( "DESTINATION".equals( intent.getExtras().getString("param") ) )
 				{
-					if ( !data.getExtras().containsKey("location") || !data.getExtras().containsKey("address") ) return;
-					
-					destination= (LatLng) data.getExtras().get("location");
-					destinationAddress = data.getExtras().getString("address");
+					if ( !intent.getExtras().containsKey("location") || !intent.getExtras().containsKey("address") ) return;
+
+					destination= (LatLng) intent.getExtras().get("location");
+					destinationAddress = intent.getExtras().getString("address");
 					btnSelectDestination.setText(destinationAddress);
 				}
 			}
 		}
-		catch( Exception ex )
-		{
-			
-		}
-		
-	}
-	
+	};
+
 	public void searchResult()
 	{
 		HashMap data = new HashMap();
