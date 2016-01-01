@@ -34,7 +34,7 @@ import android.widget.Toast;
 
 public class BaseFragment extends Fragment implements AdapterDelegate, TransactionDelegate{
 
-	ObjectMapper mapper = new ObjectMapper();
+	protected ObjectMapper mapper = new ObjectMapper();
 	protected NearhereApplication application = null;
 	
 	@Override

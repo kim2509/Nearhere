@@ -63,13 +63,13 @@ public class TaxiFragment extends BaseFragment
 	View rootView = null;
 	ListView listMain = null;
 	View fbHeader = null;
-	View header = null;
+	View snsLoginHeader = null;
 	View footer = null;
 	ObjectMapper mapper = new ObjectMapper();
 	
 	TaxiArrayAdapter adapter = null;
-	View header2 = null;
-	View header3 = null;
+	View nearUsersCountHeader = null;
+	View searchConditionHeader = null;
 	int pageNo = 1;
 	
 	Post moreFlag = new Post();
@@ -95,27 +95,26 @@ public class TaxiFragment extends BaseFragment
 			rootView = inflater.inflate(layout.fragment_taxi_main, container, false);
 
 //			fbHeader = getActivity().getLayoutInflater().inflate(R.layout.taxi_main_list_header_fb, null);
-			header = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header1, null);
-			header = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header1, null);
-			header3 = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header3, null);
-			header2 = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header2, null);
+			snsLoginHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header1, null);
+			searchConditionHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header3, null);
+			nearUsersCountHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header2, null);
 			footer = getActivity().getLayoutInflater().inflate(layout.list_footer_taxi_main, null);
 
 			listMain = (ListView) rootView.findViewById(id.listMain);
 			
-			listMain.addHeaderView(header3, null, false );
-			listMain.addHeaderView(header2, null, false );
+			listMain.addHeaderView(searchConditionHeader, null, false );
+			listMain.addHeaderView(nearUsersCountHeader, null, false );
 			
 			if ( "Guest".equals(application.getLoginUser().getType() ) )
 			{
-				listMain.addHeaderView(header, null, false );
-				
-				header.findViewById(id.btnKakaoLogin).setOnClickListener(this);
-				header.findViewById(id.btnFBLogin).setOnClickListener(this);
+				listMain.addHeaderView(snsLoginHeader, null, false );
+
+				snsLoginHeader.findViewById(id.btnKakaoLogin).setOnClickListener(this);
+				snsLoginHeader.findViewById(id.btnFBLogin).setOnClickListener(this);
 			}
 			else
 			{
-				listMain.removeHeaderView(header);
+				listMain.removeHeaderView(snsLoginHeader);
 			}
 			
 			listMain.addFooterView(footer, null, false );
@@ -131,25 +130,23 @@ public class TaxiFragment extends BaseFragment
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
+										int arg2, long arg3) {
 					// TODO Auto-generated method stub
 					Post post = (Post) arg1.getTag();
 
-					Intent intent = new Intent( getActivity(), TaxiPostDetailActivity.class);
-					intent.putExtra("postID", post.getPostID() );
-					
-					if ( departure != null )
-					{
-						intent.putExtra("fromLatitude", String.valueOf(departure.latitude) );
-						intent.putExtra("fromLongitude", String.valueOf(departure.longitude) );						
+					Intent intent = new Intent(getActivity(), TaxiPostDetailActivity.class);
+					intent.putExtra("postID", post.getPostID());
+
+					if (departure != null) {
+						intent.putExtra("fromLatitude", String.valueOf(departure.latitude));
+						intent.putExtra("fromLongitude", String.valueOf(departure.longitude));
 					}
-					
-					if ( destination != null )
-					{
-						intent.putExtra("toLatitude", String.valueOf(destination.latitude) );
-						intent.putExtra("toLongitude", String.valueOf(destination.longitude) );	
+
+					if (destination != null) {
+						intent.putExtra("toLatitude", String.valueOf(destination.latitude));
+						intent.putExtra("toLongitude", String.valueOf(destination.longitude));
 					}
-					
+
 					startActivity(intent);
 					getActivity().overridePendingTransition(anim.slide_in_from_right, anim.slide_out_to_left);
 				}
@@ -169,10 +166,6 @@ public class TaxiFragment extends BaseFragment
 				double longitude = Double.parseDouble( MainActivity.longitude );
 				updateAddress( new LatLng(latitude, longitude));
 			}
-			
-			
-//			setMetaInfo("lastLocationUpdatedDt", "");
-			getActivity().sendBroadcast(new Intent("startLocationUpdate"));
 			
 			moreFlag.setMoreFlag(true);
 		}
@@ -237,7 +230,7 @@ public class TaxiFragment extends BaseFragment
 			}
 		});
 		
-		Button btnSearchDetail = (Button) header3.findViewById(id.btnSearchDetail);
+		Button btnSearchDetail = (Button) searchConditionHeader.findViewById(id.btnSearchDetail);
 		btnSearchDetail.setOnClickListener(this);
 		
 		TextView txtNumOfUsers = (TextView) rootView.findViewById(id.txtNumOfUsers);
@@ -304,14 +297,14 @@ public class TaxiFragment extends BaseFragment
 					
 					if ( "Guest".equals(application.getLoginUser().getType() ) )
 					{
-						listMain.removeHeaderView(header);
-						listMain.addHeaderView(header, null, false );
-						header.findViewById(id.btnKakaoLogin).setOnClickListener(this);
-						header.findViewById(id.btnFBLogin).setOnClickListener(this);
+						listMain.removeHeaderView(snsLoginHeader);
+						listMain.addHeaderView(snsLoginHeader, null, false );
+						snsLoginHeader.findViewById(id.btnKakaoLogin).setOnClickListener(this);
+						snsLoginHeader.findViewById(id.btnFBLogin).setOnClickListener(this);
 					}
 					else
 					{
-						listMain.removeHeaderView(header);
+						listMain.removeHeaderView(snsLoginHeader);
 					}
 					
 					if ( "true".equals( moreFlagString ) )
@@ -343,11 +336,11 @@ public class TaxiFragment extends BaseFragment
 						listMain.removeFooterView(footer);
 					}
 					
-					listMain.removeHeaderView(header2);
+					listMain.removeHeaderView(nearUsersCountHeader);
 					
 					if ( departure != null )
 					{
-						listMain.addHeaderView(header2, null, false);
+						listMain.addHeaderView(nearUsersCountHeader, null, false);
 						rootView.findViewById(id.layoutUsers).setVisibility(ViewGroup.VISIBLE);
 						
 						TextView txtNumOfUsers = (TextView) rootView.findViewById(id.txtNumOfUsers);
@@ -476,9 +469,9 @@ public class TaxiFragment extends BaseFragment
 			}
 		}
 
-		TextView txtCurrentAddress = (TextView) header3.findViewById(id.txtCurrentAddress);
+		TextView txtCurrentAddress = (TextView) searchConditionHeader.findViewById(id.txtCurrentAddress);
 		txtCurrentAddress.setText( address );
-		header3.findViewById(id.layoutCurLocation).setVisibility(ViewGroup.VISIBLE);
+		searchConditionHeader.findViewById(id.layoutCurLocation).setVisibility(ViewGroup.VISIBLE);
 		if ( requestCode == 1 )
 		{
 			currentAddress = address;

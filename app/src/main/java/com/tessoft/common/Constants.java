@@ -27,6 +27,9 @@ public class Constants {
 
 	public static final String BROADCAST_TAXI_REFRESH = "BROADCAST_TAXI_REFRESH";
 	public static final String BROADCAST_SET_DESTINATION = "BROADCAST_SET_DESTINATION";
+	public static final String BROADCAST_LOCATION_UPDATED = "BROADCAST_LOCATION_UPDATED";
+
+	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
 	

@@ -182,11 +182,18 @@ public class LocationUpdateService extends Service
 					address = Util.getDongAddressString( resultMap.get("address").toString() );
 					User user = application.getLoginUser();
 					UserLocation userLocation = new UserLocation();
-					userLocation.setUser( user );
+					userLocation.setUser(user);
 					userLocation.setLocationName("현재위치");
-					userLocation.setLatitude( latitude );
-					userLocation.setLongitude( longitude );
-					userLocation.setAddress( address );
+					userLocation.setLatitude(latitude);
+					userLocation.setLongitude(longitude);
+					userLocation.setAddress(address);
+
+					Intent broadcastIntent = new Intent( Constants.BROADCAST_LOCATION_UPDATED );
+					broadcastIntent.putExtra("latitude", latitude );
+					broadcastIntent.putExtra("longitude", longitude );
+					broadcastIntent.putExtra("address", address );
+					sendBroadcast(broadcastIntent);
+
 					application.sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ),
 							Constants.HTTP_UPDATE_LOCATION, null );
 				}

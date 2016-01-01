@@ -24,7 +24,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if ( position == 0 ) return "위치";
+        if ( position == 0 ) return "실시간 위치공유";
         else  if( position == 1 ) return "카풀/합승";
         else return "";
     }

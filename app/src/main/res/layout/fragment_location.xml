@@ -6,6 +6,125 @@
     tools:context="com.tessoft.common.LocationFragment">
 
     <LinearLayout
+        android:id="@+id/layoutLocationBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_rounded_border"
+            android:paddingBottom="25dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:clipToPadding="false">
+
+            <TextView
+                android:id="@+id/txtLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_cur_loc"
+                android:drawablePadding="5dp"
+                android:text="현재위치"
+                android:textColor="#505255"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtCurrentAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/txtLabel"
+                android:singleLine="false"
+                android:text="로딩중"
+                android:textColor="#505255" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_rounded_border"
+            android:padding="10dp"
+            android:layout_marginTop="10dp">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnMapToggle"
+                style="@style/btn_style"
+                android:layout_height="45dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="지도 접기" />
+
+            <Button
+                android:id="@+id/btnShare"
+                style="@style/btn_style"
+                android:layout_height="45dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="공유하기" />
+
+        </LinearLayout>
+
+        <TextView android:id="@+id/txtURL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:background="@drawable/layout_rounded_border"
+            android:textSize="16sp"
+            android:textColor="#0000ff"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutGPS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_rounded_border"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:singleLine="false"
+            android:textColor="#505255"
+            android:text="GPS가 활성화되어 있지 않습니다."/>
+
+    </LinearLayout>
+
+    <!--LinearLayout
+        android:layout_below="@+id/layoutCurLocation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
@@ -28,6 +147,6 @@
             android:layout_marginTop="30dp"
             android:text="실시간 내 위치 공유" />
 
-    </LinearLayout>
+    </LinearLayout-->
 
 </RelativeLayout>

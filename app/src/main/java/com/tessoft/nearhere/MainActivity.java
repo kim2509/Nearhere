@@ -82,7 +82,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity 
-implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, AddressTaskDelegate{
+implements LocationListener, AddressTaskDelegate{
 
 	public static boolean active = false;
 	DrawerLayout mDrawerLayout = null;
@@ -90,7 +90,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 	String mTitle = "";
 	private ActionBarDrawerToggle mDrawerToggle;
 	private Fragment currentFragment = null;
-	GoogleApiClient mGoogleApiClient = null;
 
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
@@ -136,12 +135,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			.add(R.id.content_frame, currentFragment)
 			.commit();
 
-			buildGoogleApiClient();
-
 			// 마지막 위치업데이트 시간 clear
 			application.setMetaInfo("lastLocationUpdatedDt", "");
-
-			createLocationRequest();
 
 			// 푸시 토큰을 생성한다.
 			gcm = GoogleCloudMessaging.getInstance(this);
@@ -154,6 +149,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 
 			if ( application.checkIfGPSEnabled() == false )
 				buildAlertMessageNoGps();
+			else
+				startLocationUpdates();
 
 			MainActivity.active = true;
 			
@@ -291,11 +288,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		try
 		{
 			super.onStart();
-			if ( mGoogleApiClient != null && mGoogleApiClient.isConnected() == false )
-				mGoogleApiClient.connect();
 
 			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
-			registerReceiver(mMessageReceiver, new IntentFilter("startLocationUpdate"));
 		}
 		catch( Exception ex )
 		{
@@ -310,10 +304,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		{
 			super.onStop();
 
-			if ( mGoogleApiClient != null && mGoogleApiClient.isConnected() )
 			{
 				stopLocationUpdates();
-				mGoogleApiClient.disconnect();
 			}
 
 			unregisterReceiver(mMessageReceiver);
@@ -324,12 +316,14 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		}
 	}
 
+	protected void stopLocationUpdates() {
+	}
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		try
-		{
+		try {
 			getUnreadCount();
 		}
 		catch( Exception ex )
@@ -346,7 +340,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 		bUpdateUnreadCountFinished = false;
 		
 		HashMap hash = application.getDefaultRequest();
-		hash.put("userID", application.getLoginUser().getUserID() );
+		hash.put("userID", application.getLoginUser().getUserID());
 		hash.put("lastNoticeID", application.getMetaInfoString("lastNoticeID"));
 		sendHttp("/taxi/getUnreadCount.do", mapper.writeValueAsString(hash), GET_UNREAD_COUNT);
 	}
@@ -360,8 +354,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			{
 				if ( "updateUnreadCount".equals( intent.getAction() ) )
 					getUnreadCount();
-				else if ( "startLocationUpdate".equals( intent.getAction() ) )
-					startLocationUpdates();
 			}
 			catch( Exception ex )
 			{
@@ -467,7 +459,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 				setProgressBarIndeterminateVisibility(true);
 				sendHttp("/taxi/logout.do", mapper.writeValueAsString( application.getLoginUser() ), Constants.HTTP_LOGOUT );
 			}
-			else if ( UPDATE_NOTICE.equals( param ) )
+			else if (UPDATE_NOTICE.equals( param ) )
 			{
 				goUpdate();
 				finish();
@@ -506,14 +498,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
-
-	protected synchronized void buildGoogleApiClient() {
-		mGoogleApiClient = new GoogleApiClient.Builder(this)
-		.addConnectionCallbacks(this)
-		.addOnConnectionFailedListener(this)
-		.addApi(LocationServices.API)
-		.build();
 	}
 
 	@Override
@@ -586,42 +570,11 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			userLocation.setLatitude( MainActivity.latitude );
 			userLocation.setLongitude( MainActivity.longitude );
 			userLocation.setAddress( MainActivity.address );
-			sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ), Constants.HTTP_UPDATE_LOCATION );			
+			sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString(userLocation), Constants.HTTP_UPDATE_LOCATION);
 		}
-	}
-
-	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
-		application.debug("[MainActivity] playservice is onConnectionFailed.[" + arg0 + "]");
-	}
-
-	@Override
-	public void onConnected(Bundle arg0) {
-		// TODO Auto-generated method stub
-		try
-		{
-			application.debug("[MainActivity] playservice is connected.[onConnected]");
-			startLocationUpdates();
-		}
-		catch( Exception ex )
-		{
-
-		}
-	}
-
-	LocationRequest mLocationRequest = null;
-	protected void createLocationRequest() {
-		mLocationRequest = new LocationRequest();
-		mLocationRequest.setInterval(1000);
-		mLocationRequest.setFastestInterval(1000);
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 	}
 
 	protected void startLocationUpdates() {
-
-		if ( mGoogleApiClient == null || mGoogleApiClient.isConnected() == false )
-			return;
 
 		// 2분마다 갱신하기 위해 추가한 로직.
 		// 너무 자주 갱신하는 문제 수정
@@ -643,27 +596,15 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Ad
 			if(lastLocationUpdatedDt.before(now))
 				bShouldUpdate = true;
 		}
-		
-		application.debug("[MainActivity] bShouldUpdateLocation: " + bShouldUpdate );
 
 		if ( bShouldUpdate )
 		{
-			LocationServices.FusedLocationApi.requestLocationUpdates(
-					mGoogleApiClient, mLocationRequest, this);
+			// startLocationService
+			Intent locUpdateIntent = new Intent( getApplicationContext(), LocationUpdateService.class);
+			startService(locUpdateIntent);
 
 			application.setMetaInfo("lastLocationUpdatedDt", String.valueOf( now.getTime() ));			
 		}
-	}
-
-	protected void stopLocationUpdates() {
-		LocationServices.FusedLocationApi.removeLocationUpdates(
-				mGoogleApiClient, this);
-	}
-
-	@Override
-	public void onConnectionSuspended(int arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	static final String TAG = "Nearhere";
