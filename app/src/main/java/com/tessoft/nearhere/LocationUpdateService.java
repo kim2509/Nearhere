@@ -28,9 +28,6 @@ public class LocationUpdateService extends Service
 	implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, AddressTaskDelegate{
 
 	GoogleApiClient mGoogleApiClient = null;
-	String latitude = "";
-	String longitude = "";
-	public static String address = "";
 	ObjectMapper mapper = null;
 	NearhereApplication application = null;
 
@@ -159,8 +156,8 @@ public class LocationUpdateService extends Service
 		// TODO Auto-generated method stub
 		try
 		{
-			latitude = String.valueOf( location.getLatitude() );
-			longitude = String.valueOf( location.getLongitude() );
+			NearhereApplication.latitude = String.valueOf( location.getLatitude() );
+			NearhereApplication.longitude = String.valueOf( location.getLongitude() );
 			
 			new GetAddressTask( this, this, 1 ).execute(location);
 		}
@@ -179,19 +176,19 @@ public class LocationUpdateService extends Service
 				HashMap resultMap = (HashMap) result;
 				if ( resultMap.containsKey("address") && resultMap.get("address") != null )
 				{
-					address = Util.getDongAddressString( resultMap.get("address").toString() );
+					NearhereApplication.address = Util.getDongAddressString( resultMap.get("address").toString() );
 					User user = application.getLoginUser();
 					UserLocation userLocation = new UserLocation();
 					userLocation.setUser(user);
 					userLocation.setLocationName("현재위치");
-					userLocation.setLatitude(latitude);
-					userLocation.setLongitude(longitude);
-					userLocation.setAddress(address);
+					userLocation.setLatitude(NearhereApplication.latitude);
+					userLocation.setLongitude(NearhereApplication.longitude);
+					userLocation.setAddress(NearhereApplication.address);
 
 					Intent broadcastIntent = new Intent( Constants.BROADCAST_LOCATION_UPDATED );
-					broadcastIntent.putExtra("latitude", latitude );
-					broadcastIntent.putExtra("longitude", longitude );
-					broadcastIntent.putExtra("address", address );
+					broadcastIntent.putExtra("latitude", NearhereApplication.latitude );
+					broadcastIntent.putExtra("longitude", NearhereApplication.longitude );
+					broadcastIntent.putExtra("address", NearhereApplication.address );
 					sendBroadcast(broadcastIntent);
 
 					application.sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ),

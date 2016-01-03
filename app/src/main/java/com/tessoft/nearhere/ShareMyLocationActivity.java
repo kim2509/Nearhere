@@ -60,8 +60,8 @@ public class ShareMyLocationActivity extends BaseActivity implements OnMapReadyC
 		// TODO Auto-generated method stub
 		try
 		{
-			double latitude = Double.parseDouble(MainActivity.latitude);
-			double longitude = Double.parseDouble(MainActivity.longitude);
+			double latitude = Double.parseDouble(NearhereApplication.latitude);
+			double longitude = Double.parseDouble(NearhereApplication.longitude);
 			
 			LatLng location = new LatLng( latitude , longitude); 
 			CameraUpdate center=

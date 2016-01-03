@@ -138,12 +138,12 @@ public class NewTaxiPostActivity extends BaseActivity implements OnClickListener
 					departure = (LatLng) getIntent().getExtras().get("departure");
 					txtDeparture.setText( getIntent().getExtras().getString("address"));
 				}
-				else if ( Util.isEmptyString( MainActivity.address ) == false )
+				else if ( Util.isEmptyString( NearhereApplication.address ) == false )
 				{
-					double latitude =  Util.getDouble( MainActivity.latitude );
-					double longitude = Util.getDouble( MainActivity.longitude );
+					double latitude =  Util.getDouble( NearhereApplication.latitude );
+					double longitude = Util.getDouble( NearhereApplication.longitude );
 					departure = new LatLng(latitude, longitude);
-					txtDeparture.setText( MainActivity.address );
+					txtDeparture.setText( NearhereApplication.address );
 				}	
 				
 				spStatus.setEnabled(false);

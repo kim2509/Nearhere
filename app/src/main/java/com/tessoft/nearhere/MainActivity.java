@@ -81,8 +81,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends BaseActivity 
-implements LocationListener, AddressTaskDelegate{
+public class MainActivity extends BaseActivity {
 
 	public static boolean active = false;
 	DrawerLayout mDrawerLayout = null;
@@ -104,11 +103,6 @@ implements LocationListener, AddressTaskDelegate{
 
 	MainMenuArrayAdapter adapter = null;
 
-	public static String latitude = "";
-	public static String longitude = "";
-	public static String fullAddress = "";
-
-	public static String address = "";
 	DisplayImageOptions options = null;
 	
 	View header = null;
@@ -149,8 +143,6 @@ implements LocationListener, AddressTaskDelegate{
 
 			if ( application.checkIfGPSEnabled() == false )
 				buildAlertMessageNoGps();
-			else
-				startLocationUpdates();
 
 			MainActivity.active = true;
 			
@@ -325,6 +317,9 @@ implements LocationListener, AddressTaskDelegate{
 		super.onResume();
 		try {
 			getUnreadCount();
+
+			if ( application.checkIfGPSEnabled() )
+				startLocationUpdates();
 		}
 		catch( Exception ex )
 		{
@@ -498,80 +493,6 @@ implements LocationListener, AddressTaskDelegate{
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		try
-		{
-			application.debug("[MainActivity] onLocationChanged: " + location);
-			
-			MainActivity.latitude = String.valueOf( location.getLatitude() );
-			MainActivity.longitude = String.valueOf( location.getLongitude() );
-
-			new GetAddressTask( this, this, 1 ).execute(location);
-
-			if ( currentFragment instanceof TaxiFragment )
-			{
-				TaxiFragment f = (TaxiFragment) currentFragment;
-				f.updateAddress( new LatLng( location.getLatitude(), location.getLongitude() ) );
-			}
-
-			stopLocationUpdates();
-		}
-		catch( Exception ex )
-		{
-			catchException(this, ex);
-		}
-	}
-
-	@Override
-	public void onAddressTaskPostExecute(int requestCode, Object result) {
-		// TODO Auto-generated method stub
-
-		try
-		{
-			if ( result != null && result instanceof HashMap)
-			{
-				HashMap resultMap = (HashMap) result;
-				if ( resultMap.containsKey("address") && resultMap.get("address") != null )
-				{
-					MainActivity.address = Util.getDongAddressString( resultMap.get("address").toString() );
-					MainActivity.fullAddress = result.toString();
-
-					Intent intent = new Intent("currentLocationChanged");
-					intent.putExtra("latitude", MainActivity.latitude );
-					intent.putExtra("longitude", MainActivity.longitude );
-					intent.putExtra("fullAddress", result.toString() );
-					sendBroadcast(intent);
-
-					if ( bMyLocationUpdated == false )
-						updateMyLocation();
-				}
-			}
-		}
-		catch( Exception ex )
-		{
-			catchException(this, ex);
-		}
-	}
-
-	boolean bMyLocationUpdated = false;
-
-	public void updateMyLocation() throws Exception
-	{
-		if ( !Util.isEmptyString( MainActivity.latitude ) && !Util.isEmptyString( MainActivity.longitude ) )
-		{
-			User user = application.getLoginUser();
-			UserLocation userLocation = new UserLocation();
-			userLocation.setUser( user );
-			userLocation.setLocationName("현재위치");
-			userLocation.setLatitude( MainActivity.latitude );
-			userLocation.setLongitude( MainActivity.longitude );
-			userLocation.setAddress( MainActivity.address );
-			sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString(userLocation), Constants.HTTP_UPDATE_LOCATION);
-		}
 	}
 
 	protected void startLocationUpdates() {
@@ -760,8 +681,6 @@ implements LocationListener, AddressTaskDelegate{
 					
 					bUpdateUnreadCountFinished = true;
 				}
-				else if ( requestCode == Constants.HTTP_UPDATE_LOCATION )
-					bMyLocationUpdated = true;
 				else if ( requestCode == Constants.HTTP_APP_INFO )
 				{
 					String appInfoString = mapper.writeValueAsString( response.getData() );

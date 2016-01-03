@@ -31,6 +31,10 @@ public class NearhereApplication extends Application{
 
 	public static boolean bLocationServiceExecuting = false;
 	public static String strRealtimeLocationID = "";
+
+	public static String latitude = "";
+	public static String longitude = "";
+	public static String address = "";
 	
 	public int getMetaInfoInt( String key )
 	{

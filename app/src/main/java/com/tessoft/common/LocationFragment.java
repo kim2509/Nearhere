@@ -21,8 +21,8 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.nearhere.LocationService;
@@ -77,6 +77,7 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
         mapper = new ObjectMapper();
 
         getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_LOCATION_UPDATED));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_STOP_LOCATION_SERVICE));
     }
 
     @Override
@@ -88,7 +89,7 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
             // Inflate the layout for this fragment
             rootView =  inflater.inflate(R.layout.fragment_location, container, false);
 
-            MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager()
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
 
@@ -111,10 +112,16 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
 
             TextView txtURL = (TextView) rootView.findViewById(R.id.txtURL);
             txtURL.setOnClickListener(this);
+
+            if ( !Util.isEmptyString( NearhereApplication.address ) )
+            {
+                TextView txtCurrentAddress = (TextView) rootView.findViewById(R.id.txtCurrentAddress);
+                txtCurrentAddress.setText(NearhereApplication.address);
+            }
         }
         catch( Exception ex )
         {
-
+            showToastMessage( ex.getMessage() );
         }
 
         return rootView;
@@ -181,7 +188,12 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
             double latitude = 37.5627667;
             double longitude = 126.9821314;
 
-            moveMap(latitude, longitude);
+            if ( !Util.isEmptyString( NearhereApplication.latitude ) && !Util.isEmptyString( NearhereApplication.longitude ) )
+            {
+                moveMap(Double.parseDouble( NearhereApplication.latitude), Double.parseDouble( NearhereApplication.longitude ));
+            }
+            else
+                moveMap(latitude, longitude);
 
             LinearLayout layoutMap = (LinearLayout) rootView.findViewById(R.id.layoutMap);
             int Visibility = layoutMap.getVisibility();
@@ -248,24 +260,40 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
 
         if ( "공유하기".equals(btn.getText()) )
         {
-            HashMap hash = new HashMap();
-            hash.put("userID", application.getLoginUser().getUserID());
-            sendHttp("/location/getNewLocation.do", mapper.writeValueAsString(hash), Constants.HTTP_GET_NEW_LOCATION);
-            btn.setText("종료하기");
+            startLocationService();
         }
         else if ( "종료하기".equals( btn.getText()) )
         {
-            Intent intent = new Intent( getActivity().getApplicationContext(), LocationService.class );
-            getActivity().stopService(intent);
-            btn.setText("공유하기");
-
-            if ( !Util.isEmptyString(NearhereApplication.strRealtimeLocationID) )
-            {
-                HashMap hash = new HashMap();
-                hash.put("locationID", NearhereApplication.strRealtimeLocationID);
-                sendHttp("/location/finishLocationTracking.do", mapper.writeValueAsString(hash), Constants.HTTP_FINISH_LOCATION_TRACKING);
-            }
+            stopLocationService();
         }
+    }
+
+    private void startLocationService() throws IOException {
+        HashMap hash = new HashMap();
+        hash.put("userID", application.getLoginUser().getUserID());
+        sendHttp("/location/getNewLocation.do", mapper.writeValueAsString(hash), Constants.HTTP_GET_NEW_LOCATION);
+        Button btnShare = (Button) rootView.findViewById(R.id.btnShare);
+        btnShare.setText("종료하기");
+
+        rootView.findViewById(R.id.txtShareGuide).setVisibility(ViewGroup.GONE);
+        rootView.findViewById(R.id.txtExitGuide).setVisibility(ViewGroup.VISIBLE);
+    }
+
+    private void stopLocationService() throws IOException {
+        Intent intent = new Intent( getActivity().getApplicationContext(), LocationService.class );
+        getActivity().stopService(intent);
+        Button btnShare = (Button) rootView.findViewById(R.id.btnShare);
+        btnShare.setText("공유하기");
+
+        if ( !Util.isEmptyString(NearhereApplication.strRealtimeLocationID) )
+        {
+            HashMap hash = new HashMap();
+            hash.put("locationID", NearhereApplication.strRealtimeLocationID);
+            sendHttp("/location/finishLocationTracking.do", mapper.writeValueAsString(hash), Constants.HTTP_FINISH_LOCATION_TRACKING);
+        }
+
+        rootView.findViewById(R.id.txtShareGuide).setVisibility(ViewGroup.VISIBLE);
+        rootView.findViewById(R.id.txtExitGuide).setVisibility(ViewGroup.GONE);
     }
 
     private void mapClicked() {
@@ -312,16 +340,25 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
         public void onReceive(Context context, Intent intent) {
             try
             {
-                if ( intent != null && intent.getExtras() != null )
+                if ( intent == null ) return;
+
+                if ( Constants.BROADCAST_LOCATION_UPDATED.equals(intent.getAction()) )
                 {
-                    String latitude = intent.getExtras().getString("latitude");
-                    String longitude = intent.getExtras().getString("longitude");
-                    String address = intent.getExtras().getString("address");
+                    if ( intent.getExtras() != null )
+                    {
+                        String latitude = intent.getExtras().getString("latitude");
+                        String longitude = intent.getExtras().getString("longitude");
+                        String address = intent.getExtras().getString("address");
 
-                    moveMap(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                        moveMap(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
-                    TextView txtCurrentAddress = (TextView) rootView.findViewById(R.id.txtCurrentAddress);
-                    txtCurrentAddress.setText( address );
+                        TextView txtCurrentAddress = (TextView) rootView.findViewById(R.id.txtCurrentAddress);
+                        txtCurrentAddress.setText(address);
+                    }
+                }
+                else if ( Constants.BROADCAST_STOP_LOCATION_SERVICE.equals( intent.getAction() ) )
+                {
+                    stopLocationService();
                 }
             }
             catch( Exception ex )
@@ -364,7 +401,7 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
                     NearhereApplication.strRealtimeLocationID = data.get("locationID").toString();
 
                     txtURL.setText(Constants.getServerURL() + "/ul.do?ID=" +
-                            java.net.URLEncoder.encode( NearhereApplication.strRealtimeLocationID, "utf-8"));
+                            java.net.URLEncoder.encode(NearhereApplication.strRealtimeLocationID, "utf-8"));
 
                     Intent intent = new Intent( getActivity().getApplicationContext(), LocationService.class );
                     intent.putExtra("locationID", NearhereApplication.strRealtimeLocationID);

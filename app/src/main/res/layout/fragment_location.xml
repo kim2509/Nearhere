@@ -5,6 +5,12 @@
     android:background="#EEEEEE"
     tools:context="com.tessoft.common.LocationFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ScrollView>
+
     <LinearLayout
         android:id="@+id/layoutLocationBody"
         android:layout_width="match_parent"
@@ -16,10 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/layout_rounded_border"
-            android:paddingBottom="25dp"
+            android:paddingBottom="20dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             android:clipToPadding="false">
 
             <TextView
@@ -57,9 +63,10 @@
 
             <fragment
                 android:id="@+id/map"
-                android:name="com.google.android.gms.maps.MapFragment"
+                class="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
+                android:name="com.tessoft.nearhere.MainActivity"
                 />
 
         </LinearLayout>
@@ -90,6 +97,18 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/txtShareGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_rounded_border"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:singleLine="false"
+            android:padding="10dp"
+            android:textColor="#505255"
+            android:text="약속장소 이동중 혹은 밤늦게 귀가할 때 고객님의 위치를 지인들에게 실시간으로 공유해 보세요."/>
+
         <TextView android:id="@+id/txtURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,8 +117,21 @@
             android:textSize="16sp"
             android:textColor="#0000ff"
             android:padding="10dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
             android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txtExitGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_rounded_border"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:singleLine="false"
+            android:padding="10dp"
+            android:textColor="#505255"
+            android:visibility="gone"
+            android:text="고객님의 위치정보는 5초마다 갱신되며,1시간 후 자동종료됩니다."/>
 
     </LinearLayout>
 
@@ -119,7 +151,7 @@
             android:layout_marginLeft="10dp"
             android:singleLine="false"
             android:textColor="#505255"
-            android:text="GPS가 활성화되어 있지 않습니다."/>
+            android:text="GPS가 활성화되어 있지 않아서 위치공유 서비스를 이용하실 수 없습니다.\r\nGPS를 활성화시키고 프로그램을 재시작 해 주십시오."/>
 
     </LinearLayout>
 

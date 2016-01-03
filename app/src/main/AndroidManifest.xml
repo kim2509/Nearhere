@@ -109,6 +109,7 @@
             android:name=".TaxiPostDetailActivity"
             android:label="@string/title_activity_taxi_post_detail"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity
@@ -128,6 +129,7 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/NoTitleBarTheme" >
         </activity>
         <activity

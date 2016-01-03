@@ -49,7 +49,7 @@ public class SafetyKeeperActivity extends BaseActivity implements OnClickListene
 	ArrayAdapter<CharSequence> adapterExitHour = null;
 	EditText edtMessage = null;
 	TextView txtStatus = null;
-	String address = MainActivity.fullAddress;
+	String address = NearhereApplication.address;
 	Spinner spExitHour = null;
 
 	@Override
@@ -126,8 +126,8 @@ public class SafetyKeeperActivity extends BaseActivity implements OnClickListene
 				}
 			});
 
-			txtPreview.setText( "[이근처 합승-" + application.getLoginUser().getUserName() + "님] [" + 
-					MainActivity.fullAddress.replaceAll("\\|", " ") + "]" );
+			txtPreview.setText( "[이근처 합승-" + application.getLoginUser().getUserName() + "님] [" +
+					NearhereApplication.address.replaceAll("\\|", " ") + "]" );
 
 			spTotalCount = (Spinner) findViewById(R.id.spTotalCount);
 			adapterTotalCount = ArrayAdapter.createFromResource( this,
@@ -312,7 +312,7 @@ public class SafetyKeeperActivity extends BaseActivity implements OnClickListene
 				if ( "currentLocationChanged".equals( intent.getAction() ) )
 				{
 					String msg = "[이근처 합승-" + application.getLoginUser().getUserName() + "] " + edtMessage.getText().toString() + 
-							" [" + MainActivity.fullAddress.replaceAll("\\|", " ") + "]";
+							" [" + NearhereApplication.address.replaceAll("\\|", " ") + "]";
 					txtPreview.setText( msg );
 				}
 				else if ( "safetyKeeperStarted".equals( intent.getAction() ) )

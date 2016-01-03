@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.HybridActivity;
 import com.tessoft.nearhere.MainActivity;
+import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
 
 import android.content.BroadcastReceiver;
@@ -123,11 +124,11 @@ public class WebFragment extends BaseFragment {
 			handler.proceed();
 		};
 	};
-	
+
 	public void updateCurrentLocation()
 	{
-		webView.loadUrl("javascript:updateCurrentLocation('" + 
-				MainActivity.latitude + "','" + MainActivity.longitude + "','" + MainActivity.address + "');");
+		webView.loadUrl("javascript:updateCurrentLocation('" +
+				NearhereApplication.latitude + "','" + NearhereApplication.longitude + "','" + NearhereApplication.address + "');");
 	}
 
 	class MainJSInterface

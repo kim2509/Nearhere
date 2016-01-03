@@ -17,6 +17,7 @@ import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.Post;
 import com.tessoft.nearhere.MainActivity;
+import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.NewTaxiPostActivity;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.ShareMyLocationActivity;
@@ -51,7 +52,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class TaxiFragment extends BaseFragment 
-	implements AddressTaskDelegate, AdapterDelegate, TransactionDelegate, OnItemSelectedListener, OnClickListener{
+	implements AdapterDelegate, TransactionDelegate, OnItemSelectedListener, OnClickListener{
 
 	protected static final int REQUEST_POST_DETAIL = 2001;
 	private static final int GET_POSTS = 1;
@@ -151,22 +152,7 @@ public class TaxiFragment extends BaseFragment
 					getActivity().overridePendingTransition(anim.slide_in_from_right, anim.slide_out_to_left);
 				}
 			});
-			
-			if ( Util.isEmptyString(MainActivity.latitude) ||
-					Util.isEmptyString( MainActivity.longitude ))
-			{
-//				listMain.setVisibility(ViewGroup.GONE);
-//				rootView.findViewById(R.id.marker_progress).setVisibility(ViewGroup.VISIBLE);
-//				inquiryPosts();	
-			}
-			else
-			{
-				// 기존에 로딩했다가 다른 메뉴로 갔다가 왔을 경우
-				double latitude = Double.parseDouble( MainActivity.latitude );
-				double longitude = Double.parseDouble( MainActivity.longitude );
-				updateAddress( new LatLng(latitude, longitude));
-			}
-			
+
 			moreFlag.setMoreFlag(true);
 		}
 		catch( Exception ex )
@@ -415,75 +401,8 @@ public class TaxiFragment extends BaseFragment
 		sendHttp("/taxi/getPostsNearHereV2.do", mapper.writeValueAsString(hash), GET_POSTS );
 	}
 
-	boolean bUpdatedOnce = false;
-	public void updateAddress( LatLng location )
-	{
-		try
-		{
-			Location loc = new Location("taxiFragment");
-			loc.setLatitude(location.latitude);
-			loc.setLongitude(location.longitude);
-			Location[] locs = new Location[1];
-			locs[0] = loc;
-			
-			if ( bUpdatedOnce == false )
-			{
-				bUpdatedOnce = true;
-				currentLocation = new LatLng( location.latitude , location.longitude );
-				
-//				for ( int i = 0; i < adapterSearchOrder.getCount(); i++ )
-//				{
-//					if ( "거리순".equals( adapterSearchOrder.getItem(i) ) )
-//					{
-//						spSearchOrder.setSelection(i);
-//						break;
-//					}
-//				}
-				
-//				departure = currentLocation;
-				
-				new GetAddressTask( getActivity(), this, 1 ).execute(locs);
-			}
-			else
-			{
-				new GetAddressTask( getActivity(), this, 2 ).execute(locs);	
-			}
-		}
-		catch( Exception ex )
-		{
-			catchException(this, ex);
-		}
-	}
-	
-	@Override
-	public void onAddressTaskPostExecute(int requestCode, Object result) {
-		// TODO Auto-generated method stub
-		String address = "";
-
-		if ( result != null && result instanceof HashMap)
-		{
-			HashMap resultMap = (HashMap) result;
-			if ( resultMap.containsKey("address") && resultMap.get("address") != null )
-			{
-				address = Util.getDongAddressString( resultMap.get("address").toString() );
-			}
-		}
-
-		TextView txtCurrentAddress = (TextView) searchConditionHeader.findViewById(id.txtCurrentAddress);
-		txtCurrentAddress.setText( address );
-		searchConditionHeader.findViewById(id.layoutCurLocation).setVisibility(ViewGroup.VISIBLE);
-		if ( requestCode == 1 )
-		{
-			currentAddress = address;
-			departureAddress = address;
-		}
-		else
-			currentAddress = address;
-	}
-	
 	LatLng departure = null;
 	LatLng destination = null;
-	LatLng currentLocation = null;
 	String currentAddress = "";
 	String departureDistance = "";
 	String departureAddress = "";
@@ -638,15 +557,15 @@ public class TaxiFragment extends BaseFragment
 				{
 					if ( departure == null )
 					{
-						if ( currentLocation == null )
+						if ( Util.isEmptyString(NearhereApplication.latitude ) || Util.isEmptyString(NearhereApplication.longitude ) )
 						{
 							showOKDialog("알림", "출발지를 설정해 주십시오.", null);
 							spSearchOrder.setSelection(0);
 							return;
 						}
 						
-						departure = currentLocation;
-						departureAddress = currentAddress;
+						departure = new LatLng( Double.parseDouble( NearhereApplication.latitude ), Double.parseDouble( NearhereApplication.longitude ));
+						departureAddress = NearhereApplication.address;
 					}
 				}
 			}

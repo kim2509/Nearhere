@@ -69,8 +69,17 @@ implements OnMapReadyCallback, AddressTaskDelegate {
 			}
 			else
 			{
-				initLocation = new LatLng( Util.getDouble(MainActivity.latitude),
-						Util.getDouble( MainActivity.longitude ) );
+				if ( !Util.isEmptyString( NearhereApplication.latitude ) && Util.isEmptyString( NearhereApplication.longitude ) )
+				{
+					initLocation = new LatLng( Util.getDouble(NearhereApplication.latitude),
+							Util.getDouble( NearhereApplication.longitude ) );
+				}
+				else {
+					// 초기위치 서울시청
+					double latitude = 37.5627667;
+					double longitude = 126.9821314;
+					initLocation = new LatLng(latitude,longitude);
+				}
 			}
 			
 			EditText edtSearchLocation = (EditText) findViewById(R.id.edtSearchLocation);

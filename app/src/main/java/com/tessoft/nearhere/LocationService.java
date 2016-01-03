@@ -20,12 +20,15 @@ import com.tessoft.common.Constants;
 import com.tessoft.common.GetAddressTask;
 import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
+import com.tessoft.common.Util;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserLocation;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LocationService extends Service
 		implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, TransactionDelegate , AddressTaskDelegate{
@@ -33,10 +36,11 @@ public class LocationService extends Service
 	private NotificationManager mNM;
 	ObjectMapper mapper = null;
 	GoogleApiClient mGoogleApiClient = null;
-	String latitude = "";
-	String longitude = "";
 	String locationID = "";
 	NearhereApplication application = null;
+
+	Timer exitTimer = null;
+	TimerTask exitTask = null;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -77,6 +81,23 @@ public class LocationService extends Service
 			// stopped, so return sticky.
 			if ( mGoogleApiClient != null && mGoogleApiClient.isConnected() == false )
 				mGoogleApiClient.connect();
+
+			//자동종료처리
+			exitTimer = new Timer();
+			exitTask = new TimerTask() {
+				@Override
+				public void run() {
+					try
+					{
+						Intent intent = new Intent( Constants.BROADCAST_STOP_LOCATION_SERVICE );
+						sendBroadcast(intent);
+					}
+					catch( Exception ex )
+					{
+					}
+				}
+			};
+			exitTimer.schedule( exitTask , 1000 * 60 * 60 );
 		}
 		catch( Exception ex )
 		{
@@ -225,7 +246,12 @@ public class LocationService extends Service
 					userLocation.setLocationName("현재위치");
 					userLocation.setLatitude(resultMap.get("latitude").toString());
 					userLocation.setLongitude(resultMap.get("longitude").toString());
-					userLocation.setAddress(resultMap.get("address").toString());
+					userLocation.setAddress( Util.getDongAddressString(resultMap.get("address").toString()));
+
+					NearhereApplication.latitude = resultMap.get("latitude").toString();
+					NearhereApplication.longitude = resultMap.get("longitude").toString();
+					NearhereApplication.address = Util.getDongAddressString(resultMap.get("address").toString());
+
 					sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString(userLocation), Constants.HTTP_UPDATE_LOCATION);
 				}
 			}

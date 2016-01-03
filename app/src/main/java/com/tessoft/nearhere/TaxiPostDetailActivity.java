@@ -456,13 +456,13 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 			PostReply postReply = new PostReply();
 			postReply.setPostID( post.getPostID() );
 			postReply.setUser( application.getLoginUser() );
-			postReply.setLatitude( MainActivity.latitude );
-			postReply.setLongitude( MainActivity.longitude );
+			postReply.setLatitude( NearhereApplication.latitude );
+			postReply.setLongitude( NearhereApplication.longitude );
 			postReply.setMessage( edtPostReply.getText().toString() );
 			edtPostReply.setText("");
 
 			sendHttp("/taxi/insertPostReply.do", mapper.writeValueAsString(postReply), INSERT_POST_REPLY );
-			
+
 			findViewById(R.id.marker_progress).setVisibility(ViewGroup.VISIBLE);
 			listMain.setVisibility(ViewGroup.GONE);
 		}
