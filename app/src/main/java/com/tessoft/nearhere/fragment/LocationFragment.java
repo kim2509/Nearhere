@@ -1,13 +1,10 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.fragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,15 +21,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.nearhere.LocationService;
-import com.tessoft.nearhere.LocationUpdateService;
-import com.tessoft.nearhere.MainActivity;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
-import com.tessoft.nearhere.ShareMyLocationActivity;
-import com.tessoft.nearhere.ShareRealtimeMyLocationActivity;
-import com.tessoft.nearhere.fragment.BaseFragment;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -87,36 +81,39 @@ public class LocationFragment extends BaseFragment implements OnMapReadyCallback
         try
         {
             // Inflate the layout for this fragment
-            rootView =  inflater.inflate(R.layout.fragment_location, container, false);
-
-            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-
-            Button btnMapToggle = (Button) rootView.findViewById(R.id.btnMapToggle);
-            if ( "GONE".equals( application.getMetaInfoString(Constants.METAINFO_LOCATION_MAP_VISIBILITY) ) )
+            if ( rootView == null )
             {
-                rootView.findViewById(R.id.layoutMap).setVisibility(ViewGroup.GONE);
-                btnMapToggle.setText("지도 펼치기");
-            }
-            else
-            {
-                rootView.findViewById(R.id.layoutMap).setVisibility(ViewGroup.VISIBLE);
-                btnMapToggle.setText("지도 접기");
-            }
+                rootView =  inflater.inflate(R.layout.fragment_location, container, false);
 
-            btnMapToggle.setOnClickListener(this);
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
 
-            btnShare = (Button) rootView.findViewById(R.id.btnShare);
-            btnShare.setOnClickListener(this);
+                Button btnMapToggle = (Button) rootView.findViewById(R.id.btnMapToggle);
+                if ( "GONE".equals( application.getMetaInfoString(Constants.METAINFO_LOCATION_MAP_VISIBILITY) ) )
+                {
+                    rootView.findViewById(R.id.layoutMap).setVisibility(ViewGroup.GONE);
+                    btnMapToggle.setText("지도 펼치기");
+                }
+                else
+                {
+                    rootView.findViewById(R.id.layoutMap).setVisibility(ViewGroup.VISIBLE);
+                    btnMapToggle.setText("지도 접기");
+                }
 
-            TextView txtURL = (TextView) rootView.findViewById(R.id.txtURL);
-            txtURL.setOnClickListener(this);
+                btnMapToggle.setOnClickListener(this);
 
-            if ( !Util.isEmptyString( NearhereApplication.address ) )
-            {
-                TextView txtCurrentAddress = (TextView) rootView.findViewById(R.id.txtCurrentAddress);
-                txtCurrentAddress.setText(NearhereApplication.address);
+                btnShare = (Button) rootView.findViewById(R.id.btnShare);
+                btnShare.setOnClickListener(this);
+
+                TextView txtURL = (TextView) rootView.findViewById(R.id.txtURL);
+                txtURL.setOnClickListener(this);
+
+                if ( !Util.isEmptyString(NearhereApplication.address) )
+                {
+                    TextView txtCurrentAddress = (TextView) rootView.findViewById(R.id.txtCurrentAddress);
+                    txtCurrentAddress.setText(NearhereApplication.address);
+                }
             }
         }
         catch( Exception ex )

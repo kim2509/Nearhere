@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.tessoft.nearhere.fragment.CarPoolTaxiFragment;
+import com.tessoft.nearhere.fragment.LocationFragment;
 import com.tessoft.nearhere.fragment.TaxiFragment;
 
 /**
@@ -17,15 +19,17 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
 
-        fragments = new Fragment[2];
+        fragments = new Fragment[3];
         fragments[0] = LocationFragment.newInstance();
-        fragments[1] = TaxiFragment.newInstance();
+        fragments[1] = CarPoolTaxiFragment.newInstance();
+        fragments[2] = TaxiFragment.newInstance();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         if ( position == 0 ) return "실시간 위치공유";
         else  if( position == 1 ) return "카풀/합승";
+        else  if( position == 2 ) return "카풀/합승";
         else return "";
     }
 

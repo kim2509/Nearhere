@@ -24,8 +24,10 @@ public class BaseListFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		
-		rootView = inflater.inflate(layout.fragment_base_list, container, false);
+		if ( rootView == null )
+		{
+			rootView = inflater.inflate(layout.fragment_base_list, container, false);
+		}
 		
 		return rootView;
 	}

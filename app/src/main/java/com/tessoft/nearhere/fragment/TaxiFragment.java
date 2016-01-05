@@ -19,8 +19,6 @@ import com.tessoft.domain.Post;
 import com.tessoft.nearhere.MainActivity;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.NewTaxiPostActivity;
-import com.tessoft.nearhere.R;
-import com.tessoft.nearhere.ShareMyLocationActivity;
 import com.tessoft.nearhere.TaxiPostDetailActivity;
 import com.tessoft.nearhere.UserListActivity;
 import com.tessoft.nearhere.UserProfileActivity;
@@ -47,6 +45,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,6 +70,7 @@ public class TaxiFragment extends BaseFragment
 	TaxiArrayAdapter adapter = null;
 	View nearUsersCountHeader = null;
 	View searchConditionHeader = null;
+
 	int pageNo = 1;
 	
 	Post moreFlag = new Post();
@@ -95,16 +95,15 @@ public class TaxiFragment extends BaseFragment
 		{
 			rootView = inflater.inflate(layout.fragment_taxi_main, container, false);
 
-//			fbHeader = getActivity().getLayoutInflater().inflate(R.layout.taxi_main_list_header_fb, null);
 			snsLoginHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header1, null);
 			searchConditionHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header3, null);
 			nearUsersCountHeader = getActivity().getLayoutInflater().inflate(layout.taxi_main_list_header2, null);
 			footer = getActivity().getLayoutInflater().inflate(layout.list_footer_taxi_main, null);
 
 			listMain = (ListView) rootView.findViewById(id.listMain);
-			
-			listMain.addHeaderView(searchConditionHeader, null, false );
-			listMain.addHeaderView(nearUsersCountHeader, null, false );
+
+			listMain.addHeaderView(searchConditionHeader, null, false);
+			listMain.addHeaderView(nearUsersCountHeader, null, false);
 			
 			if ( "Guest".equals(application.getLoginUser().getType() ) )
 			{
@@ -118,7 +117,7 @@ public class TaxiFragment extends BaseFragment
 				listMain.removeHeaderView(snsLoginHeader);
 			}
 			
-			listMain.addFooterView(footer, null, false );
+			listMain.addFooterView(footer, null, false);
 			listMain.setHeaderDividersEnabled(true);
 			listMain.setFooterDividersEnabled(false);
 

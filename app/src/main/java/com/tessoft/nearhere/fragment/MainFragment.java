@@ -53,6 +53,7 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
         // Bind the tabs to the ViewPager
         tabs = (PagerSlidingTabStrip) rootView.findViewById(R.id.tabs);
+
         tabs.setViewPager(pager);
 
         // continued from above
