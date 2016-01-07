@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tessoft.nearhere.activities.BaseActivity;
+
 public class FacebookConnect extends BaseActivity {
 
 	@Override

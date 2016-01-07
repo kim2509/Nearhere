@@ -1,6 +1,7 @@
 package com.tessoft.nearhere;
 
 import com.tessoft.common.Constants;
+import com.tessoft.nearhere.activities.BaseActivity;
 import com.uk.co.senab.photoview.PhotoViewAttacher;
 
 import com.nostra13.universalimageloader.core.ImageLoader;

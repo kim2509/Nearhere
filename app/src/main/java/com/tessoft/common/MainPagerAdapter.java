@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.tessoft.nearhere.fragment.CarPoolTaxiFragment;
-import com.tessoft.nearhere.fragment.LocationFragment;
-import com.tessoft.nearhere.fragment.TaxiFragment;
+import com.tessoft.nearhere.fragments.CarPoolTaxiFragment;
+import com.tessoft.nearhere.fragments.LocationFragment;
+import com.tessoft.nearhere.fragments.TaxiFragment;
 
 /**
  * Created by Daeyong on 2015-12-14.

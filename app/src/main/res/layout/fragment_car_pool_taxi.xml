@@ -7,11 +7,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <ListView
-            android:id="@+id/listMain"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </ListView>
+            android:layout_height="match_parent">
+
+            <EditText android:id="@+id/edtSearchDestination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="목적지 검색"
+                android:drawableLeft="@drawable/ic_action_search"
+                android:focusableInTouchMode="false"
+                android:editable="false"
+                android:drawablePadding="5dp"/>
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:background="@color/transparent"
+                android:layout_below="@+id/edtSearchDestination"
+                android:layout_height="match_parent" >
+            </WebView>
+
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/marker_progress"

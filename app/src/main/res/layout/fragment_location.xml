@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE"
-    tools:context=".fragment.LocationFragment">
+    tools:context=".fragments.LocationFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 class="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:name="com.tessoft.nearhere.MainActivity"
+                android:name="com.tessoft.nearhere.activities.MainActivity"
                 />
 
         </LinearLayout>

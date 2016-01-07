@@ -23,6 +23,7 @@ import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserLocation;
+import com.tessoft.nearhere.activities.MainActivity;
 
 import org.codehaus.jackson.map.ObjectMapper;
 

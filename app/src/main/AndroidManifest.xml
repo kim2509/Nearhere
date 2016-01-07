@@ -45,7 +45,7 @@
             android:value="@string/kakao_app_key" />
 
         <activity
-            android:name=".IntroActivity"
+            android:name=".activities.IntroActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/IntroTheme">
@@ -76,63 +76,63 @@
             android:value="AIzaSyDyFndsCslyqMFUvKAjRsnRIKNwvVjy2n4" />
 
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".RegisterUserActivity"
+            android:name=".activities.RegisterUserActivity"
             android:label="@string/title_activity_register_user"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".TaxiTutorialActivity"
+            android:name=".activities.TaxiTutorialActivity"
             android:label="@string/title_activity_taxi_tutorial"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".TermsAgreementActivity"
+            android:name=".activities.TermsAgreementActivity"
             android:label="@string/title_activity_terms_agreement"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".SelectHomeLocationActivity"
+            android:name=".activities.SelectHomeLocationActivity"
             android:label="@string/title_activity_select_home_location"></activity>
         <activity
-            android:name=".BaseListActivity"
+            android:name=".activities.BaseListActivity"
             android:label="@string/title_activity_base_list"></activity>
         <activity
-            android:name=".TaxiPostDetailActivity"
+            android:name=".activities.TaxiPostDetailActivity"
             android:label="@string/title_activity_taxi_post_detail"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".UserMessageActivity"
+            android:name=".activities.UserMessageActivity"
             android:label="@string/title_activity_user_chat"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
-            android:name=".SetDestinationActivity"
+            android:name=".activities.SetDestinationActivity"
             android:label="@string/title_activity_set_destination"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".NewTaxiPostActivity"
+            android:name=".activities.NewTaxiPostActivity"
             android:label="@string/title_activity_new_taxi_post"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".MoreUserInfoActivity"
+            android:name=".activities.MoreUserInfoActivity"
             android:label="@string/title_activity_more_user_info"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".SafetyKeeperActivity"
+            android:name=".activities.SafetyKeeperActivity"
             android:label="@string/title_activity_safety_keeper"
             android:windowSoftInputMode="stateHidden"></activity>
 
@@ -153,10 +153,10 @@
         </service>
 
         <activity
-            android:name=".EventViewerActivity"
+            android:name=".activities.EventViewerActivity"
             android:label="@string/title_activity_event_viewer"></activity>
         <activity
-            android:name=".UserListActivity"
+            android:name=".activities.UserListActivity"
             android:label="@string/title_activity_user_list"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
@@ -164,14 +164,14 @@
             android:label="@string/title_activity_photo_viewer"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".HybridActivity"
+            android:name=".activities.HybridActivity"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".KakaoLoginActivity"
+            android:name=".activities.KakaoLoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".KakaoSignupActivity"
+            android:name=".activities.KakaoSignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
@@ -185,15 +185,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".ShareMyLocationActivity"
+            android:name=".activities.ShareMyLocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
         <activity
-            android:name=".ShareRealtimeMyLocationActivity"
+            android:name=".activities.ShareRealtimeMyLocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"></activity>
 
-        <activity android:name=".SearchMapActivity"></activity>
+        <activity android:name=".activities.SearchMapActivity"></activity>
     </application>
 
 </manifest>

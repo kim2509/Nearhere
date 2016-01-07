@@ -13,7 +13,7 @@ import com.tessoft.domain.SettingListItem;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserSetting;
 
-import com.tessoft.nearhere.fragment.BaseListFragment;
+import com.tessoft.nearhere.fragments.BaseListFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

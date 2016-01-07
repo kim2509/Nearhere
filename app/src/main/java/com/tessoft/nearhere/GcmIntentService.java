@@ -16,16 +16,15 @@
 
 package com.tessoft.nearhere;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tessoft.common.Constants;
-import com.tessoft.common.Util;
-import com.tessoft.domain.User;
+import com.tessoft.nearhere.activities.EventViewerActivity;
+import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
+import com.tessoft.nearhere.activities.UserMessageActivity;
+import com.tessoft.nearhere.activities.UserProfileActivity;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -38,7 +37,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;

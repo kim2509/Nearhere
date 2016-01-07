@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="BaseListActivity" >
+    tools:context=".activities.BaseListActivity" >
 
     <ListView
         android:id="@+id/listMain"

@@ -21,6 +21,7 @@ import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
 import com.tessoft.domain.Contact;
+import com.tessoft.nearhere.activities.SafetyKeeperActivity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
