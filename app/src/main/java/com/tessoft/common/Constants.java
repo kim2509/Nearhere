@@ -35,6 +35,8 @@ public class Constants {
 	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
+
+	public static String DAUM_MAP_API_KEY = "1ce23b1035fde7488e6be71df90904d7";
 	
 	public static String getServerURL()
 	{

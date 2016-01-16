@@ -26,14 +26,12 @@
         android:layout_height="250dp"
         android:orientation="vertical"
         android:layout_below="@+id/edtSearchDestination"
-        android:visibility="gone">
+        android:visibility="visible">
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <net.daum.mf.map.api.MapView
+            android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -41,7 +39,8 @@
         android:id="@+id/layoutList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layoutMap">
+        android:layout_below="@+id/layoutMap"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"

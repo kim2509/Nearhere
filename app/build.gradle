@@ -43,9 +43,7 @@ dependencies {
     //compile 'com.kakao.sdk:kakaotalk:1.1.7'
     // push sdk를 사용하기 위해 필요.
     //    compile group: 'com.kakao.sdk', name: 'push', version: '1.1.7'
-
     compile project(':sdk')
-
     //compile project('')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
@@ -53,4 +51,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile files('libs/libDaumMapAndroid.jar')
+    compile files('libs/libDaumMapEngineApi.jar')
 }

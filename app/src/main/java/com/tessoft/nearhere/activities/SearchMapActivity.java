@@ -14,16 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.tessoft.common.Constants;
-import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
-import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
 
 import org.codehaus.jackson.type.TypeReference;
@@ -33,11 +25,9 @@ import java.util.List;
 import java.util.Locale;
 import net.daum.mf.map.api.MapView;
 
-public class SearchMapActivity extends BaseActivity implements OnMapReadyCallback {
+public class SearchMapActivity extends BaseActivity {
 
     View header = null;
-    int ZoomLevel = 14;
-    private GoogleMap map = null;
     ListView listMain = null;
     EditText edtSearchDestination = null;
 
@@ -52,20 +42,13 @@ public class SearchMapActivity extends BaseActivity implements OnMapReadyCallbac
 
             setTitle("목적지 선택");
 
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-
             listMain = (ListView) findViewById(R.id.listMain);
 
-            /*
             LinearLayout layoutMap = (LinearLayout) findViewById(R.id.layoutMap);
             ViewGroup.LayoutParams params = layoutMap.getLayoutParams();
             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutMap.setVisibility(ViewGroup.VISIBLE);
-
             findViewById(R.id.layoutList).setVisibility(ViewGroup.GONE);
-            */
 
             HashMap hash = application.getDefaultRequest();
             hash.put("userID", application.getLoginUser().getUserID());
@@ -74,8 +57,8 @@ public class SearchMapActivity extends BaseActivity implements OnMapReadyCallbac
 
             initializeComponent();
 
-            MapView mapView = new MapView(this);
-            mapView.setDaumMapApiKey("1ce23b1035fde7488e6be71df90904d7");
+            MapView mapView = (MapView) findViewById(R.id.map_view);
+            mapView.setDaumMapApiKey(Constants.DAUM_MAP_API_KEY);
         }
         catch( Exception ex )
         {
@@ -93,7 +76,7 @@ public class SearchMapActivity extends BaseActivity implements OnMapReadyCallbac
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchDestinations( s.toString() );
+                searchDestinations(s.toString());
             }
 
             @Override
@@ -106,41 +89,6 @@ public class SearchMapActivity extends BaseActivity implements OnMapReadyCallbac
     protected void setTitle( String title ) {
         TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtTitle.setText(title);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        try
-        {
-            this.map = googleMap;
-
-            // 초기위치 서울시청
-            double latitude = 37.5627667;
-            double longitude = 126.9821314;
-
-            if ( !Util.isEmptyString( NearhereApplication.latitude ) && !Util.isEmptyString( NearhereApplication.longitude ) )
-            {
-                latitude = Double.parseDouble( NearhereApplication.latitude );
-                longitude = Double.parseDouble( NearhereApplication.longitude );
-            }
-
-            moveMap(latitude, longitude);
-
-            map.setMyLocationEnabled(true);
-        }
-        catch( Exception ex )
-        {
-            application.catchException(this, ex);
-        }
-    }
-
-    private void moveMap(double latitude, double longitude) {
-        LatLng location = new LatLng( latitude , longitude);
-        CameraUpdate center =
-                CameraUpdateFactory.newLatLng(location);
-        map.moveCamera(center);
-        CameraUpdate zoom= CameraUpdateFactory.zoomTo(ZoomLevel);
-        map.animateCamera(zoom);
     }
 
     @Override
