@@ -1,5 +1,6 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
+import com.tessoft.common.AdapterDelegate;
 import com.tessoft.domain.Contact;
 
 import com.tessoft.nearhere.R;

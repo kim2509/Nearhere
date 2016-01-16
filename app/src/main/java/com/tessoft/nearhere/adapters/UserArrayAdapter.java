@@ -1,9 +1,12 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.User;
 import com.tessoft.nearhere.R;
 
@@ -113,10 +116,10 @@ public class UserArrayAdapter extends ArrayAdapter<User>{
 
 			viewHolder.user = user;
 			
-			if ( !Util.isEmptyString( user.getProfileImageURL() ))
+			if ( !Util.isEmptyString(user.getProfileImageURL()))
 			{
 				ImageLoader.getInstance().displayImage( 
-						Constants.getThumbnailImageURL() + user.getProfileImageURL() , imageView, options );	
+						Constants.getThumbnailImageURL() + user.getProfileImageURL() , imageView, options );
 			}
 			else
 			{

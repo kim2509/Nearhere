@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.tessoft.common.Constants;
-import com.tessoft.common.PushMessageListAdapter;
+import com.tessoft.nearhere.adapters.PushMessageListAdapter;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserPushMessage;

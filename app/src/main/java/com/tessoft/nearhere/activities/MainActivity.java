@@ -25,7 +25,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.tessoft.common.Constants;
-import com.tessoft.common.MainMenuArrayAdapter;
+import com.tessoft.nearhere.adapters.MainMenuArrayAdapter;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.MainMenuItem;

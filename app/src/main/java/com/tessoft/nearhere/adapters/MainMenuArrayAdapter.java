@@ -1,4 +1,4 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import android.content.Context;
 import android.util.Log;

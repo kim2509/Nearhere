@@ -2,7 +2,7 @@ package com.tessoft.nearhere.activities;
 
 import java.util.ArrayList;
 
-import com.tessoft.common.ReadContactArrayAdapter;
+import com.tessoft.nearhere.adapters.ReadContactArrayAdapter;
 import com.tessoft.domain.Contact;
 
 import com.tessoft.nearhere.NearhereApplication;

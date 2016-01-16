@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
 
 /**
@@ -65,8 +67,19 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
             {
                 rootView = inflater.inflate(R.layout.fragment_car_pool_taxi, container, false);
                 webView = (WebView) rootView.findViewById(R.id.webView);
+                webView.getSettings().setJavaScriptEnabled(true);
                 webView.loadUrl( Constants.getServerURL() + "/taxi/index.do");
-
+                webView.setWebViewClient( new WebViewClient(){
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        // Here put your code
+                        Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
+                        intent.putExtra("url", url);
+                        startActivity(intent);
+                        // return true; //Indicates WebView to NOT load the url;
+                        return true; //Allow WebView to load url
+                    }
+                });
                 edtSearchDestination = (EditText) rootView.findViewById(R.id.edtSearchDestination );
                 edtSearchDestination.setOnClickListener(this);
             }

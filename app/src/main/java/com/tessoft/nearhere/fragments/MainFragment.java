@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.tessoft.common.Constants;
-import com.tessoft.common.MainPagerAdapter;
+import com.tessoft.nearhere.adapters.MainPagerAdapter;
 import com.tessoft.nearhere.R;
 
 public class MainFragment extends BaseFragment implements OnPageChangeListener, View.OnClickListener{

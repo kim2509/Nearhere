@@ -160,7 +160,7 @@ public class NearhereApplication extends Application{
 	
 	public void sendHttp( String url, Object request, int requestCode, TransactionDelegate listener )
 	{
-		new HttpTransactionReturningString( listener, url, requestCode ).execute( request );
+		new HttpTransactionReturningString( listener, url, requestCode ).execute(request);
 	}
 	
 	public boolean checkIfGPSEnabled()
@@ -210,5 +210,11 @@ public class NearhereApplication extends Application{
 		}
 		
 		return "";
+	}
+
+	public int getPixelsFromDP( int dp )
+	{
+		final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+		return (int) (dp * scale + 0.5f);
 	}
 }

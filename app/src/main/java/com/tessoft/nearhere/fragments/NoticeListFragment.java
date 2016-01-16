@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.tessoft.common.Constants;
-import com.tessoft.common.NoticeListAdapter;
+import com.tessoft.nearhere.adapters.NoticeListAdapter;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.Notice;

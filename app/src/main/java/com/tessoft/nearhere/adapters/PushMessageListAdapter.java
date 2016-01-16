@@ -1,8 +1,10 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Util;
 import com.tessoft.domain.UserPushMessage;
 import com.tessoft.nearhere.R;
 
@@ -61,7 +63,7 @@ public class PushMessageListAdapter extends ArrayAdapter<UserPushMessage> {
 			TextView txtTitle = (TextView) row.findViewById(R.id.txtTitle);
 			txtTitle.setText( item.getMessage() );
 			TextView txtCreatedDate = (TextView) row.findViewById(R.id.txtCreatedDate);
-			txtCreatedDate.setText( Util.getFormattedDateString( item.getCreatedDate(), "yyyy-MM-dd" ) );
+			txtCreatedDate.setText( Util.getFormattedDateString(item.getCreatedDate(), "yyyy-MM-dd") );
 			
 			TextView txtNew = (TextView) row.findViewById(R.id.txtNew);
 			if ( item.isRead() == false )

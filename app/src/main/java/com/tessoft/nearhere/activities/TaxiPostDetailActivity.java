@@ -9,7 +9,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
 import com.tessoft.common.Constants;
-import com.tessoft.common.TaxiPostReplyListAdapter;
+import com.tessoft.nearhere.adapters.TaxiPostReplyListAdapter;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.Post;

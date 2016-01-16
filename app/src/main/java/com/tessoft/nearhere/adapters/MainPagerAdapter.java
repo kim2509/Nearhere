@@ -1,4 +1,4 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 
 import android.support.v4.app.Fragment;

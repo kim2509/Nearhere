@@ -1,10 +1,13 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.ListItemModel;
 import com.tessoft.domain.Post;
 import com.tessoft.domain.PostReply;
@@ -87,7 +90,7 @@ public class MainArrayAdapter extends ArrayAdapter<ListItemModel> {
 			{
 				Post post = (Post) item;
 				txtUserID = (TextView) row.findViewById(R.id.txtDistance);
-				txtUserID.setText( Util.getDistance( post.getFromDistance()) );
+				txtUserID.setText( Util.getDistance(post.getFromDistance()) );
 				TextView txtMsg = (TextView) row.findViewById(R.id.txtMessage);
 				txtMsg.setText( post.getMessage() );
 				ImageView imageView = (ImageView) row.findViewById(R.id.imgProfile);

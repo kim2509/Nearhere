@@ -1,4 +1,4 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.List;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.PostReply;
 import com.tessoft.domain.User;
 import com.tessoft.nearhere.R;
@@ -102,7 +105,7 @@ public class TaxiPostReplyListAdapter extends ArrayAdapter<PostReply> implements
 			txtMessage.setText( item.getMessage() );
 			
 			TextView txtDistance = (TextView) row.findViewById(R.id.txtDistance);
-			if ( !Util.isEmptyString( item.getLatitude() ) && !Util.isEmptyString( item.getLongitude() ) )
+			if ( !Util.isEmptyString(item.getLatitude()) && !Util.isEmptyString( item.getLongitude() ) )
 			{
 				txtDistance.setText( Util.getDistance( item.getDistance()) );
 				txtDistance.setVisibility(ViewGroup.VISIBLE);
@@ -114,7 +117,7 @@ public class TaxiPostReplyListAdapter extends ArrayAdapter<PostReply> implements
 			{
 				if ( !Util.isEmptyString( item.getUser().getProfileImageURL() ) )
 				{
-					ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() + 
+					ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
 							item.getUser().getProfileImageURL() , imageView, options );	
 				}
 				else

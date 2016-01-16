@@ -1,9 +1,12 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.UserMessage;
 import com.tessoft.nearhere.R;
 
@@ -66,11 +69,11 @@ public class MessageBoxListAdapter extends ArrayAdapter<UserMessage> {
 			if ( item.getUser() != null && item.getUser().getProfileImageURL() != null && 
 					!"".equals( item.getUser().getProfileImageURL() ) )
 			{
-				ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() + 
+				ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
 						item.getUser().getProfileImageURL() , imgProfile);
 			}
 			
-			if ( item.getUser() != null && Util.isEmptyString( item.getUser().getUserName() ) == false )
+			if ( item.getUser() != null && Util.isEmptyString(item.getUser().getUserName()) == false )
 			{
 				TextView txtUserName = (TextView) row.findViewById(R.id.txtUserName);
 				txtUserName.setText( item.getUser().getUserName() );

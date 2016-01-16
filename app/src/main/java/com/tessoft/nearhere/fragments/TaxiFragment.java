@@ -9,7 +9,7 @@ import org.codehaus.jackson.type.TypeReference;
 import com.google.android.gms.maps.model.LatLng;
 import com.tessoft.common.AdapterDelegate;
 import com.tessoft.common.Constants;
-import com.tessoft.common.TaxiArrayAdapter;
+import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
 import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;

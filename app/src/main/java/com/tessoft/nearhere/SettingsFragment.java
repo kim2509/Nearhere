@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.tessoft.common.Constants;
-import com.tessoft.common.SettingsAdapter;
+import com.tessoft.nearhere.adapters.SettingsAdapter;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.SettingListItem;
 import com.tessoft.domain.User;

@@ -1,8 +1,11 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.Notice;
 import com.tessoft.nearhere.R;
 
@@ -133,7 +136,7 @@ public class NoticeListAdapter extends BaseExpandableListAdapter {
 			}
 
 			String title = "<font>" + item.getTitle() + "</font>&nbsp;&nbsp;<font color='#ff0000'>";
-			title += Util.getFormattedDateString(item.getCreatedDate(),"MM-dd") + "</font>";
+			title += Util.getFormattedDateString(item.getCreatedDate(), "MM-dd") + "</font>";
 			TextView txtTitle = (TextView) row.findViewById(R.id.txtTitle);
 			txtTitle.setText( Html.fromHtml(title) );
 			

@@ -1,9 +1,12 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.Post;
 import com.tessoft.nearhere.R;
 
@@ -94,7 +97,7 @@ public class TaxiArrayAdapter extends ArrayAdapter<Post> implements OnClickListe
 				imgSex.setVisibility(ViewGroup.GONE);
 			
 			TextView txtUserName = (TextView) row.findViewById(R.id.txtUserName);
-			if ( Util.isEmptyString( item.getUser().getUserName() ) )
+			if ( Util.isEmptyString(item.getUser().getUserName()) )
 			{
 				txtUserName.setText( item.getUser().getUserID() );
 			}
@@ -118,7 +121,7 @@ public class TaxiArrayAdapter extends ArrayAdapter<Post> implements OnClickListe
 			
 			if ( item.getUser() != null && !Util.isEmptyString( item.getUser().getProfileImageURL() ) )
 			{
-				ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() + 
+				ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
 						item.getUser().getProfileImageURL() , imageView, options );
 			}
 			else

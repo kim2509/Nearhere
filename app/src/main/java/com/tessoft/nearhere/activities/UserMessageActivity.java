@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.tessoft.common.Constants;
-import com.tessoft.common.UserMessageArrayAdapter;
+import com.tessoft.nearhere.adapters.UserMessageArrayAdapter;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserMessage;

@@ -1,7 +1,7 @@
 package com.tessoft.nearhere.fragments;
 
 import com.tessoft.common.AdapterDelegate;
-import com.tessoft.common.ReadContactArrayAdapter;
+import com.tessoft.nearhere.adapters.ReadContactArrayAdapter;
 import com.tessoft.domain.Contact;
 
 import com.tessoft.nearhere.R.id;

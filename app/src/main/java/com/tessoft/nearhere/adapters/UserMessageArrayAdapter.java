@@ -1,9 +1,12 @@
-package com.tessoft.common;
+package com.tessoft.nearhere.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserMessage;
 import com.tessoft.nearhere.R;
@@ -91,7 +94,7 @@ public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> {
 				if ( item.getFromUser() != null && item.getFromUser().getProfileImageURL() != null && 
 						!"".equals( item.getFromUser().getProfileImageURL() ) )
 				{
-					ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() + 
+					ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
 							item.getFromUser().getProfileImageURL() , imgProfile);
 					
 					TextView txtUserName = (TextView) row.findViewById(R.id.txtUserName);
@@ -102,7 +105,7 @@ public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> {
 			TextView txtMessage = (TextView) row.findViewById(R.id.txtMessage);
 			txtMessage.setText( item.getMessage() );
 			TextView txtCreatedDate = (TextView) row.findViewById(R.id.txtCreatedDate);
-			txtCreatedDate.setText( Util.getFormattedDateString( item.getCreatedDate(), "HH:mm") );
+			txtCreatedDate.setText( Util.getFormattedDateString(item.getCreatedDate(), "HH:mm") );
 			
 			row.setTag( item );
 		}
