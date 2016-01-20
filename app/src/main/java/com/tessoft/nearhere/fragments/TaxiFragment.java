@@ -1,30 +1,5 @@
 package com.tessoft.nearhere.fragments;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.tessoft.common.AdapterDelegate;
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
-import com.tessoft.common.TransactionDelegate;
-import com.tessoft.common.Util;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.Post;
-import com.tessoft.nearhere.activities.MainActivity;
-import com.tessoft.nearhere.NearhereApplication;
-import com.tessoft.nearhere.activities.NewTaxiPostActivity;
-import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
-import com.tessoft.nearhere.activities.UserListActivity;
-import com.tessoft.nearhere.activities.UserProfileActivity;
-import com.tessoft.nearhere.R.anim;
-import com.tessoft.nearhere.R.array;
-import com.tessoft.nearhere.R.id;
-import com.tessoft.nearhere.R.layout;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -45,6 +20,31 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.TransactionDelegate;
+import com.tessoft.common.Util;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.Post;
+import com.tessoft.nearhere.NearhereApplication;
+import com.tessoft.nearhere.R.anim;
+import com.tessoft.nearhere.R.array;
+import com.tessoft.nearhere.R.id;
+import com.tessoft.nearhere.R.layout;
+import com.tessoft.nearhere.activities.MainActivity;
+import com.tessoft.nearhere.activities.NewTaxiPostActivity;
+import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
+import com.tessoft.nearhere.activities.UserListActivity;
+import com.tessoft.nearhere.activities.UserProfileActivity;
+import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class TaxiFragment extends BaseFragment 
 	implements AdapterDelegate, TransactionDelegate, OnItemSelectedListener, OnClickListener{

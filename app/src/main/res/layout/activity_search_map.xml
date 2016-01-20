@@ -5,35 +5,63 @@
 
     <include layout="@layout/titlebar_for_activity" />
 
-    <EditText
-        android:id="@+id/edtSearchDestination"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_below="@+id/titleBar"
-        android:hint="목적지 검색"
-        android:drawableLeft="@drawable/ic_action_search"
-        android:drawablePadding="5dp"
-        android:layout_marginLeft="5dp"
-        android:background="@android:color/transparent"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layoutMap"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:orientation="vertical"
-        android:layout_below="@+id/edtSearchDestination"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edtSearchDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:hint="목적지 검색"
+            android:drawableLeft="@drawable/ic_action_search"
+            android:drawablePadding="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"/>
 
         <net.daum.mf.map.api.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/edtSearchDestination"
+            android:layout_above="@+id/layoutSearchResultCount"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutSearchResultCount"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@color/com_facebook_button_background_color"
+            android:layout_alignParentBottom="true"
+            android:onClick="toggleList">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검색 결과"
+                android:layout_marginRight="10dp"
+                android:textColor="#ffffff"/>
+
+            <TextView android:id="@+id/txtDestinationCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/layoutList"
@@ -46,35 +74,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/layoutSearchResultCount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="검색 결과"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""/>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
             <ListView
                 android:id="@+id/listMain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/layoutSearchResultCount">
+                android:layout_height="match_parent">
             </ListView>
 
         </RelativeLayout>
