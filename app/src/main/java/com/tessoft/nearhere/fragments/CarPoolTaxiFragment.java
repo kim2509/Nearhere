@@ -20,6 +20,9 @@ import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
 
+import java.net.URLEncoder;
+import java.util.HashMap;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -54,6 +57,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_OPEN_SEARCH_PAGE));
     }
 
     @Override
@@ -73,9 +77,38 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         // Here put your code
-                        Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
-                        intent.putExtra("url", url);
-                        startActivity(intent);
+
+                        if ( url.startsWith("nearhere://openURL?") )
+                        {
+                            Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
+
+                            String params = url.substring(url.indexOf("?") + 1);
+
+                            String[] paramAr = params.split("&");
+                            for ( int i = 0; i < paramAr.length; i++ )
+                            {
+                                if ( paramAr[i].indexOf("=") >= 0 ) {
+                                    String key = paramAr[i].split("=")[0];
+                                    String value = paramAr[i].split("=")[1];
+
+                                    if (key != null && key.equals("title")) {
+                                        intent.putExtra("title", java.net.URLDecoder.decode(value) );
+                                    }
+                                    else if (key != null && key.equals("url")) {
+                                        intent.putExtra("url", java.net.URLDecoder.decode( value ));
+                                    }
+                                }
+                            }
+
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
+                            intent.putExtra("url", url);
+                            startActivity(intent);
+                        }
+
                         // return true; //Indicates WebView to NOT load the url;
                         return true; //Allow WebView to load url
                     }
@@ -98,6 +131,17 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         try
         {
             super.onResume();
+        }
+        catch( Exception ex )
+        {
+
+        }
+    }
+
+    @Override
+    public void onPause() {
+        try {
+            super.onPause();
         }
         catch( Exception ex )
         {
@@ -168,7 +212,22 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         public void onReceive(Context context, Intent intent) {
             try
             {
-                webView.reload();
+                if ( intent.getAction().equals(Constants.BROADCAST_REFRESH))
+                    webView.reload();
+                else if ( intent.getAction().equals(Constants.BROADCAST_OPEN_SEARCH_PAGE))
+                {
+                    if ( intent.getExtras() != null && intent.getExtras().containsKey("param") )
+                    {
+                        HashMap param = (HashMap) intent.getExtras().get("param");
+                        String latitude = param.get("latitude").toString();
+                        String longitude = param.get("longitude").toString();
+                        String address = param.get("address").toString();
+
+                        String url = Constants.getServerURL() + "/taxi/searchDestination.do?latitude=" +
+                                latitude + "&longitude=" + longitude + "&address=" + URLEncoder.encode(address, "utf-8");
+                        openPopupWebViewActivity("검색결과", url);
+                    }
+                }
             }
             catch( Exception ex )
             {
@@ -176,4 +235,12 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
             }
         }
     };
+
+    public void openPopupWebViewActivity( String title, String url )
+    {
+        Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("title", title);
+        startActivity(intent);
+    }
 }

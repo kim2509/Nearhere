@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/daum/android/map/openapi/search/Item.java" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/daum/android/map/openapi/search/OnFinishSearchListener.java" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/net/daum/android/map/openapi/search/Searcher.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/custom_callout_balloon.9.png" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/custom_callout_balloon.xml" charset="x-windows-949" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -193,7 +193,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme" />
         <activity android:name=".activities.SearchMapActivity" />
-        <activity android:name=".activities.PopupWebViewActivity"></activity>
+        <activity android:name=".activities.PopupWebViewActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+
+        </activity>
     </application>
 
 </manifest>

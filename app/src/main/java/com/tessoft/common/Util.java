@@ -1,5 +1,7 @@
 package com.tessoft.common;
 
+import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,8 +11,6 @@ import java.util.concurrent.TimeUnit;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import android.util.Base64;
 
 public class Util {
 
@@ -26,7 +26,7 @@ public class Util {
 
 	public static String getDistanceDouble( String dist )
 	{
-		if ( "전체".equals( dist ) || isEmptyString( dist )) return "";
+		if ( "전체".equals(dist) || isEmptyString( dist )) return "";
 		else if ( "500m".equals( dist ))
 		{
 			return "0.5";
@@ -37,7 +37,7 @@ public class Util {
 
 	public static Date getDateFromString( String dateString, String format ) throws Exception
 	{
-		if ( dateString == null || "".equals( dateString ) ) return null;
+		if ( dateString == null || "".equals(dateString) ) return null;
 
 		DateFormat sdf = new SimpleDateFormat( format );
 		Date date = sdf.parse(dateString);
@@ -159,6 +159,26 @@ public class Util {
 		if ( tokens.length < 4 ) return "";
 
 		return tokens[1] + " " + tokens[2] + " " + tokens[3];
+	}
+
+	public static String getFormattedAddressString( Object fullAddress, boolean country, boolean city,
+													boolean gu, boolean add1, boolean add2 )
+	{
+		if ( fullAddress == null || "".equals( fullAddress )) return "";
+
+		String[] tokens = fullAddress.toString().split("\\|");
+
+		if ( tokens.length < 4 ) return "";
+
+		String result = "";
+
+		if ( country ) result += tokens[0] + " ";
+		if ( city ) result += tokens[1] + " ";
+		if ( gu ) result += tokens[2] + " ";
+		if ( add1 ) result += tokens[3] + " ";
+		if ( add2 ) result += tokens[4] + " ";
+
+		return result.trim();
 	}
 
 	public static boolean isEmptyString( String str )

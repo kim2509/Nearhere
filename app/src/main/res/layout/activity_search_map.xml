@@ -24,7 +24,9 @@
             android:drawableLeft="@drawable/ic_action_search"
             android:drawablePadding="5dp"
             android:layout_marginLeft="5dp"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:imeOptions="actionSend"/>
 
         <net.daum.mf.map.api.MapView
             android:id="@+id/map_view"

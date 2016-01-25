@@ -3,8 +3,11 @@
     android:layout_height="match_parent"
     android:background="#EEEEEE" >
 
+    <include layout="@layout/titlebar_for_activity" />
+
     <FrameLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/titleBar"
         android:layout_height="match_parent" >
 
         <RelativeLayout
