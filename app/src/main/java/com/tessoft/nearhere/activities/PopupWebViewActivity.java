@@ -54,6 +54,29 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
                         return true;
                     }
+                    else if ( url.startsWith("nearhere://openUserProfile?userID=") )
+                    {
+                        String params = url.substring( url.indexOf("?") + 1);
+                        String[] paramAr = params.split("&");
+                        for ( int i = 0; i < paramAr.length; i++ )
+                        {
+                            if ( paramAr[i].indexOf("=") >= 0 )
+                            {
+                                String key = paramAr[i].split("=")[0];
+                                String value = paramAr[i].split("=")[1];
+
+                                if ( key != null && key.equals("userID"))
+                                {
+                                    Intent intent = new Intent( getApplicationContext(), UserProfileActivity.class);
+                                    intent.putExtra("userID", value );
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
 
                     return true; //Allow WebView to load url
                 }
@@ -64,8 +87,13 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 if ( getIntent().getExtras().containsKey("title") )
                     setTitle( getIntent().getExtras().get("title").toString() );
 
-                if ( getIntent().getExtras().containsKey("url") )
-                    webView.loadUrl( getIntent().getExtras().getString("url"));
+                if ( getIntent().getExtras().containsKey("url") ) {
+                    String url = getIntent().getExtras().getString("url");
+                    if ( url.indexOf("?") >= 0 )
+                        webView.loadUrl(getIntent().getExtras().getString("url") + "&isApp=Y");
+                    else
+                        webView.loadUrl(getIntent().getExtras().getString("url") + "?isApp=Y");
+                }
             }
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);

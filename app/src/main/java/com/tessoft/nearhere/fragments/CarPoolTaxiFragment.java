@@ -19,6 +19,7 @@ import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
+import com.tessoft.nearhere.activities.UserProfileActivity;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                 rootView = inflater.inflate(R.layout.fragment_car_pool_taxi, container, false);
                 webView = (WebView) rootView.findViewById(R.id.webView);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do");
+                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y");
                 webView.setWebViewClient( new WebViewClient(){
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -101,6 +102,29 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                             }
 
                             startActivity(intent);
+                        }
+                        else if ( url.startsWith("nearhere://openUserProfile?userID=") )
+                        {
+                            String params = url.substring( url.indexOf("?") + 1);
+                            String[] paramAr = params.split("&");
+                            for ( int i = 0; i < paramAr.length; i++ )
+                            {
+                                if ( paramAr[i].indexOf("=") >= 0 )
+                                {
+                                    String key = paramAr[i].split("=")[0];
+                                    String value = paramAr[i].split("=")[1];
+
+                                    if ( key != null && key.equals("userID"))
+                                    {
+                                        Intent intent = new Intent( getActivity(), UserProfileActivity.class);
+                                        intent.putExtra("userID", value );
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+                                    }
+                                }
+                            }
+
+                            return true;
                         }
                         else
                         {
