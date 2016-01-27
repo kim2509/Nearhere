@@ -3,11 +3,13 @@ package com.tessoft.nearhere.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
 
 public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener{
@@ -74,8 +76,37 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                                 }
                             }
                         }
-
                         return true;
+                    }
+                    else if ( url.startsWith("nearhere://snsLogin") )
+                    {
+                        showYesNoDialog("확인", "SNS 계정으로 로그인하시겠습니까?", "snsLogin" );
+                    }
+                    else if ( url.startsWith("nearhere://showOKDialog?") )
+                    {
+                        String title = "";
+                        String message = "";
+                        String param = "";
+
+                        String params = url.substring( url.indexOf("?") + 1);
+                        String[] paramAr = params.split("&");
+                        for ( int i = 0; i < paramAr.length; i++ )
+                        {
+                            if ( paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1)
+                            {
+                                String key = paramAr[i].split("=")[0];
+                                String value = paramAr[i].split("=")[1];
+
+                                if ( key != null && key.equals("title"))
+                                    title = java.net.URLDecoder.decode(value);
+                                if ( key != null && key.equals("message"))
+                                    message = java.net.URLDecoder.decode(value);
+                                if ( key != null && key.equals("param"))
+                                    param = java.net.URLDecoder.decode(value);
+                            }
+                        }
+
+                        showOKDialog( title, message, param );
                     }
 
                     return true; //Allow WebView to load url
@@ -94,6 +125,18 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                     else
                         webView.loadUrl(getIntent().getExtras().getString("url") + "?isApp=Y");
                 }
+
+                if ( getIntent().getExtras().containsKey("showNewButton") )
+                {
+                    if ( "Y".equals( getIntent().getExtras().getString("showNewButton") ) )
+                        findViewById(R.id.btnAddPost).setVisibility(ViewGroup.VISIBLE);
+                    else
+                        findViewById(R.id.btnAddPost).setVisibility(ViewGroup.GONE);
+                }
+                else
+                    findViewById(R.id.btnAddPost).setVisibility(ViewGroup.GONE);
+
+
             }
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
@@ -131,5 +174,17 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         {
             catchException(this, ex);
         }
+    }
+
+    @Override
+    public void yesClicked(Object param) {
+
+        if ( "snsLogin".equals( param ))
+        {
+            sendBroadcast(new Intent(Constants.BROADCAST_LOGOUT));
+            finish();
+        }
+
+        super.yesClicked(param);
     }
 }

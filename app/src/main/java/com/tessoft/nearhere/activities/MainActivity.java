@@ -1,49 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-
-import org.codehaus.jackson.type.TypeReference;
-
-import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-/*
-import com.kakao.APIErrorResult;
-import com.kakao.LogoutResponseCallback;
-import com.kakao.UserManagement;
-*/
-
-import com.kakao.APIErrorResult;
-import com.kakao.LogoutResponseCallback;
-import com.kakao.UserManagement;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.MainMenuArrayAdapter;
-import com.tessoft.common.Util;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.MainMenuItem;
-import com.tessoft.domain.User;
-
-import com.tessoft.nearhere.LocationUpdateService;
-import com.tessoft.nearhere.R;
-import com.tessoft.nearhere.SettingsFragment;
-import com.tessoft.nearhere.fragments.MainFragment;
-import com.tessoft.nearhere.fragments.MessageBoxFragment;
-import com.tessoft.nearhere.fragments.MyInfoFragment;
-import com.tessoft.nearhere.fragments.NoticeListFragment;
-import com.tessoft.nearhere.fragments.PushMessageListFragment;
-
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,6 +14,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,6 +30,44 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.UserManagement;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.MainMenuItem;
+import com.tessoft.domain.User;
+import com.tessoft.nearhere.LocationUpdateService;
+import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.SettingsFragment;
+import com.tessoft.nearhere.adapters.MainMenuArrayAdapter;
+import com.tessoft.nearhere.fragments.MainFragment;
+import com.tessoft.nearhere.fragments.MessageBoxFragment;
+import com.tessoft.nearhere.fragments.MyInfoFragment;
+import com.tessoft.nearhere.fragments.NoticeListFragment;
+import com.tessoft.nearhere.fragments.PushMessageListFragment;
+
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
+/*
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.UserManagement;
+*/
 
 public class MainActivity extends BaseActivity {
 
@@ -139,6 +137,9 @@ public class MainActivity extends BaseActivity {
 			HashMap hash = application.getDefaultRequest();
 			hash.put("os", "Android");
 			sendHttp("/app/appInfo.do", mapper.writeValueAsString( hash ), Constants.HTTP_APP_INFO );
+
+			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
+			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_LOGOUT));
 		}
 		catch( Exception ex )
 		{
@@ -270,8 +271,6 @@ public class MainActivity extends BaseActivity {
 		try
 		{
 			super.onStart();
-
-			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
 		}
 		catch( Exception ex )
 		{
@@ -289,8 +288,6 @@ public class MainActivity extends BaseActivity {
 			{
 				stopLocationUpdates();
 			}
-
-			unregisterReceiver(mMessageReceiver);
 		}
 		catch( Exception ex )
 		{
@@ -339,6 +336,8 @@ public class MainActivity extends BaseActivity {
 			{
 				if ( "updateUnreadCount".equals( intent.getAction() ) )
 					getUnreadCount();
+				if ( Constants.BROADCAST_LOGOUT.equals( intent.getAction() ) )
+					yesClicked("logout");
 			}
 			catch( Exception ex )
 			{
@@ -733,7 +732,9 @@ public class MainActivity extends BaseActivity {
 		try
 		{
 			super.onDestroy();
-			MainActivity.active = false;	
+			MainActivity.active = false;
+
+			unregisterReceiver(mMessageReceiver);
 		}
 		catch( Exception ex )
 		{

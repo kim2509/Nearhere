@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.activities.MainActivity;
 import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
@@ -88,7 +89,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                             String[] paramAr = params.split("&");
                             for ( int i = 0; i < paramAr.length; i++ )
                             {
-                                if ( paramAr[i].indexOf("=") >= 0 ) {
+                                if ( paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1) {
                                     String key = paramAr[i].split("=")[0];
                                     String value = paramAr[i].split("=")[1];
 
@@ -97,6 +98,9 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                                     }
                                     else if (key != null && key.equals("url")) {
                                         intent.putExtra("url", java.net.URLDecoder.decode( value ));
+                                    }
+                                    else if (key != null && key.equals("showNewButton")) {
+                                        intent.putExtra("showNewButton", value );
                                     }
                                 }
                             }
@@ -109,7 +113,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                             String[] paramAr = params.split("&");
                             for ( int i = 0; i < paramAr.length; i++ )
                             {
-                                if ( paramAr[i].indexOf("=") >= 0 )
+                                if ( paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1)
                                 {
                                     String key = paramAr[i].split("=")[0];
                                     String value = paramAr[i].split("=")[1];
@@ -123,8 +127,36 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                                     }
                                 }
                             }
+                        }
+                        else if ( url.startsWith("nearhere://snsLogin") )
+                        {
+                            showYesNoDialog("확인", "SNS 계정으로 로그인하시겠습니까?", "snsLogin" );
+                        }
+                        else if ( url.startsWith("nearhere://showOKDialog?") )
+                        {
+                            String title = "";
+                            String message = "";
+                            String param = "";
 
-                            return true;
+                            String params = url.substring( url.indexOf("?") + 1);
+                            String[] paramAr = params.split("&");
+                            for ( int i = 0; i < paramAr.length; i++ )
+                            {
+                                if ( paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1)
+                                {
+                                    String key = paramAr[i].split("=")[0];
+                                    String value = paramAr[i].split("=")[1];
+
+                                    if ( key != null && key.equals("title"))
+                                        title = java.net.URLDecoder.decode(value);
+                                    if ( key != null && key.equals("message"))
+                                        message = java.net.URLDecoder.decode(value);
+                                    if ( key != null && key.equals("param"))
+                                        param = java.net.URLDecoder.decode(value);
+                                }
+                            }
+
+                            showOKDialog( title, message, param );
                         }
                         else
                         {
@@ -266,5 +298,17 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         intent.putExtra("url", url);
         intent.putExtra("title", title);
         startActivity(intent);
+    }
+
+    @Override
+    public void yesClicked(Object param) {
+
+        if ( "snsLogin".equals( param ))
+        {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.yesClicked("logout");
+        }
+
+        super.yesClicked(param);
     }
 }

@@ -32,6 +32,16 @@
             android:indeterminate="true"
             android:visibility="gone"/>
 
+        <Button
+            android:id="@+id/btnAddPost"
+            android:background="@drawable/btn_plus_selector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="bottom|right"
+            android:visibility="gone"/>
+
     </FrameLayout>
 
 </RelativeLayout>
