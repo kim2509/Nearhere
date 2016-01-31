@@ -1,6 +1,16 @@
 package com.tessoft.nearhere.activities;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LimitedAgeMemoryCache;
@@ -18,17 +28,7 @@ import com.tessoft.domain.User;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,7 +37,7 @@ import java.io.FileReader;
 public class BaseActivity extends FragmentActivity implements TransactionDelegate, AdapterDelegate {
 
 	ObjectMapper mapper = new ObjectMapper();
-	NearhereApplication application = null;
+	public NearhereApplication application = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -300,5 +300,15 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 		findViewById(R.id.txtTitle).setVisibility(ViewGroup.VISIBLE);
 		txtTitle.setText( title );
+	}
+
+	public String getMetaInfoString( String key )
+	{
+		return application.getMetaInfoString( key );
+	}
+
+	public void setMetaInfoString( String key, String value )
+	{
+		application.setMetaInfo(key, value);
 	}
 }

@@ -70,13 +70,13 @@ public class SearchMapActivity extends BaseActivity
             listMain = (ListView) findViewById(R.id.listMain);
             adapter = new DestinationAdapter( this, new ArrayList<Item>());
             listMain.setAdapter(adapter);
-            listMain.setOnItemClickListener( this );
+            listMain.setOnItemClickListener(this);
 
             initializeComponent();
 
             HashMap hash = application.getDefaultRequest();
             hash.put("userID", application.getLoginUser().getUserID());
-            sendHttp("/taxi/getUserDestinations.do", mapper.writeValueAsString(hash), Constants.HTTP_SEARCH_USER_DESTINATIONS);
+            //sendHttp("/taxi/getUserDestinations.do", mapper.writeValueAsString(hash), Constants.HTTP_SEARCH_USER_DESTINATIONS);
 
             registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_DESTINATION_REFRESH));
         }
@@ -330,6 +330,7 @@ public class SearchMapActivity extends BaseActivity
                             false, true, true, true, true);
 
                     HashMap param = new HashMap();
+                    param.put("name", "" );
                     param.put("address", address );
                     param.put("latitude", String.valueOf( loc.getLatitude() ) );
                     param.put("longitude", String.valueOf( loc.getLongitude() ) );
@@ -482,8 +483,18 @@ public class SearchMapActivity extends BaseActivity
         if ( mapPOIItem != null && mapPOIItem.getUserObject() != null
                 && mapPOIItem.getUserObject() instanceof HashMap )
         {
-            Intent intent = new Intent(Constants.BROADCAST_OPEN_SEARCH_PAGE);
-            intent.putExtra("param", (HashMap)mapPOIItem.getUserObject());
+            Intent intent = null;
+
+            if ( getIntent() != null && getIntent().getExtras() != null &&
+                    getIntent().getExtras().containsKey("broadcastKey") )
+                intent = new Intent( getIntent().getExtras().getString("broadcastKey") );
+            else
+                intent = new Intent(Constants.BROADCAST_OPEN_SEARCH_PAGE);
+
+            if ( getIntent().getExtras() != null && getIntent().getExtras().containsKey("param") )
+                intent.putExtra("param", getIntent().getExtras().getString("param"));
+
+            intent.putExtra("resultData", (HashMap)mapPOIItem.getUserObject());
             sendBroadcast(intent);
             finish();
         }

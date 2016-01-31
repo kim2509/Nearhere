@@ -11,12 +11,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 
+import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.activities.BaseActivity;
 import com.tessoft.nearhere.activities.MainActivity;
 import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
@@ -72,9 +75,23 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
             if ( rootView == null )
             {
                 rootView = inflater.inflate(R.layout.fragment_car_pool_taxi, container, false);
+
+                CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity());
+
                 webView = (WebView) rootView.findViewById(R.id.webView);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y");
+                webView.setWebChromeClient(new WebChromeClient() {
+
+                });
+
+                webView.addJavascriptInterface(commonWebViewClient, "Android");
+
+                String snsLoginYN = "snsLogin=N";
+
+                if ( "Guest".equals(application.getLoginUser().getType()))
+                    snsLoginYN = "snsLogin=Y";
+
+                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&" + snsLoginYN );
                 webView.setWebViewClient( new WebViewClient(){
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -231,6 +248,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
             if ( v.getId() == R.id.edtSearchDestination )
             {
                 Intent intent = new Intent( getActivity(), SearchMapActivity.class );
+                intent.putExtra("broadcastKey", Constants.BROADCAST_OPEN_SEARCH_PAGE);
                 startActivity(intent);
             }
         }
@@ -272,9 +290,9 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                     webView.reload();
                 else if ( intent.getAction().equals(Constants.BROADCAST_OPEN_SEARCH_PAGE))
                 {
-                    if ( intent.getExtras() != null && intent.getExtras().containsKey("param") )
+                    if ( intent.getExtras() != null && intent.getExtras().containsKey("resultData") )
                     {
-                        HashMap param = (HashMap) intent.getExtras().get("param");
+                        HashMap param = (HashMap) intent.getExtras().get("resultData");
                         String latitude = param.get("latitude").toString();
                         String longitude = param.get("longitude").toString();
                         String address = param.get("address").toString();

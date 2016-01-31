@@ -35,6 +35,11 @@ public class Constants {
 	public static final String BROADCAST_OPEN_SEARCH_PAGE = "BROADCAST_OPEN_SEARCH_PAGE";
 	public static final String BROADCAST_LOGOUT = "BROADCAST_LOGOUT";
 
+	public static final String ACTION_SEARCH_MAP = "ACTION_SEARCH_MAP";
+	public static final String ACTION_OPEN_DATE_PICKER = "ACTION_OPEN_DATE_PICKER";
+	public static final String ACTION_OPEN_TIME_PICKER = "ACTION_OPEN_TIME_PICKER";
+	public static final String ACTION_FINISH_ACTIVITY = "ACTION_FINISH_ACTIVITY";
+
 	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;

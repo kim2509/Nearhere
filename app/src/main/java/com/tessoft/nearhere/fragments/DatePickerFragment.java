@@ -12,7 +12,7 @@ import android.os.Bundle;
 public class DatePickerFragment extends DialogFragment {
 
 	OnDateSetListener listener = null;
-	
+
 	public DatePickerFragment( OnDateSetListener listener )
 	{
 		this.listener = listener;

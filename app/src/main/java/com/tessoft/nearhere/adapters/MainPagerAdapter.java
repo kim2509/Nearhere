@@ -20,15 +20,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         super(fm);
 
         fragments = new Fragment[3];
-        fragments[0] = LocationFragment.newInstance();
-        fragments[1] = CarPoolTaxiFragment.newInstance();
+        fragments[0] = CarPoolTaxiFragment.newInstance();
+        fragments[1] = LocationFragment.newInstance();
         fragments[2] = TaxiFragment.newInstance();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if ( position == 0 ) return "실시간 위치공유";
-        else  if( position == 1 ) return "카풀/합승";
+        if( position == 0 ) return "카풀/합승";
+        else if ( position == 1 ) return "실시간 위치공유";
         else  if( position == 2 ) return "카풀/합승";
         else return "";
     }
