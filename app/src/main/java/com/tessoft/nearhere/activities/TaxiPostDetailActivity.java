@@ -1,19 +1,28 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONObject;
-
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.TaxiPostReplyListAdapter;
-import com.tessoft.common.Util;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.Post;
-import com.tessoft.domain.User;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -42,35 +51,24 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
+import com.tessoft.common.Constants;
 import com.tessoft.common.UploadTask;
+import com.tessoft.common.Util;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.Post;
 import com.tessoft.domain.PostReply;
+import com.tessoft.domain.User;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.adapters.TaxiPostReplyListAdapter;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class TaxiPostDetailActivity extends BaseListActivity 
 implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, OnClickListener{
@@ -123,10 +121,10 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 			listMain.addHeaderView(fbHeader, null, false );
 			listMain.addHeaderView(headerPost, null, false );
 			listMain.addHeaderView(headerButtons, null, false );
-			listMain.addHeaderView(header2 );
-			listMain.setHeaderDividersEnabled( false );
-			listMain.addFooterView(footer, null, false );
-			listMain.addFooterView(footerPadding, null, false );
+			listMain.addHeaderView(header2);
+			listMain.setHeaderDividersEnabled(false);
+			listMain.addFooterView(footer, null, false);
+			listMain.addFooterView(footerPadding, null, false);
 			listMain.setFooterDividersEnabled(false);
 
 			listMain.setSelector(android.R.color.transparent);
@@ -142,6 +140,9 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 			setTitle("합승상세");
 			
 			setupFacebookLogin();
+
+			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH));
+			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
 		}
 		catch(Exception ex )
 		{
@@ -788,11 +789,18 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 
 	public void modifyPost( View v )
 	{
+		/*
 		Intent intent = new Intent( this, NewTaxiPostActivity.class);
 		intent.putExtra("mode", "modify");
 		intent.putExtra("post", post);
 		startActivityForResult(intent, REQUEST_MODIFY_POST );
 		overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+		*/
+
+		Intent intent = new Intent( this, NewTaxiPostActivity2.class);
+		intent.putExtra("mode", "modify");
+		intent.putExtra("post", post);
+		startActivity(intent);
 	}
 
 	@Override
@@ -873,7 +881,11 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 		public void onReceive(Context context, Intent intent) {
 			try
 			{
-				if ( intent.getExtras() != null && intent.getExtras().containsKey("type"))
+				if ( Constants.BROADCAST_REFRESH.equals( intent.getAction() ) )
+				{
+					inquiryPostDetail();
+				}
+				else if ( intent.getExtras() != null && intent.getExtras().containsKey("type"))
 				{
 					String type = intent.getExtras().getString("type");
 					if ( "postReply".equals( type ) && intent.getExtras().containsKey("postID"))
@@ -897,7 +909,7 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 		super.onStart();
 		try
 		{
-			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
+
 		}
 		catch( Exception ex )
 		{
@@ -909,9 +921,14 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 		unregisterReceiver(mMessageReceiver);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 

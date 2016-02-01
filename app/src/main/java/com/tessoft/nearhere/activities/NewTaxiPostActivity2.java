@@ -18,6 +18,7 @@ import android.widget.TimePicker;
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.common.Util;
+import com.tessoft.domain.Post;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.fragments.DatePickerFragment;
 import com.tessoft.nearhere.fragments.TimePickerFragment;
@@ -41,16 +42,35 @@ public class NewTaxiPostActivity2 extends BaseActivity
 
             webView = (WebView) findViewById(R.id.webView);
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.setWebChromeClient(new WebChromeClient() {});
-            webView.addJavascriptInterface( commonWebViewClient, "Android");
-            webView.setWebViewClient( commonWebViewClient );
+            webView.setWebChromeClient(new WebChromeClient() {
+            });
+            webView.addJavascriptInterface(commonWebViewClient, "Android");
+            webView.setWebViewClient(commonWebViewClient);
 
-            webView.loadUrl(Constants.getServerURL() + "/taxi/newPost.do?isApp=Y");
+            setTitle("합승 등록");
+
+            if ( getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("mode"))
+            {
+                if ( "modify".equals( getIntent().getExtras().getString("mode") ) ) {
+                    String postID = "";
+
+                    if ( getIntent().getExtras().containsKey("post") && getIntent().getExtras().get("post") != null )
+                    {
+                        postID = ((Post) getIntent().getExtras().get("post") ).getPostID();
+
+                        setTitle("합승 수정");
+                    }
+
+                    webView.loadUrl(Constants.getServerURL() + "/taxi/editPost.do?isApp=Y&postID=" + postID );
+                }
+                else
+                    webView.loadUrl(Constants.getServerURL() + "/taxi/newPost.do?isApp=Y");
+            }
+            else
+                webView.loadUrl(Constants.getServerURL() + "/taxi/newPost.do?isApp=Y");
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
             btnRefresh.setOnClickListener(this);
-
-            setTitle("합승 등록");
 
             registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_SET_DESTINATION));
         }
@@ -149,6 +169,8 @@ public class NewTaxiPostActivity2 extends BaseActivity
         }
         else if ( Constants.ACTION_FINISH_ACTIVITY.equals( actionName ) )
         {
+            if ( "refresh".equals( param ) )
+                sendBroadcast(new Intent(Constants.BROADCAST_REFRESH));
             finish();
         }
     }

@@ -10,6 +10,10 @@ import com.tessoft.nearhere.activities.BaseActivity;
 import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.util.HashMap;
+
 /**
  * Created by Daeyong on 2016-01-30.
  */
@@ -155,5 +159,21 @@ public class CommonWebViewClient extends WebViewClient {
     public void finishActivity( String param )
     {
         activity.doAction(Constants.ACTION_FINISH_ACTIVITY, param);
+    }
+
+    @JavascriptInterface
+    public String getDefaultInfo()
+    {
+        try
+        {
+            HashMap hash = activity.application.getDefaultRequest();
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(hash);
+        }
+        catch( Exception ex )
+        {
+
+        }
+        return "";
     }
 }

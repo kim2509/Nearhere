@@ -23,7 +23,6 @@
             <WebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
-                android:background="@color/transparent"
                 android:layout_below="@+id/edtSearchDestination"
                 android:layout_height="match_parent" >
             </WebView>

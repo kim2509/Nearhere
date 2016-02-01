@@ -91,6 +91,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                 if ( "Guest".equals(application.getLoginUser().getType()))
                     snsLoginYN = "snsLogin=Y";
 
+                webView.setBackgroundColor(0);
                 webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&" + snsLoginYN );
                 webView.setWebViewClient( new WebViewClient(){
                     @Override

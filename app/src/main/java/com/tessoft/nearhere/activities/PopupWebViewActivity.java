@@ -1,6 +1,9 @@
 package com.tessoft.nearhere.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,24 @@ import com.tessoft.nearhere.R;
 public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener{
 
     private WebView webView = null;
+
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try
+            {
+                if ( Constants.BROADCAST_REFRESH.equals( intent.getAction() ) )
+                {
+                    webView.reload();
+                }
+            }
+            catch( Exception ex )
+            {
+                catchException(this, ex);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +53,10 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
             });
 
             webView.addJavascriptInterface(commonWebViewClient, "Android");
-            webView.setWebViewClient(  commonWebViewClient );
+            webView.setWebViewClient(commonWebViewClient);
+            webView.setBackgroundColor(0);
 
-            if ( getIntent() != null && getIntent().getExtras() != null )
+            if (getIntent() != null && getIntent().getExtras() != null )
             {
                 if ( getIntent().getExtras().containsKey("title") )
                     setTitle( getIntent().getExtras().get("title").toString() );
@@ -65,6 +87,8 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
             btnRefresh.setOnClickListener(this);
+
+            registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH));
         }
         catch( Exception ex )
         {
@@ -116,5 +140,13 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         }
 
         super.yesClicked(param);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(mMessageReceiver);
     }
 }
