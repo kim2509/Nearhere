@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
@@ -45,6 +46,10 @@ public class UserMessageActivity extends BaseActivity {
 			super.onCreate(savedInstanceState);
 
 			setContentView(R.layout.activity_user_message);
+
+			findViewById(R.id.btnRefresh).setVisibility(ViewGroup.GONE);
+
+			setTitle("메시지");
 
 			header = getLayoutInflater().inflate(R.layout.list_header_user_message, null);
 

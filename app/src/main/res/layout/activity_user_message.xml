@@ -6,11 +6,14 @@
     android:focusableInTouchMode="true"
     tools:context=".activities.BaseListActivity" >
 
+    <include layout="@layout/titlebar_for_activity" />
+
     <ListView
         android:id="@+id/listMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/layoutFooter"
+        android:layout_below="@+id/titleBar"
         android:listSelector="#00000000">
     </ListView>
 
@@ -20,14 +23,16 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentBottom="true" >
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="#eeeeee">
 
         <Button
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             style="@style/btn_style"
             android:layout_marginLeft="5dp"
             android:text="전송" />
@@ -36,12 +41,10 @@
             android:id="@+id/edtMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/btnSend"
-            android:layout_alignBottom="@+id/btnSend"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/btnSend"
             android:singleLine="false"
-            android:ems="10"
             android:hint="내용을 입력하세요." >
 
             <requestFocus />

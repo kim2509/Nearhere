@@ -5,6 +5,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.BaseActivity;
 import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
@@ -176,4 +177,26 @@ public class CommonWebViewClient extends WebViewClient {
         }
         return "";
     }
+
+    @JavascriptInterface
+    public String getCurrentLocationInfo()
+    {
+        try
+        {
+            HashMap hash = new HashMap();
+            hash.put("latitude", NearhereApplication.latitude );
+            hash.put("longitude", NearhereApplication.longitude );
+            hash.put("address", NearhereApplication.address );
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(hash);
+        }
+        catch( Exception ex )
+        {
+
+        }
+        return "";
+    }
+
+
 }
