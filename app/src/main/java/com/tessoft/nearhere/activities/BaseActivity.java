@@ -43,8 +43,6 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Constants.bReal = true;
-
 		application = (NearhereApplication) getApplication();
 
 		checkIfAdminUser();

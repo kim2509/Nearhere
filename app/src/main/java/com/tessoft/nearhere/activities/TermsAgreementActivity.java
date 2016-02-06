@@ -1,21 +1,22 @@
 package com.tessoft.nearhere.activities;
 
-import java.util.HashMap;
-
-import org.codehaus.jackson.type.TypeReference;
-
-import com.tessoft.common.Constants;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.nearhere.R;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import com.tessoft.common.Constants;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.nearhere.R;
+
+import org.codehaus.jackson.type.TypeReference;
+
+import java.util.HashMap;
 
 public class TermsAgreementActivity extends BaseActivity {
 
@@ -46,9 +47,13 @@ public class TermsAgreementActivity extends BaseActivity {
 			webView3 = (WebView) findViewById(R.id.webView3);
 			webView3.setWebViewClient( webViewClient );
 			
-			webView1.loadUrl( Constants.getServerURL() + "/taxi/getUserTerms.do?type=nearhere&version=1.0");
-			webView2.loadUrl( Constants.getServerURL() + "/taxi/getUserTerms.do?type=personal&version=1.0");
+			webView1.loadUrl(Constants.getServerURL() + "/taxi/getUserTerms.do?type=nearhere&version=1.0");
+			webView2.loadUrl(Constants.getServerURL() + "/taxi/getUserTerms.do?type=personal&version=1.0");
 			webView3.loadUrl( Constants.getServerURL() + "/taxi/getUserTerms.do?type=location&version=1.0");
+
+			setTitle("이용약관");
+
+			findViewById(R.id.btnRefresh).setVisibility(ViewGroup.GONE);
 		}
 		catch( Exception ex )
 		{

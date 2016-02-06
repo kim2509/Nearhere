@@ -1,13 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,19 +8,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
 import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.Post;
@@ -36,6 +27,15 @@ import com.tessoft.domain.User;
 import com.tessoft.domain.UserLocation;
 import com.tessoft.nearhere.PhotoViewer;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class UserProfileActivity extends BaseActivity {
 
@@ -230,7 +230,7 @@ public class UserProfileActivity extends BaseActivity {
 
 					if ( user != null && user.getProfileImageURL() != null && user.getProfileImageURL().isEmpty() == false )
 					{
-						ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() + 
+						ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
 								user.getProfileImageURL() , imgProfile, options);
 						imgProfile.setTag(user.getProfileImageURL());
 					}

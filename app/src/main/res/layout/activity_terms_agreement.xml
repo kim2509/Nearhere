@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context=".activities.TermsAgreementActivity" >
+
+    <include layout="@layout/titlebar_for_activity" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnAgree"
+        android:layout_below="@+id/titleBar"
+        android:padding="10dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -77,7 +80,7 @@
         android:id="@+id/btnAgree"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
         style="@style/btn_style"
         android:onClick="updateTermsAgreement"
         android:text="@string/agree" />

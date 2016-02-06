@@ -92,7 +92,8 @@
         <activity
             android:name=".activities.TermsAgreementActivity"
             android:label="@string/title_activity_terms_agreement"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleBarTheme"/>
         <activity
             android:name=".activities.SelectHomeLocationActivity"
             android:label="@string/title_activity_select_home_location" />

@@ -65,7 +65,7 @@ public class SearchMapActivity extends BaseActivity
 
             setContentView(R.layout.activity_search_map);
 
-            setTitle("목적지 선택");
+            setTitle("위치 검색");
 
             listMain = (ListView) findViewById(R.id.listMain);
             adapter = new DestinationAdapter( this, new ArrayList<Item>());
