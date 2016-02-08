@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="68" >
 
-                <com.tessoft.common.CustomImageView
+                <ImageView
                     android:id="@+id/imgProfile"
                     android:layout_width="90dp"
                     android:layout_height="90dp"

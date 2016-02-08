@@ -101,7 +101,7 @@ public class UserProfileActivity extends BaseActivity {
 
 				}
 			});
-			
+
 			options = new DisplayImageOptions.Builder()
 			.resetViewBeforeLoading(true)
 			.cacheInMemory(true)
@@ -111,7 +111,7 @@ public class UserProfileActivity extends BaseActivity {
 			.displayer(new RoundedBitmapDisplayer(20))
 			.delayBeforeLoading(100)
 			.build();
-			
+
 			setTitle("사용자정보");
 			
 			Button btnRefresh = (Button) findViewById(R.id.btnRefresh);

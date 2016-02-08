@@ -1,15 +1,5 @@
 package com.tessoft.nearhere.adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.tessoft.common.AdapterDelegate;
-import com.tessoft.common.Constants;
-import com.tessoft.common.Util;
-import com.tessoft.domain.UserMessage;
-import com.tessoft.nearhere.R;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +9,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
+import com.tessoft.domain.UserMessage;
+import com.tessoft.nearhere.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageBoxListAdapter extends ArrayAdapter<UserMessage> {
 
 	private List<UserMessage> itemList = new ArrayList<UserMessage>();
 	private AdapterDelegate delegate = null;
 
 	LayoutInflater inflater = null;
+	DisplayImageOptions options = null;
 
 	@Override
 	public void add(UserMessage object) {
@@ -35,6 +38,16 @@ public class MessageBoxListAdapter extends ArrayAdapter<UserMessage> {
 	public MessageBoxListAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 		inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		options = new DisplayImageOptions.Builder()
+				.resetViewBeforeLoading(true)
+				.cacheInMemory(true)
+				.showImageOnLoading(R.drawable.no_image)
+				.showImageForEmptyUri(R.drawable.no_image)
+				.showImageOnFail(R.drawable.no_image)
+				.displayer(new RoundedBitmapDisplayer(20))
+				.delayBeforeLoading(100)
+				.build();
 	}
 
 	public int getCount() {
@@ -70,7 +83,7 @@ public class MessageBoxListAdapter extends ArrayAdapter<UserMessage> {
 					!"".equals( item.getUser().getProfileImageURL() ) )
 			{
 				ImageLoader.getInstance().displayImage( Constants.getThumbnailImageURL() +
-						item.getUser().getProfileImageURL() , imgProfile);
+						item.getUser().getProfileImageURL() , imgProfile, options );
 			}
 			
 			if ( item.getUser() != null && Util.isEmptyString(item.getUser().getUserName()) == false )

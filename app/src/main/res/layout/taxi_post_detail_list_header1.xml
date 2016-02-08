@@ -28,7 +28,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_height="60dp" >
 
-                    <com.tessoft.common.CustomImageView
+                    <ImageView
                         android:id="@+id/imgProfile"
                         android:layout_width="60dp"
                         android:layout_height="60dp" />

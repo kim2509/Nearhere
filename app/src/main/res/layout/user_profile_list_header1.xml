@@ -7,7 +7,7 @@
     android:paddingRight="10dp"
     android:paddingTop="10dp" >
 
-    <com.tessoft.common.CustomImageView
+    <ImageView
         android:id="@+id/imgProfile"
         android:layout_width="140dp"
         android:layout_height="140dp" />
