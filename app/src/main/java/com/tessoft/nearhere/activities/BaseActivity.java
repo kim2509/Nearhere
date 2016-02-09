@@ -45,6 +45,8 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 
 		application = (NearhereApplication) getApplication();
 
+		Constants.bReal = true;
+
 		checkIfAdminUser();
 
 		initImageLoader();
@@ -114,6 +116,8 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 				Constants.bReal = true;
 			else if ( "DEV".equals( server ) )
 				Constants.bReal = false;
+			else
+				Constants.bReal = true;
 
 			Constants.bAdminMode = true;
 
