@@ -25,7 +25,7 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
     Button btnRefresh = null;
     MainPagerAdapter pagerAdapter = null;
     PagerSlidingTabStrip tabs = null;
-    int selectedTabIndex = 0;
+    public int selectedTabIndex = 0;
 
     public MainFragment() {
         // Required empty public constructor
@@ -144,5 +144,10 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public Fragment getChildFragment( int position )
+    {
+        return pagerAdapter.getItem(position);
     }
 }

@@ -48,25 +48,25 @@ public class Constants {
 	
 	public static String getServerURL()
 	{
-//		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.10.110:8080/nearhere";
-		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
+		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.10.110:8080/nearhere";
+//		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
 	}
-	
+
 	public static String getServerSSLURL()
 	{
-//		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.10.110:8080/nearhere";
-		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
+		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.10.110:8080/nearhere";
+//		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
 	}
-	
+
 	public static String getThumbnailImageURL()
 	{
-//		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.10.110/thumbnail/";
-		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.43.137/thumbnail/";
+		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.10.110/thumbnail/";
+//		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.43.137/thumbnail/";
 	}
-	
+
 	public static String getImageURL()
 	{
-//		return Constants.bReal ? "http://www.hereby.co.kr/image/" : "http://192.168.10.110/image/";
-		return Constants.bReal ? "http://www.hereby.co.kr/image/" : "http://192.168.43.137/image/";
+		return Constants.bReal ? "http://www.hereby.co.kr/image/" : "http://192.168.10.110/image/";
+//		return Constants.bReal ? "http://www.hereby.co.kr/image/" : "http://192.168.43.137/image/";
 	}
 }

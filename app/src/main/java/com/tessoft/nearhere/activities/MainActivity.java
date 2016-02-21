@@ -50,6 +50,7 @@ import com.tessoft.nearhere.LocationUpdateService;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.SettingsFragment;
 import com.tessoft.nearhere.adapters.MainMenuArrayAdapter;
+import com.tessoft.nearhere.fragments.DriverFragment;
 import com.tessoft.nearhere.fragments.MainFragment;
 import com.tessoft.nearhere.fragments.MessageBoxFragment;
 import com.tessoft.nearhere.fragments.MyInfoFragment;
@@ -751,14 +752,20 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onBackPressed() {
 
-		try {
-//			application.debug( this, mapper.writeValueAsString( application.getLoginUser() ) );
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if ( currentFragment instanceof MainFragment )
+		{
+			MainFragment mainFragment = (MainFragment) currentFragment;
+			if ( mainFragment.selectedTabIndex == 1 )
+			{
+				DriverFragment driverFragment = (DriverFragment) mainFragment.getChildFragment(mainFragment.selectedTabIndex);
+				if ( driverFragment.canGoBack() )
+				{
+					driverFragment.goBack();
+					return;
+				}
+			}
 		}
-		
-		if ( currentFragment instanceof MainFragment == false )
+		else
 		{
 			reloadProfile();
 			selectItem(new MainMenuItem("홈"));
