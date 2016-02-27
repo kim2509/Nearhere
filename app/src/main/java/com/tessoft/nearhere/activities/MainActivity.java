@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -56,6 +57,7 @@ import com.tessoft.nearhere.fragments.MessageBoxFragment;
 import com.tessoft.nearhere.fragments.MyInfoFragment;
 import com.tessoft.nearhere.fragments.NoticeListFragment;
 import com.tessoft.nearhere.fragments.PushMessageListFragment;
+import com.tessoft.nearhere.fragments.TermsDialogFragment;
 
 import org.codehaus.jackson.type.TypeReference;
 
@@ -137,14 +139,41 @@ public class MainActivity extends BaseActivity {
 			
 			HashMap hash = application.getDefaultRequest();
 			hash.put("os", "Android");
-			sendHttp("/app/appInfo.do", mapper.writeValueAsString( hash ), Constants.HTTP_APP_INFO );
+			sendHttp("/app/appInfo.do", mapper.writeValueAsString(hash), Constants.HTTP_APP_INFO);
 
 			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
 			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_LOGOUT));
+			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_START_LOCATION_UPDATE));
+
+			HashMap mainInfo = application.getDefaultRequest();
+			mainInfo.put("userID", application.getLoginUser().getUserID());
+			sendHttp("/taxi/getMainInfo.do", mapper.writeValueAsString(mainInfo), Constants.HTTP_GET_MAIN_INFO);
 		}
 		catch( Exception ex )
 		{
 			catchException(this, ex);
+		}
+	}
+
+	private void openTermsDialogFragment() {
+
+		try
+		{
+			Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
+			TermsDialogFragment termsDialogFragment = new TermsDialogFragment();
+			termsDialogFragment.setApplication(application);
+			termsDialogFragment.show(ft, "dialog");
+
+			bShowTermsDialog = false;
+		}
+		catch( Exception ex )
+		{
+			bShowTermsDialog = true;
 		}
 	}
 
@@ -306,7 +335,12 @@ public class MainActivity extends BaseActivity {
 		try {
 			getUnreadCount();
 
-			if ( application.checkIfGPSEnabled() )
+			if ( bShowTermsDialog )
+			{
+				openTermsDialogFragment();
+			}
+
+			if ( application.bUserTermsAgreed && application.checkIfGPSEnabled() )
 				startLocationUpdates();
 		}
 		catch( Exception ex )
@@ -339,6 +373,11 @@ public class MainActivity extends BaseActivity {
 					getUnreadCount();
 				if ( Constants.BROADCAST_LOGOUT.equals( intent.getAction() ) )
 					yesClicked("logout");
+				else if ( Constants.BROADCAST_START_LOCATION_UPDATE.equals( intent.getAction() ) )
+				{
+					if ( application.bUserTermsAgreed && application.checkIfGPSEnabled() )
+						startLocationUpdates();
+				}
 			}
 			catch( Exception ex )
 			{
@@ -507,6 +546,8 @@ public class MainActivity extends BaseActivity {
 			if(lastLocationUpdatedDt.before(now))
 				bShouldUpdate = true;
 		}
+
+		bShouldUpdate = true;
 
 		if ( bShouldUpdate )
 		{
@@ -698,6 +739,29 @@ public class MainActivity extends BaseActivity {
 						return;
 					}
 				}
+				else if ( requestCode == Constants.HTTP_GET_MAIN_INFO )
+				{
+					if ( response.getData() == null ) {
+						openTermsDialogFragment();
+						return;
+					}
+
+
+					String mainInfoString = mapper.writeValueAsString( response.getData() );
+					HashMap mainInfo = mapper.readValue( mainInfoString, new TypeReference<HashMap>(){});
+					if ( mainInfo == null || !mainInfo.containsKey("UserAgreed") ||
+							!"Y".equals( mainInfo.get("UserAgreed")))
+					{
+						openTermsDialogFragment();
+					}
+					else if ( "Y".equals( mainInfo.get("UserAgreed") ) )
+					{
+						application.bUserTermsAgreed = true;
+
+						if ( application.checkIfGPSEnabled() )
+							startLocationUpdates();
+					}
+				}
 			}
 			else
 			{
@@ -710,6 +774,8 @@ public class MainActivity extends BaseActivity {
 			catchException(this, ex);
 		}
 	}
+
+	boolean bShowTermsDialog = false;
 
 	public void kakaoLogout() {
 
@@ -755,7 +821,8 @@ public class MainActivity extends BaseActivity {
 		if ( currentFragment instanceof MainFragment )
 		{
 			MainFragment mainFragment = (MainFragment) currentFragment;
-			if ( mainFragment.selectedTabIndex == 1 )
+			if ( mainFragment.selectedTabIndex == 1 &&
+					mainFragment.getChildFragment(mainFragment.selectedTabIndex) instanceof DriverFragment )
 			{
 				DriverFragment driverFragment = (DriverFragment) mainFragment.getChildFragment(mainFragment.selectedTabIndex);
 				if ( driverFragment.canGoBack() )

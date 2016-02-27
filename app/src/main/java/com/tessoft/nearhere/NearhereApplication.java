@@ -1,18 +1,5 @@
 package com.tessoft.nearhere;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.tessoft.common.HttpTransactionReturningString;
-import com.tessoft.common.TransactionDelegate;
-import com.tessoft.common.Util;
-import com.tessoft.domain.User;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,6 +12,19 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.tessoft.common.HttpTransactionReturningString;
+import com.tessoft.common.TransactionDelegate;
+import com.tessoft.common.Util;
+import com.tessoft.domain.User;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.util.HashMap;
+import java.util.UUID;
+
 public class NearhereApplication extends Application{
 
 	ObjectMapper mapper = new ObjectMapper();
@@ -35,6 +35,7 @@ public class NearhereApplication extends Application{
 	public static String latitude = "";
 	public static String longitude = "";
 	public static String address = "";
+	public static boolean bUserTermsAgreed = false;
 	
 	public int getMetaInfoInt( String key )
 	{

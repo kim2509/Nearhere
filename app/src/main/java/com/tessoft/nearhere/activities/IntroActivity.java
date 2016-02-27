@@ -44,9 +44,11 @@ public class IntroActivity extends BaseActivity {
 			HashMap hash = application.getDefaultRequest();
 			hash.put("os", "Android");
 
-			application.debug("application.getLoginUser().getUserID() :" + application.getLoginUser().getUserID() );
-			application.debug("application.getLoginUser().getType() :" + application.getLoginUser().getType() );
-			
+			application.debug("application.getLoginUser().getUserID() :" + application.getLoginUser().getUserID());
+			application.debug("application.getLoginUser().getType() :" + application.getLoginUser().getType());
+
+//			setContentView(R.layout.activity_intro);
+
 			if ( Util.isEmptyString(application.getLoginUser().getUserID()) )
 			{
 				//Guest 최초로그인
@@ -148,19 +150,8 @@ public class IntroActivity extends BaseActivity {
 				User user = mapper.readValue( userString, new TypeReference<User>(){});
 
 				application.setLoginUser( user );
-				
-				if ( requestCode == HTTP_LOGIN_BACKGROUND )
-				{
-					String addInfoString = mapper.writeValueAsString( response.getData2() );
-					HashMap<String,String> addInfo = mapper.readValue( addInfoString, new TypeReference<HashMap<String,String>>(){});
-					
-					if ( addInfo != null && addInfo.containsKey("UserAgreed") && "Y".equals( addInfo.get("UserAgreed") ) )
-						goMainActivity();
-					else
-						goTermsAgreementActivity();
-				}
-				else if ( requestCode == Constants.HTTP_GET_RANDOM_ID_FOR_GUEST )
-					goTermsAgreementActivity();
+
+				goMainActivity();
 					
 				finish();
 			}

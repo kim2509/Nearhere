@@ -110,6 +110,11 @@ public class CommonWebViewClient extends WebViewClient {
 
             return true;
         }
+        else if ( url.startsWith("nearhere://clearHistory") )
+        {
+            view.clearHistory();
+            return true;
+        }
 
         return false;
     }

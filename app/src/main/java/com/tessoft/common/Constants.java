@@ -25,10 +25,13 @@ public class Constants {
 	public static final int HTTP_ADD_LOCATION = 1090;
 	public static final int HTTP_FINISH_LOCATION_TRACKING = 1100;
 	public static final int HTTP_SEARCH_USER_DESTINATIONS = 1110;
+	public static final int HTTP_INSERT_USER_TERMS_AGREEMENT = 1120;
+	public static final int HTTP_GET_MAIN_INFO = 1130;
 
 	public static final String BROADCAST_REFRESH = "BROADCAST_REFRESH";
 	public static final String BROADCAST_TAXI_REFRESH = "BROADCAST_TAXI_REFRESH";
 	public static final String BROADCAST_SET_DESTINATION = "BROADCAST_SET_DESTINATION";
+	public static final String BROADCAST_START_LOCATION_UPDATE = "BROADCAST_START_LOCATION_UPDATE";
 	public static final String BROADCAST_LOCATION_UPDATED = "BROADCAST_LOCATION_UPDATED";
 	public static final String BROADCAST_STOP_LOCATION_SERVICE = "BROADCAST_STOP_LOCATION_SERVICE";
 	public static final String BROADCAST_DESTINATION_REFRESH = "BROADCAST_DESTINATION_REFRESH";

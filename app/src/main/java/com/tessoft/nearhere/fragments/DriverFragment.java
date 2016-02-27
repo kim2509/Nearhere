@@ -78,7 +78,8 @@ public class DriverFragment extends BaseFragment implements View.OnClickListener
                 webView.setWebChromeClient(new WebChromeClient() {});
                 webView.setBackgroundColor(0);
                 webView.addJavascriptInterface(commonWebViewClient, "Android");
-                webView.loadUrl(Constants.getServerURL() + "/driver/driverMain.do?isApp=Y&");
+                webView.loadUrl(Constants.getServerURL() + "/driver/driverMain.do?isApp=Y&userID=" +
+                        java.net.URLEncoder.encode( application.getLoginUser().getUserID(), "utf-8") );
                 webView.setWebViewClient(commonWebViewClient);
 
             }
@@ -153,7 +154,7 @@ public class DriverFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        getActivity().unregisterReceiver(mMessageReceiver);
     }
 
     @Override
