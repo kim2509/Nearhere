@@ -547,8 +547,6 @@ public class MainActivity extends BaseActivity {
 				bShouldUpdate = true;
 		}
 
-		bShouldUpdate = true;
-
 		if ( bShouldUpdate )
 		{
 			// startLocationService
