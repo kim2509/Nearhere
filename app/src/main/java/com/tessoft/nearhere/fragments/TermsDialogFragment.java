@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.tessoft.common.AdapterDelegate;
 import com.tessoft.common.Constants;
@@ -74,9 +77,14 @@ public class TermsDialogFragment extends DialogFragment implements OnClickListen
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 		}
 	};
-	WebView webView1 = null;
-	WebView webView2 = null;
-	WebView webView3 = null;
+
+	TextView txtTerm1 = null;
+	TextView txtTerm2 = null;
+	TextView txtTerm3 = null;
+	CheckBox chkTerm1 = null;
+	CheckBox chkTerm2 = null;
+	CheckBox chkTerm3 = null;
+	CheckBox chkTermAll = null;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) 
@@ -101,16 +109,21 @@ public class TermsDialogFragment extends DialogFragment implements OnClickListen
 				public void onShow(DialogInterface dialog) {
 					// TODO Auto-generated method stub
 
-					webView1 = (WebView) rootView.findViewById(R.id.webView1);
-					webView1.setWebViewClient( webViewClient );
-					webView2 = (WebView) rootView.findViewById(R.id.webView2);
-					webView2.setWebViewClient( webViewClient );
-					webView3 = (WebView) rootView.findViewById(R.id.webView3);
-					webView3.setWebViewClient( webViewClient );
+					txtTerm1 = (TextView) rootView.findViewById(id.txtTerm1);
+					txtTerm1.setOnClickListener(TermsDialogFragment.this);
+					txtTerm2 = (TextView) rootView.findViewById(id.txtTerm2);
+					txtTerm2.setOnClickListener(TermsDialogFragment.this);
+					txtTerm3 = (TextView) rootView.findViewById(id.txtTerm3);
+					txtTerm3.setOnClickListener(TermsDialogFragment.this);
 
-					webView1.loadUrl(Constants.getServerURL() + "/taxi/getUserTerms.do?type=nearhere&version=1.0");
-					webView2.loadUrl(Constants.getServerURL() + "/taxi/getUserTerms.do?type=personal&version=1.0");
-					webView3.loadUrl( Constants.getServerURL() + "/taxi/getUserTerms.do?type=location&version=1.0");
+					chkTerm1 = (CheckBox) rootView.findViewById(R.id.chkTerm1);
+					chkTerm1.setOnClickListener(TermsDialogFragment.this);
+					chkTerm2 = (CheckBox) rootView.findViewById(R.id.chkTerm2);
+					chkTerm2.setOnClickListener(TermsDialogFragment.this);
+					chkTerm3 = (CheckBox) rootView.findViewById(R.id.chkTerm3);
+					chkTerm3.setOnClickListener(TermsDialogFragment.this);
+					chkTermAll = (CheckBox) rootView.findViewById(R.id.chkTermAll);
+					chkTermAll.setOnClickListener(TermsDialogFragment.this);
 
 					rootView.findViewById(R.id.btnAgree).setOnClickListener(TermsDialogFragment.this);
 				}
@@ -136,15 +149,62 @@ public class TermsDialogFragment extends DialogFragment implements OnClickListen
 		// TODO Auto-generated method stub
 		try
 		{
-			if ( v.getId() == id.btnAgree )
+			if ( v.getId() == id.txtTerm1 )
 			{
-				HashMap hash = new HashMap();
-				hash.put("userID", application.getLoginUser().getUserID());
-				hash.put("nearhere_ver", "1.0");
-				hash.put("personal_ver", "1.0");
-				hash.put("location_ver", "1.0");
-				sendHttp("/taxi/insertTermsAgreement.do",
-						mapper.writeValueAsString(hash), Constants.HTTP_INSERT_USER_TERMS_AGREEMENT);
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(Constants.getServerURL() + "/taxi/getUserTerms.do?type=nearhere&version=1.0"));
+				startActivity(browserIntent);
+			}
+			else if ( v.getId() == id.txtTerm2 )
+			{
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(Constants.getServerURL() + "/taxi/getUserTerms.do?type=personal&version=1.0"));
+				startActivity(browserIntent);
+			}
+			else if ( v.getId() == id.txtTerm3 )
+			{
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(Constants.getServerURL() + "/taxi/getUserTerms.do?type=location&version=1.0"));
+				startActivity(browserIntent);
+			}
+			else if ( v.getId() == id.chkTerm1 || v.getId() == id.chkTerm2 || v.getId() == id.chkTerm3 )
+			{
+				if ( chkTerm1.isChecked() && chkTerm2.isChecked() && chkTerm3.isChecked() )
+					chkTermAll.setChecked(true);
+				else
+					chkTermAll.setChecked(false);
+			}
+			else if ( v.getId() == id.chkTermAll )
+			{
+				if ( chkTermAll.isChecked() )
+				{
+					chkTerm1.setChecked(true);
+					chkTerm2.setChecked(true);
+					chkTerm3.setChecked(true);
+				}
+				else
+				{
+					chkTerm1.setChecked(false);
+					chkTerm2.setChecked(false);
+					chkTerm3.setChecked(false);
+				}
+			}
+			else if ( v.getId() == id.btnAgree )
+			{
+				if ( chkTerm1.isChecked() && chkTerm2.isChecked() && chkTerm3.isChecked() )
+				{
+					HashMap hash = new HashMap();
+					hash.put("userID", application.getLoginUser().getUserID());
+					hash.put("nearhere_ver", "1.0");
+					hash.put("personal_ver", "1.0");
+					hash.put("location_ver", "1.0");
+					sendHttp("/taxi/insertTermsAgreement.do",
+							mapper.writeValueAsString(hash), Constants.HTTP_INSERT_USER_TERMS_AGREEMENT);
+				}
+				else
+				{
+					application.showToastMessage("약관에 동의해 주시기 바랍니다.");
+				}
 			}
 		}
 		catch( Exception ex )

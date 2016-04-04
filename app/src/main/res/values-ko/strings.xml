@@ -89,4 +89,5 @@
     <string name="taxi_main_guide1">근처에 등록된 합승내역입니다.\r\n도착지가 비슷한 합승을 선택해 보세요.</string>
     <string name="taxi_post_detail_guide1">님의 합승정보입니다. \r\n도착지가 고객님과 비슷하면, 아래 댓글을 통해 연락해보세요.</string>
 
+    <string name="term_guide1"><u>이근처 합승 이용약관</u></string>
 </resources>
