@@ -132,8 +132,8 @@ public class MainActivity extends BaseActivity {
 			// google play sdk 설치 여부를 검사한다.
 			checkPlayServices();
 
-			if ( application.checkIfGPSEnabled() == false )
-				buildAlertMessageNoGps();
+			//if ( application.checkIfGPSEnabled() == false )
+			//	buildAlertMessageNoGps();
 
 			MainActivity.active = true;
 			

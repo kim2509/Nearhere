@@ -18,7 +18,8 @@
                 android:drawableLeft="@drawable/ic_action_search"
                 android:focusableInTouchMode="false"
                 android:editable="false"
-                android:drawablePadding="5dp"/>
+                android:drawablePadding="5dp"
+                android:visibility="gone"/>
 
             <WebView
                 android:id="@+id/webView"

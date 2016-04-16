@@ -3,6 +3,8 @@ package net.daum.android.map.openapi.search;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +21,7 @@ import java.util.Scanner;
 
 public class Searcher {
     // http://dna.daum.net/apis/local
-	public static final String DAUM_MAPS_LOCAL_KEYWORD_SEARCH_API_FORMAT = "https://apis.daum.net/local/v1/search/keyword.json?query=%s&location=%f,%f&radius=%d&page=%d&apikey=%s";
+	public static final String DAUM_MAPS_LOCAL_KEYWORD_SEARCH_API_FORMAT = "https://apis.daum.net/local/v1/search/keyword.json?query=%s&page=%d&apikey=%s";
 	public static final String DAUM_MAPS_LOCAL_CATEGORY_SEARCH_API_FORMAT = "https://apis.daum.net/local/v1/search/category.json?code=%s&location=%f,%f&radius=%d&page=%d&apikey=%s";
 	
 	private static final String HEADER_NAME_X_APPID = "x-appid";
@@ -89,7 +91,7 @@ public class Searcher {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-    	return String.format(DAUM_MAPS_LOCAL_KEYWORD_SEARCH_API_FORMAT, encodedQuery, latitude, longitude, radius, page, apikey);
+    	return String.format(DAUM_MAPS_LOCAL_KEYWORD_SEARCH_API_FORMAT, encodedQuery, page, apikey);
     }
 	
 	private String buildCategorySearchApiUrlString(String categoryCode, double latitude, double longitude, int radius, int page, String apikey) {
@@ -126,9 +128,16 @@ public class Searcher {
 	private List<Item> parse(String jsonString) {
 		List<Item> itemList = new ArrayList<Item>();
 		try {
+
 			JSONObject reader = new JSONObject(jsonString);
 			JSONObject channel = reader.getJSONObject("channel");
 			JSONArray objects = channel.getJSONArray("item");
+
+			ObjectMapper mapper = new ObjectMapper();
+			itemList = mapper.readValue(objects.toString(), new TypeReference<List<Item>>(){});
+			/*
+
+
 			for (int i = 0; i < objects.length(); i++) {
 				JSONObject object = objects.getJSONObject(i);
 				Item item = new Item();
@@ -147,7 +156,11 @@ public class Searcher {
 				item.placeUrl = object.getString("placeUrl");
 				item.addressBCode = object.getString("addressBCode");
 				itemList.add(item);
+
 			}
+
+			*/
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
