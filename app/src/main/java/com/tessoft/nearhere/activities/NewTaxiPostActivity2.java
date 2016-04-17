@@ -63,9 +63,12 @@ public class NewTaxiPostActivity2 extends BaseActivity
 
                     webView.loadUrl(Constants.getServerURL() + "/taxi/editPost.do?isApp=Y&postID=" + postID );
                 }
-                else
+                else {
                     webView.loadUrl(Constants.getServerURL() + "/taxi/newPost.do?isApp=Y");
+                }
             }
+            else if ( getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("url") )
+                webView.loadUrl( getIntent().getExtras().getString("url") );
             else
                 webView.loadUrl(Constants.getServerURL() + "/taxi/newPost.do?isApp=Y");
 

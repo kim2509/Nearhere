@@ -92,7 +92,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                     snsLoginYN = "snsLogin=Y";
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&showSearchDiv=Y&" + snsLoginYN );
+                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&" + snsLoginYN );
                 webView.setWebViewClient( new WebViewClient(){
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {

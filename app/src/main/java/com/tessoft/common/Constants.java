@@ -42,6 +42,7 @@ public class Constants {
 	public static final String ACTION_OPEN_DATE_PICKER = "ACTION_OPEN_DATE_PICKER";
 	public static final String ACTION_OPEN_TIME_PICKER = "ACTION_OPEN_TIME_PICKER";
 	public static final String ACTION_FINISH_ACTIVITY = "ACTION_FINISH_ACTIVITY";
+	public static final String ACTION_SET_NEW_POST_URL = "ACTION_SET_NEW_POST_URL";
 
 	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 

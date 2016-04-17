@@ -57,7 +57,6 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
         tabs.setOnPageChangeListener(this);
 
         btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
-        btnRefresh.setVisibility(ViewGroup.GONE);
         btnRefresh.setOnClickListener(this);
         return rootView;
     }
@@ -90,11 +89,11 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
         selectedTabIndex = position;
 
-        if ( position == 0 )
+        if ( position == 1 )
         {
             btnRefresh.setVisibility(ViewGroup.GONE);
         }
-        else if ( position == 1 )
+        else if ( position == 0 )
         {
             btnRefresh.setVisibility(ViewGroup.VISIBLE);
         }

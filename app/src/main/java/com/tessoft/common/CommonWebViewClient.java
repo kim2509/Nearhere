@@ -203,5 +203,9 @@ public class CommonWebViewClient extends WebViewClient {
         return "";
     }
 
-
+    @JavascriptInterface
+    public void setNewPostURL( String url )
+    {
+        activity.doAction(Constants.ACTION_SET_NEW_POST_URL, url);
+    }
 }

@@ -119,14 +119,25 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 webView.reload();
             else if ( v.getId() == R.id.btnAddPost )
             {
-                Intent intent = new Intent(this, NewTaxiPostActivity2.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+                webView.loadUrl("javascript:getNewPostURL();");
             }
         }
         catch( Exception ex )
         {
             catchException(this, ex);
+        }
+    }
+
+    @Override
+    public void doAction(String actionName, Object param) {
+        super.doAction(actionName, param);
+
+        if ( Constants.ACTION_SET_NEW_POST_URL.equals( actionName ) )
+        {
+            Intent intent = new Intent(this, NewTaxiPostActivity2.class);
+            intent.putExtra("url", param.toString() );
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
         }
     }
 
