@@ -1,8 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.R;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +8,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+
+import com.tessoft.common.Constants;
+import com.tessoft.nearhere.R;
 
 public class HybridActivity extends BaseActivity{
 
@@ -65,10 +65,6 @@ public class HybridActivity extends BaseActivity{
 		};
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 		}
-
-		public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
-			handler.proceed();
-		};
 	};
 	
 	class JSInterface

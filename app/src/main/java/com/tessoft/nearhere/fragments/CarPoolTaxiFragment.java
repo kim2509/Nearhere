@@ -23,6 +23,7 @@ import com.tessoft.nearhere.activities.BaseActivity;
 import com.tessoft.nearhere.activities.MainActivity;
 import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.SearchMapActivity;
+import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
 
 import java.net.URLEncoder;
@@ -92,7 +93,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                     snsLoginYN = "snsLogin=Y";
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&" + snsLoginYN );
+                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&showRecentPosts=Y&" + snsLoginYN );
                 webView.setWebViewClient( new WebViewClient(){
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -146,9 +147,30 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                                 }
                             }
                         }
+                        else if ( url.startsWith("nearhere://viewPost?postID=") )
+                        {
+                            String params = url.substring( url.indexOf("?") + 1);
+                            String[] paramAr = params.split("&");
+                            for ( int i = 0; i < paramAr.length; i++ )
+                            {
+                                if ( paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1)
+                                {
+                                    String key = paramAr[i].split("=")[0];
+                                    String value = paramAr[i].split("=")[1];
+
+                                    if ( key != null && key.equals("postID"))
+                                    {
+                                        Intent intent = new Intent( getActivity(), TaxiPostDetailActivity.class);
+                                        intent.putExtra("postID", value );
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                                    }
+                                }
+                            }
+                        }
                         else if ( url.startsWith("nearhere://snsLogin") )
                         {
-                            showYesNoDialog("확인", "SNS 계정으로 로그인하시겠습니까?", "snsLogin" );
+                            showYesNoDialog("확인", "SNS 계정으로 로그인하시겠습니까?", "snsLogin");
                         }
                         else if ( url.startsWith("nearhere://showOKDialog?") )
                         {
@@ -174,7 +196,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                                 }
                             }
 
-                            showOKDialog( title, message, param );
+                            showOKDialog(title, message, param);
                         }
                         else if ( url.startsWith("nearhere://openSearchDestination") )
                         {

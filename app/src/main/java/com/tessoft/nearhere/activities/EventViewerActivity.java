@@ -1,8 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +9,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.tessoft.common.Constants;
+import com.tessoft.nearhere.R;
+
 public class EventViewerActivity extends BaseActivity {
 
 	WebView webView = null;
@@ -19,10 +19,6 @@ public class EventViewerActivity extends BaseActivity {
 	WebViewClient webViewClient = new WebViewClient() {
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 			Toast.makeText( getApplicationContext(), description, Toast.LENGTH_SHORT).show();
-		}
-		
-		public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
-			handler.proceed();
 		}
 	};
 	

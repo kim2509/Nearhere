@@ -1,14 +1,5 @@
 package com.tessoft.nearhere.adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.tessoft.common.AdapterDelegate;
-import com.tessoft.common.Constants;
-import com.tessoft.common.Util;
-import com.tessoft.domain.Notice;
-import com.tessoft.nearhere.R;
-
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
@@ -19,6 +10,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
+import com.tessoft.domain.Notice;
+import com.tessoft.nearhere.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoticeListAdapter extends BaseExpandableListAdapter {
 
@@ -86,10 +86,6 @@ public class NoticeListAdapter extends BaseExpandableListAdapter {
 	WebViewClient webViewClient = new WebViewClient() {
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 		}
-		
-		public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
-			handler.proceed();
-		};
 	};
 
 	@Override

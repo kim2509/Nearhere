@@ -1,12 +1,5 @@
 package com.tessoft.nearhere.fragments;
 
-import java.util.HashMap;
-
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.activities.HybridActivity;
-import com.tessoft.nearhere.NearhereApplication;
-import com.tessoft.nearhere.R;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,13 +9,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+
+import com.tessoft.common.Constants;
+import com.tessoft.nearhere.NearhereApplication;
+import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.activities.HybridActivity;
+
+import java.util.HashMap;
 
 public class WebFragment extends BaseFragment {
 
@@ -118,10 +118,6 @@ public class WebFragment extends BaseFragment {
 		};
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 		}
-
-		public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
-			handler.proceed();
-		};
 	};
 
 	public void updateCurrentLocation()
