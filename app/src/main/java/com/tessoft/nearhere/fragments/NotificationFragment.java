@@ -20,14 +20,14 @@ import com.tessoft.nearhere.activities.BaseActivity;
 /**
  * Created by Daeyong on 2016-04-18.
  */
-public class FriendFragment extends BaseFragment {
+public class NotificationFragment extends BaseFragment {
 
     protected View rootView = null;
     private WebView webView = null;
 
     // TODO: Rename and change types and number of parameters
-    public static FriendFragment newInstance() {
-        FriendFragment fragment = new FriendFragment();
+    public static NotificationFragment newInstance() {
+        NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
         return fragment;
     }
@@ -74,7 +74,7 @@ public class FriendFragment extends BaseFragment {
                 webView.addJavascriptInterface(commonWebViewClient, "Android");
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl(Constants.getServerURL() + "/friend/index.do?isApp=Y");
+                webView.loadUrl(Constants.getServerURL() + "/notification/index.do");
 
                 webView.setWebViewClient( new WebViewClient() {
                     @Override

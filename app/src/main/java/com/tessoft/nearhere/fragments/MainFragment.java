@@ -89,11 +89,11 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
         selectedTabIndex = position;
 
-        if ( position == 1 )
+        if ( position == 4 )
         {
             btnRefresh.setVisibility(ViewGroup.GONE);
         }
-        else if ( position == 0 )
+        else
         {
             btnRefresh.setVisibility(ViewGroup.VISIBLE);
         }
