@@ -16,16 +16,6 @@
 
 package com.tessoft.nearhere;
 
-import java.util.HashMap;
-import java.util.List;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.activities.EventViewerActivity;
-import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
-import com.tessoft.nearhere.activities.UserMessageActivity;
-import com.tessoft.nearhere.activities.UserProfileActivity;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.IntentService;
@@ -41,6 +31,17 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.tessoft.common.Constants;
+import com.tessoft.nearhere.activities.EventViewerActivity;
+import com.tessoft.nearhere.activities.MainActivity;
+import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
+import com.tessoft.nearhere.activities.UserMessageActivity;
+import com.tessoft.nearhere.activities.UserProfileActivity;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -261,6 +262,17 @@ public class GcmIntentService extends IntentService {
             	if ( extras.containsKey("vibrate") && "on".equals( extras.getString("vibrate") ) )
             		mBuilder.setVibrate(new long[] { 1000, 1000 });
             	
+            }
+            else if ( "friendRequest".equals( type ))
+            {
+                intent = new Intent(this, MainActivity.class);
+                intent.putExtra("tab", "friend");
+
+                if ( extras.containsKey("sound") && "on".equals( extras.getString("sound") ) )
+                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                if ( extras.containsKey("vibrate") && "on".equals( extras.getString("vibrate") ) )
+                    mBuilder.setVibrate(new long[] { 1000, 1000 });
+
             }
             else
             {

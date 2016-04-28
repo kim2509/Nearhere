@@ -12,8 +12,13 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_below="@+id/titleBar"
+        app:pstsUnderlineHeight="1dp"
         android:layout_height="48dip"
-        app:pstsShouldExpand="true"/>
+        app:pstsShouldExpand="true"
+        app:pstsIndicatorColor="#0000dd"
+        app:pstsIndicatorHeight="2dp"
+        app:pstsDividerColor="#eeeeee"
+        app:pstsTabPaddingLeftRight="0dp"/>
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"

@@ -16,6 +16,7 @@ import com.tessoft.nearhere.fragments.NotificationFragment;
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
     Fragment[] fragments = null;
+    String[] titles = null;
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,14 +26,27 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         fragments[1] = FriendFragment.newInstance();
         fragments[2] = NotificationFragment.newInstance();
         fragments[3] = LocationFragment.newInstance();
+
+        titles = new String[4];
+        titles[0] = "카풀/합승";
+        titles[1] = "친구";
+        titles[2] = "알림";
+        titles[3] = "위치";
+    }
+
+    public String[] getTitles()
+    {
+        return titles;
+    }
+
+    public void setTitles( String[] titles )
+    {
+        this.titles = titles;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if( position == 0 ) return "카풀/합승";
-        else if ( position == 1 ) return "친구";
-        else if ( position == 2 ) return "알림";
-        else  if( position == 3 ) return "위치";
+        if ( position < titles.length ) return titles[position];
         else return "";
     }
 
