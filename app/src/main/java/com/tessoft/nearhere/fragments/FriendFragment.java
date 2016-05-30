@@ -92,4 +92,10 @@ public class FriendFragment extends BaseFragment {
 
         return rootView;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(mMessageReceiver);
+    }
 }

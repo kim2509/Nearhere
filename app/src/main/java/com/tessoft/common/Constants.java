@@ -46,6 +46,8 @@ public class Constants {
 
 	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 
+	public static final int STATISTICS_DEBUG = 1234;
+
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
 
 	public static String DAUM_MAP_API_KEY = "1ce23b1035fde7488e6be71df90904d7";
@@ -58,7 +60,7 @@ public class Constants {
 
 	public static String getServerSSLURL()
 	{
-		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://172.30.1.200:8080/nearhere";
+		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://172.30.1.200:8080/nearhere";
 //		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
 	}
 

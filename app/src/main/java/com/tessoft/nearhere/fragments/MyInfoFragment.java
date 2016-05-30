@@ -1,42 +1,5 @@
 package com.tessoft.nearhere.fragments;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
-import com.tessoft.common.UploadTask;
-import com.tessoft.common.Util;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.Post;
-import com.tessoft.domain.User;
-import com.tessoft.domain.UserLocation;
-import com.tessoft.nearhere.activities.MainActivity;
-import com.tessoft.nearhere.PhotoViewer;
-import com.tessoft.nearhere.activities.SetDestinationActivity;
-import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
-import com.tessoft.nearhere.R.anim;
-import com.tessoft.nearhere.R.drawable;
-import com.tessoft.nearhere.R.id;
-import com.tessoft.nearhere.R.layout;
-
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,9 +8,9 @@ import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Bitmap.CompressFormat;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,6 +29,43 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.tessoft.common.Constants;
+import com.tessoft.common.UploadTask;
+import com.tessoft.common.Util;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.Post;
+import com.tessoft.domain.User;
+import com.tessoft.domain.UserLocation;
+import com.tessoft.nearhere.PhotoViewer;
+import com.tessoft.nearhere.R.anim;
+import com.tessoft.nearhere.R.drawable;
+import com.tessoft.nearhere.R.id;
+import com.tessoft.nearhere.R.layout;
+import com.tessoft.nearhere.activities.MainActivity;
+import com.tessoft.nearhere.activities.SetDestinationActivity;
+import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
+import com.tessoft.nearhere.adapters.TaxiArrayAdapter;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 public class MyInfoFragment extends BaseFragment implements OnClickListener {
 
 	TaxiArrayAdapter adapter = null;
@@ -81,7 +81,7 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 	DisplayImageOptions options = null;
 	
 	MainActivity mainActivity = null;
-	
+
 	public MyInfoFragment( MainActivity mainActivity )
 	{
 		this.mainActivity = mainActivity;
@@ -563,8 +563,14 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 			}
 			else if ( requestCode == 3 )
 			{
+				sendHttp("/taxi/statistics.do?name=changeImageButtonClick",
+						mapper.writeValueAsString( application.getLoginUser() ), Constants.STATISTICS_DEBUG);
+
 				if( data != null && data.getData() != null) {
 					Uri _uri = data.getData();
+
+					sendHttp("/taxi/statistics.do?name=ImageDataNotNull",
+							mapper.writeValueAsString( application.getLoginUser() ), Constants.STATISTICS_DEBUG);
 
 					String imageFilePath = _uri.getPath();
 
@@ -575,7 +581,10 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 					if(exifDegree != 0) {
 						Bitmap bitmap = getBitmap( imageFilePath );			    	
 						Bitmap rotatePhoto = rotate(bitmap, exifDegree);
-						saveBitmap(rotatePhoto, imageFilePath );			    			    
+						saveBitmap(rotatePhoto, imageFilePath );
+
+						sendHttp("/taxi/statistics.do?name=ImageRotationFinished",
+								mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
 					}	    			
 
 					cropImage( _uri );
@@ -584,11 +593,28 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 			}
 			else if ( requestCode == REQUEST_IMAGE_CROP )
 			{
+				sendHttp("/taxi/statistics.do?name=onActivityResultImageCrop",
+						mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
+
+				if ( data == null )
+					return;
+
 				Bundle extras = data.getExtras();
 				if(extras != null) {
+
+					sendHttp("/taxi/statistics.do?name=ImageCropDataNotNull",
+							mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
+
 					Bitmap bitmap = (Bitmap)extras.get("data");
 					bitmap = resizeBitmapImageFn( bitmap, 1024 );
-					sendPhoto( bitmap );
+
+					sendHttp("/taxi/statistics.do?name=ResizeImageCrop1024",
+							mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
+
+					sendPhoto(bitmap);
+
+					sendHttp("/taxi/statistics.do?name=sendPhoto",
+							mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
 				}
 			}
 		}
@@ -700,7 +726,11 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 		}		
 	}
 
-	private void cropImage(Uri contentUri) {
+	private void cropImage(Uri contentUri) throws Exception{
+
+		sendHttp("/taxi/statistics.do?name=cropImageStarted",
+				mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
+
 		Intent cropIntent = new Intent("com.android.camera.action.CROP");
 		//indicate image type and Uri of image
 		cropIntent.setDataAndType(contentUri, "image/*");
@@ -714,7 +744,10 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 		cropIntent.putExtra("outputY", 256);
 		//retrieve data on return
 		cropIntent.putExtra("return-data", true);
-		startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);		
+		startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
+
+		sendHttp("/taxi/statistics.do?name=cropImageFinished",
+				mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
 	}
 
 	private void sendPhoto(Bitmap f) throws Exception {
