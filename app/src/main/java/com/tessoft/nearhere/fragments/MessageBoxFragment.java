@@ -7,21 +7,20 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tessoft.common.Constants;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserMessage;
+import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.R.anim;
 import com.tessoft.nearhere.R.id;
-import com.tessoft.nearhere.R.layout;
 import com.tessoft.nearhere.activities.UserMessageActivity;
 import com.tessoft.nearhere.adapters.MessageBoxListAdapter;
 
@@ -36,6 +35,8 @@ import java.util.List;
 public class MessageBoxFragment extends BaseListFragment {
 
 	MessageBoxListAdapter adapter = null;
+	RelativeLayout layoutFooter = null;
+	protected View fragmentRootView = null;
 
 	// TODO: Rename and change types and number of parameters
 	public static MessageBoxFragment newInstance() {
@@ -52,51 +53,60 @@ public class MessageBoxFragment extends BaseListFragment {
 		{
 			super.onCreateView(inflater, container, savedInstanceState);
 
-			rootView.findViewById(id.titleBar).setVisibility(ViewGroup.GONE);
+			if ( fragmentRootView == null )
+			{
+				fragmentRootView = rootView;
+				rootView.findViewById(id.titleBar).setVisibility(ViewGroup.GONE);
 
-			footer = getActivity().getLayoutInflater().inflate(layout.fragment_messagebox_footer, null);
+				footer = getActivity().getLayoutInflater().inflate(R.layout.fragment_messagebox_footer, null);
 
-			listMain = (ListView) rootView.findViewById(id.listMain);
-			adapter = new MessageBoxListAdapter(getActivity(), 0);
-			listMain.addFooterView(footer, null, false );
-			listMain.setAdapter(adapter);
+				layoutFooter = (RelativeLayout) footer.findViewById(id.layoutFooter);
+				layoutFooter.setVisibility(ViewGroup.GONE);
+				TextView txtView = (TextView) layoutFooter.findViewById(id.txtGuide);
+				txtView.setText("메시지내역이 없습니다.");
 
-			inquiryMessage();
+				listMain = (ListView) rootView.findViewById(id.listMain);
+				adapter = new MessageBoxListAdapter(getActivity(), 0);
+				listMain.addFooterView(footer, null, false );
+				listMain.setAdapter(adapter);
 
-			listMain.setOnItemClickListener( new OnItemClickListener() {
+				inquiryMessage();
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					// TODO Auto-generated method stub
-					UserMessage um = (UserMessage) arg1.getTag();
-					goUserChatActivity( um );
-				}
-			});
-			
-			setTitle("쪽지함");
-			
-			Button btnRefresh = (Button) rootView.findViewById(id.btnRefresh);
-			btnRefresh.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					try {
-						inquiryMessage();
-					} catch ( Exception ex ) {
-						// TODO Auto-generated catch block
-						catchException(this, ex);
+				listMain.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+											int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						UserMessage um = (UserMessage) arg1.getTag();
+						goUserChatActivity( um );
 					}
-				}
-			});
+				});
+
+				setTitle("쪽지함");
+
+				Button btnRefresh = (Button) rootView.findViewById(id.btnRefresh);
+				btnRefresh.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						try {
+							inquiryMessage();
+						} catch ( Exception ex ) {
+							// TODO Auto-generated catch block
+							catchException(this, ex);
+						}
+					}
+				});
+			}
 		}
 		catch( Exception ex )
 		{
 			catchException(this, ex);
 		}
 
-		return rootView;
+		return fragmentRootView;
 	}
 
 	private void inquiryMessage() throws IOException, JsonGenerationException,
@@ -136,14 +146,9 @@ public class MessageBoxFragment extends BaseListFragment {
 				adapter.notifyDataSetChanged();
 
 				if ( messageList.size() == 0 )
-				{
-					listMain.removeFooterView(footer);
-					listMain.addFooterView(footer, null, false );
-					TextView txtView = (TextView) footer.findViewById(id.txtGuide);
-					txtView.setText("메시지내역이 없습니다.");
-				}
+					layoutFooter.setVisibility(ViewGroup.VISIBLE);
 				else
-					listMain.removeFooterView(footer);
+					layoutFooter.setVisibility(ViewGroup.GONE);
 			}
 			else
 			{

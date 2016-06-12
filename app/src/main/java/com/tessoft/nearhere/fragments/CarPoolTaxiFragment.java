@@ -329,7 +329,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                         String longitude = param.get("longitude").toString();
                         String address = param.get("address").toString();
 
-                        String url = Constants.getServerURL() + "/taxi/searchDestination.do?latitude=" +
+                        String url = Constants.getServerURL() + "/taxi/searchDestination.do?isApp=Y&latitude=" +
                                 latitude + "&longitude=" + longitude + "&address=" + URLEncoder.encode(address, "utf-8") +
                                 "&appVersion=" + application.getPackageVersion();
                         openPopupWebViewActivity("검색결과", url);

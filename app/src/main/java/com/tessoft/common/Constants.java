@@ -74,6 +74,12 @@ public class Constants {
 //		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.43.137/thumbnail/";
 	}
 
+	public static String getThumbnailImageSSLURL()
+	{
+		return Constants.bReal ? "https://www.hereby.co.kr/thumbnail/" : "http://172.30.1.200/thumbnail/";
+//		return Constants.bReal ? "http://www.hereby.co.kr/thumbnail/" : "http://192.168.43.137/thumbnail/";
+	}
+
 	public static String getImageURL()
 	{
 		return Constants.bReal ? "http://www.hereby.co.kr/image/" : "http://172.30.1.200/image/";

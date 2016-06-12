@@ -350,7 +350,7 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 		overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
 		*/
 
-		String url = Constants.getServerURL() + "/user/userInfo.do?userID=" + userID + "&isApp=Y";
+		String url = Constants.getServerSSLURL() + "/user/userInfo.do?userID=" + userID + "&isApp=Y";
 		Intent intent = new Intent(this, PopupWebViewActivity.class);
 		intent.putExtra("url", url);
 		intent.putExtra("title", "사용자 정보" );
