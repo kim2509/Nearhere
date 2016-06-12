@@ -122,8 +122,13 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 			Constants.bAdminMode = true;
 
 			User user = application.getLoginUser();
-			user.setUserNo(userNo);
-			user.setUserID(userID);
+
+			if ( !Util.isEmptyString( userNo ) )
+				user.setUserNo(userNo);
+
+			if ( !Util.isEmptyString( userID ) )
+				user.setUserID(userID);
+
 			application.setLoginUser(user);
 
 			application.setMetaInfo("registerUserFinished", "true");

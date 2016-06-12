@@ -139,6 +139,13 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
         }
+        else if ( "showNewButton".equals( actionName ) )
+        {
+            if ( "Y".equals( param ) )
+                findViewById(R.id.btnAddPost).setVisibility(ViewGroup.VISIBLE);
+            else
+                findViewById(R.id.btnAddPost).setVisibility(ViewGroup.GONE);
+        }
     }
 
     @Override

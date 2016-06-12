@@ -191,7 +191,8 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 		btnFinish = (Button) footer2.findViewById(R.id.btnFinish);
 		btnFinish.setOnClickListener(this);
 		
-		if ( "true".equals( application.getMetaInfoString("hideMapOnPostDetail") ) )
+		if ( "true".equals( application.getMetaInfoString("hideMapOnPostDetail") ) ||
+				"".equals( application.getMetaInfoString("hideMapOnPostDetail") ))
 		{
 			findViewById(R.id.map_layout).setVisibility(ViewGroup.GONE);
 			Button btnHideMap = (Button)findViewById(R.id.btnHideMap);
@@ -206,13 +207,13 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 		
 		Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
 		btnRefresh.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				try {
 					inquiryPostDetail();
-				} catch ( Exception ex ) {
+				} catch (Exception ex) {
 					// TODO Auto-generated catch block
 					catchException(this, ex);
 				}
@@ -342,10 +343,19 @@ implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, 
 
 	public void goUserProfileActivity( String userID )
 	{
+		/*
 		Intent intent = new Intent( this, UserProfileActivity.class);
 		intent.putExtra("userID", userID );
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+		*/
+
+		String url = Constants.getServerURL() + "/user/userInfo.do?userID=" + userID + "&isApp=Y";
+		Intent intent = new Intent(this, PopupWebViewActivity.class);
+		intent.putExtra("url", url);
+		intent.putExtra("title", "사용자 정보" );
+
+		startActivity(intent);
 	}
 
 	public void goUserChatActivity()

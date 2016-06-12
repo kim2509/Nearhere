@@ -18,6 +18,7 @@ import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
 import com.tessoft.domain.User;
+import com.tessoft.nearhere.fragments.MainFragment;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -36,6 +37,11 @@ public class NearhereApplication extends Application{
 	public static String longitude = "";
 	public static String address = "";
 	public static boolean bUserTermsAgreed = false;
+	public static int messageCount = 0;
+	public static int NotificationCount = 0;
+	public static int friendRequestCount = 0;
+
+	public MainFragment mainFragment = null;
 	
 	public int getMetaInfoInt( String key )
 	{

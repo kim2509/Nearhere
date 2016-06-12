@@ -169,10 +169,10 @@ public class GcmIntentService extends IntentService {
 
         if ( isActive )
         {
-        	intent = new Intent("updateUnreadCount");
-        	intent.putExtra("type", type );
         	if ( "message".equals( type ) )
         	{
+                intent = new Intent("updateUnreadCount");
+                intent.putExtra("type", type );
             	intent.putExtra("fromUserID", extras.getString("fromUserID") );
             	
             	Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -184,6 +184,8 @@ public class GcmIntentService extends IntentService {
         	}
             else if ( "postReply".equals( type ) )
             {
+                intent = new Intent("updateUnreadCount");
+                intent.putExtra("type", type );
             	intent.putExtra("postID", extras.getString("postID") );
             	
             	Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -193,36 +195,61 @@ public class GcmIntentService extends IntentService {
                 Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(500);
             }
+            else if ( "friendRequest".equals( type ))
+            {
+                intent = new Intent("updateUnreadCount");
+                intent.putExtra("type", type );
+
+                if ( "on".equals( extras.getString("sound") ) )
+                {
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
+                }
+                if ( "on".equals( extras.getString("vibrate") ) )
+                {
+                    Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(500);
+                }
+            }
+            else if ("acceptFriendRequest".equals(type))
+            {
+                intent = new Intent("showToastMessage");
+                intent.putExtra("msg", "친구 요청이 수락되었습니다." );
+            }
             else
             {
             	return;
             }
-        	
-            getApplicationContext().sendBroadcast(intent);
+
+            if ( intent != null )
+            {
+                getApplicationContext().sendBroadcast(intent);
+            }
         }
         else
         {
             if ( "message".equals( type ) )
             {
             	intent = new Intent(this, UserMessageActivity.class);
-            	HashMap hash = new HashMap();
-    			hash.put("fromUserID",  extras.getString("fromUserID") );
-    			hash.put("userID",  extras.getString("toUserID") );
+                HashMap hash = new HashMap();
+                hash.put("fromUserID", extras.getString("fromUserID"));
+                hash.put("userID", extras.getString("toUserID"));
     			intent.putExtra("messageInfo", hash);
-            	mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-                mBuilder.setVibrate(new long[] { 1000, 1000 });
+                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                mBuilder.setVibrate(new long[]{1000, 1000});
             }
             else if ( "postReply".equals( type ) )
             {
             	intent = new Intent(this, TaxiPostDetailActivity.class);
-            	intent.putExtra("postID", extras.getString("postID") );
-            	mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-                mBuilder.setVibrate(new long[] { 1000, 1000 });
+            	intent.putExtra("postID", extras.getString("postID"));
+                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                mBuilder.setVibrate(new long[]{1000, 1000});
             }
             else if ( "newPostByDistance".equals( type ))
             {
             	intent = new Intent(this, TaxiPostDetailActivity.class);
-            	intent.putExtra("postID", extras.getString("postID") );
+                intent.putExtra("postID", extras.getString("postID") );
 
                 Intent broadcastIntent = new Intent( Constants.BROADCAST_TAXI_REFRESH );
                 getApplicationContext().sendBroadcast(broadcastIntent);
@@ -264,6 +291,17 @@ public class GcmIntentService extends IntentService {
             	
             }
             else if ( "friendRequest".equals( type ))
+            {
+                intent = new Intent(this, MainActivity.class);
+                intent.putExtra("tab", "friend");
+
+                if ( extras.containsKey("sound") && "on".equals( extras.getString("sound") ) )
+                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                if ( extras.containsKey("vibrate") && "on".equals( extras.getString("vibrate") ) )
+                    mBuilder.setVibrate(new long[] { 1000, 1000 });
+
+            }
+            else if ( "acceptFriendRequest".equals( type ))
             {
                 intent = new Intent(this, MainActivity.class);
                 intent.putExtra("tab", "friend");

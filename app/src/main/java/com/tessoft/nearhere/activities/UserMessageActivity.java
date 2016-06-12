@@ -1,20 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.UserMessageArrayAdapter;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.User;
-import com.tessoft.domain.UserMessage;
-import com.tessoft.nearhere.R;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +15,21 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.tessoft.common.Constants;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.User;
+import com.tessoft.domain.UserMessage;
+import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.adapters.UserMessageArrayAdapter;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class UserMessageActivity extends BaseActivity {
 
@@ -209,7 +209,16 @@ public class UserMessageActivity extends BaseActivity {
 		try
 		{
 			// TODO Auto-generated method stub
-			super.doAction(actionName, param);	
+			super.doAction(actionName, param);
+
+			if ( "openUserProfile".equals( actionName ) )
+			{
+				Intent intent = new Intent(this, PopupWebViewActivity.class);
+				String url = Constants.getServerSSLURL() + "/user/userInfo.do?userID=" + param.toString() + "&isApp=Y";
+				intent.putExtra("url", url);
+				intent.putExtra("title", "사용자 정보" );
+				startActivity(intent);
+			}
 		}
 		catch( Exception ex )
 		{

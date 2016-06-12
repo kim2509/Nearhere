@@ -112,6 +112,8 @@ public class MainActivity extends BaseActivity {
 			initLeftMenu();
 
 			currentFragment = new MainFragment();
+			application.mainFragment = (MainFragment) currentFragment;
+
 //			currentFragment = new TaxiFragment();
 
 			// Insert the fragment by replacing any existing fragment
@@ -142,6 +144,7 @@ public class MainActivity extends BaseActivity {
 			sendHttp("/app/appInfo.do", mapper.writeValueAsString(hash), Constants.HTTP_APP_INFO);
 
 			registerReceiver(mMessageReceiver, new IntentFilter("updateUnreadCount"));
+			registerReceiver(mMessageReceiver, new IntentFilter("showToastMessage"));
 			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_LOGOUT));
 			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_START_LOCATION_UPDATE));
 
@@ -242,10 +245,10 @@ public class MainActivity extends BaseActivity {
 		adapter = new MainMenuArrayAdapter( getApplicationContext(), 0);
 		adapter.add(new MainMenuItem("홈"));
 		//		adapter.add(new MainMenuItem("내 정보"));
-		adapter.add(new MainMenuItem("알림메시지"));
+		//adapter.add(new MainMenuItem("알림메시지"));
 		
-		if ( !"Guest".equals( application.getLoginUser().getType() ) )
-			adapter.add(new MainMenuItem("쪽지함"));
+//		if ( !"Guest".equals( application.getLoginUser().getType() ) )
+//			adapter.add(new MainMenuItem("쪽지함"));
 		
 		adapter.add(new MainMenuItem("공지사항"));
 		adapter.add(new MainMenuItem("설정"));
@@ -377,6 +380,12 @@ public class MainActivity extends BaseActivity {
 				{
 					if ( application.bUserTermsAgreed && application.checkIfGPSEnabled() )
 						startLocationUpdates();
+				}
+				else if ( "showToastMessage".equals( intent.getAction() ) )
+				{
+					application.showToastMessage( intent.getExtras().getString("msg") );
+					Intent friendRefreshIntent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
+					sendBroadcast(friendRefreshIntent);
 				}
 			}
 			catch( Exception ex )
@@ -670,6 +679,7 @@ public class MainActivity extends BaseActivity {
 
 					int pushCount = hash.get("pushCount");
 					int messageCount = hash.get("messageCount");
+					int friendRequestCount = hash.get("friendRequestCount");
 
 					int noticeCount = 0;
 					if ( hash.containsKey("noticeCount") && hash.get("noticeCount") != null )
@@ -698,7 +708,7 @@ public class MainActivity extends BaseActivity {
 
 					if ( findViewById(R.id.btnLeftMenu) != null )
 					{
-						if ( pushCount + messageCount + noticeCount > 0 )
+						if ( noticeCount > 0 )
 						{
 							findViewById(R.id.btnLeftMenu).setBackgroundResource(R.drawable.top_ic_new);
 						}
@@ -707,7 +717,24 @@ public class MainActivity extends BaseActivity {
 					}
 
 					adapter.notifyDataSetChanged();
-					
+
+					application.NotificationCount = pushCount;
+					application.messageCount = messageCount;
+					application.friendRequestCount = friendRequestCount;
+					application.mainFragment.updateTabCount();
+
+					if ( application.friendRequestCount > 0 )
+					{
+						Intent intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
+						getApplicationContext().sendBroadcast(intent);
+					}
+
+					if ( application.NotificationCount > 0 )
+					{
+						Intent intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
+						getApplicationContext().sendBroadcast(intent);
+					}
+
 					bUpdateUnreadCountFinished = true;
 				}
 				else if ( requestCode == Constants.HTTP_APP_INFO )

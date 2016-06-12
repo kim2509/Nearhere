@@ -24,7 +24,7 @@ import com.tessoft.nearhere.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> {
+public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> implements View.OnClickListener{
 
 	private List<UserMessage> itemList = new ArrayList<UserMessage>();
 	private AdapterDelegate delegate = null;
@@ -113,6 +113,9 @@ public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> {
 					TextView txtUserName = (TextView) row.findViewById(R.id.txtUserName);
 					txtUserName.setText( item.getFromUser().getUserName() );
 				}
+
+				imgProfile.setOnClickListener( this );
+				imgProfile.setTag( item.getFromUser().getUserID() );
 			}
 			
 			TextView txtMessage = (TextView) row.findViewById(R.id.txtMessage);
@@ -142,4 +145,8 @@ public class UserMessageArrayAdapter extends ArrayAdapter<UserMessage> {
 		this.delegate = delegate;
 	}
 
+	@Override
+	public void onClick(View v) {
+		delegate.doAction("openUserProfile", v.getTag().toString());
+	}
 }

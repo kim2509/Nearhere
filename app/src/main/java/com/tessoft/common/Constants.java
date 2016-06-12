@@ -37,6 +37,10 @@ public class Constants {
 	public static final String BROADCAST_DESTINATION_REFRESH = "BROADCAST_DESTINATION_REFRESH";
 	public static final String BROADCAST_OPEN_SEARCH_PAGE = "BROADCAST_OPEN_SEARCH_PAGE";
 	public static final String BROADCAST_LOGOUT = "BROADCAST_LOGOUT";
+	public static final String BROADCAST_UPDATE_UNREAD_COUNT = "updateUnreadCount";
+	public static final String BROADCAST_REFRESH_NOTIFICATION = "BROADCAST_REFRESH_NOTIFICATION";
+	public static final String BROADCAST_FRIEND_REQUEST = "BROADCAST_FRIEND_REQUEST";
+	public static final String BROADCAST_REFRESH_FRIEND_LIST = "BROADCAST_REFRESH_FRIEND_LIST";
 
 	public static final String ACTION_SEARCH_MAP = "ACTION_SEARCH_MAP";
 	public static final String ACTION_OPEN_DATE_PICKER = "ACTION_OPEN_DATE_PICKER";

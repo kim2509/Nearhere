@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.BaseActivity;
+
+import java.net.URLEncoder;
 
 /**
  * Created by Daeyong on 2016-04-18.
@@ -35,7 +36,7 @@ public class FriendFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_FRIEND_LIST));
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -43,7 +44,7 @@ public class FriendFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             try
             {
-                if ( intent.getAction().equals(Constants.BROADCAST_REFRESH))
+                if ( intent.getAction().equals(Constants.BROADCAST_REFRESH_FRIEND_LIST))
                     webView.reload();
             }
             catch( Exception ex )
@@ -74,15 +75,11 @@ public class FriendFragment extends BaseFragment {
                 webView.addJavascriptInterface(commonWebViewClient, "Android");
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl(Constants.getServerURL() + "/friend/index.do?isApp=Y");
+                webView.loadUrl(Constants.getServerSSLURL() + "/friend/list.do?isApp=Y"
+                        + "&userHash=" + URLEncoder.encode(application.getMetaInfoString("hash")) +
+                        "&appVersion=" + application.getPackageVersion());
 
-                webView.setWebViewClient( new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        // Here put your code
-                        return true;
-                    }
-                });
+                webView.setWebViewClient(commonWebViewClient);
             }
         }
         catch( Exception ex )

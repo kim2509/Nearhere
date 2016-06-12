@@ -14,10 +14,10 @@ import android.widget.Button;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.MainPagerAdapter;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.adapters.MainPagerAdapter;
 
-public class MainFragment extends BaseFragment implements OnPageChangeListener, View.OnClickListener{
+public class MainFragment extends BaseFragment implements OnPageChangeListener, View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -26,6 +26,7 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
     MainPagerAdapter pagerAdapter = null;
     PagerSlidingTabStrip tabs = null;
     public int selectedTabIndex = 0;
+    ViewPager pager = null;
 
     public MainFragment() {
         // Required empty public constructor
@@ -44,8 +45,8 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) rootView.findViewById(R.id.pagerMain);
-        pagerAdapter = new MainPagerAdapter( getChildFragmentManager() );
+        pager = (ViewPager) rootView.findViewById(R.id.pagerMain);
+        pagerAdapter = new MainPagerAdapter(getChildFragmentManager(), application);
         pager.setAdapter(pagerAdapter);
 
         // Bind the tabs to the ViewPager
@@ -66,6 +67,15 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void updateTabCount() {
+        tabs.notifyDataSetChanged();
+    }
+
+    public void selectTab(int position)
+    {
+        pager.setCurrentItem(position);
     }
 
     @Override
@@ -89,13 +99,18 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
         selectedTabIndex = position;
 
-        if ( position == 4 )
-        {
-            btnRefresh.setVisibility(ViewGroup.GONE);
+        if ( "Guest".equals( application.getLoginUser().getType() ) ) {
+            if ( position == 1 )
+                btnRefresh.setVisibility(ViewGroup.GONE);
+            else
+                btnRefresh.setVisibility(ViewGroup.VISIBLE);
         }
         else
         {
-            btnRefresh.setVisibility(ViewGroup.VISIBLE);
+            if ( position == 3 )
+                btnRefresh.setVisibility(ViewGroup.GONE);
+            else
+                btnRefresh.setVisibility(ViewGroup.VISIBLE);
         }
     }
 
@@ -119,8 +134,26 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
                 }
                 else
                 {
-                    Intent intent = new Intent(Constants.BROADCAST_REFRESH);
-                    getActivity().sendBroadcast(intent);
+                    Intent intent = null;
+
+                    if ( "Guest".equals( application.getLoginUser().getType() ) ) {
+                        if ( selectedTabIndex == 2 )
+                            intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
+                        else
+                            intent = new Intent(Constants.BROADCAST_REFRESH);
+                    }
+                    else
+                    {
+                        if ( selectedTabIndex == 1 )
+                            intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
+                        else if ( selectedTabIndex == 4 )
+                            intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
+                        else
+                            intent = new Intent(Constants.BROADCAST_REFRESH);
+                    }
+
+                    if ( intent != null )
+                        getActivity().sendBroadcast(intent);
                 }
             }
         }

@@ -1,23 +1,5 @@
 package com.tessoft.nearhere.fragments;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.tessoft.common.Constants;
-import com.tessoft.nearhere.adapters.MessageBoxListAdapter;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.User;
-import com.tessoft.domain.UserMessage;
-import com.tessoft.nearhere.activities.UserMessageActivity;
-import com.tessoft.nearhere.R.anim;
-import com.tessoft.nearhere.R.id;
-import com.tessoft.nearhere.R.layout;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,17 +7,42 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.tessoft.common.Constants;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.User;
+import com.tessoft.domain.UserMessage;
+import com.tessoft.nearhere.R.anim;
+import com.tessoft.nearhere.R.id;
+import com.tessoft.nearhere.R.layout;
+import com.tessoft.nearhere.activities.UserMessageActivity;
+import com.tessoft.nearhere.adapters.MessageBoxListAdapter;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class MessageBoxFragment extends BaseListFragment {
 
 	MessageBoxListAdapter adapter = null;
+
+	// TODO: Rename and change types and number of parameters
+	public static MessageBoxFragment newInstance() {
+		MessageBoxFragment fragment = new MessageBoxFragment();
+		Bundle args = new Bundle();
+		return fragment;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +51,8 @@ public class MessageBoxFragment extends BaseListFragment {
 		try
 		{
 			super.onCreateView(inflater, container, savedInstanceState);
+
+			rootView.findViewById(id.titleBar).setVisibility(ViewGroup.GONE);
 
 			footer = getActivity().getLayoutInflater().inflate(layout.fragment_messagebox_footer, null);
 

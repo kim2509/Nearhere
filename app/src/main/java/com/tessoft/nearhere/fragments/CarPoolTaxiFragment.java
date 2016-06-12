@@ -93,7 +93,10 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                     snsLoginYN = "snsLogin=Y";
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl( Constants.getServerURL() + "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&showRecentPosts=Y&" + snsLoginYN );
+                webView.loadUrl( Constants.getServerURL() +
+                        "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&showRecentPosts=Y&" + snsLoginYN +
+                        "&appVersion=" + application.getPackageVersion() );
+
                 webView.setWebViewClient( new WebViewClient(){
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -327,7 +330,8 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                         String address = param.get("address").toString();
 
                         String url = Constants.getServerURL() + "/taxi/searchDestination.do?latitude=" +
-                                latitude + "&longitude=" + longitude + "&address=" + URLEncoder.encode(address, "utf-8");
+                                latitude + "&longitude=" + longitude + "&address=" + URLEncoder.encode(address, "utf-8") +
+                                "&appVersion=" + application.getPackageVersion();
                         openPopupWebViewActivity("검색결과", url);
                     }
                 }

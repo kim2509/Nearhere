@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.fragments.CarPoolTaxiFragment;
 import com.tessoft.nearhere.fragments.FriendFragment;
 import com.tessoft.nearhere.fragments.LocationFragment;
+import com.tessoft.nearhere.fragments.MessageBoxFragment;
 import com.tessoft.nearhere.fragments.NotificationFragment;
 
 /**
@@ -16,37 +18,79 @@ import com.tessoft.nearhere.fragments.NotificationFragment;
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
     Fragment[] fragments = null;
-    String[] titles = null;
+    public NearhereApplication application = null;
 
-    public MainPagerAdapter(FragmentManager fm) {
+    public MainPagerAdapter(FragmentManager fm, NearhereApplication application) {
         super(fm);
 
-        fragments = new Fragment[4];
-        fragments[0] = CarPoolTaxiFragment.newInstance();
-        fragments[1] = FriendFragment.newInstance();
-        fragments[2] = NotificationFragment.newInstance();
-        fragments[3] = LocationFragment.newInstance();
+        this.application = application;
 
-        titles = new String[4];
-        titles[0] = "카풀/합승";
-        titles[1] = "친구";
-        titles[2] = "알림";
-        titles[3] = "위치";
+        if ( "Guest".equals( application.getLoginUser().getType() ) ) {
+            fragments = new Fragment[3];
+            fragments[0] = CarPoolTaxiFragment.newInstance();
+            fragments[1] = LocationFragment.newInstance();
+            fragments[2] = NotificationFragment.newInstance();
+        }
+        else
+        {
+            fragments = new Fragment[5];
+
+            fragments[0] = CarPoolTaxiFragment.newInstance();
+            fragments[1] = FriendFragment.newInstance();
+            fragments[2] = MessageBoxFragment.newInstance();
+            fragments[3] = LocationFragment.newInstance();
+            fragments[4] = NotificationFragment.newInstance();
+        }
     }
 
-    public String[] getTitles()
+    public void setApplication( NearhereApplication application )
     {
-        return titles;
-    }
-
-    public void setTitles( String[] titles )
-    {
-        this.titles = titles;
+        this.application = application;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if ( position < titles.length ) return titles[position];
+
+        String[] titles = null;
+
+        if ( "Guest".equals( application.getLoginUser().getType() ) ) {
+            titles = new String[3];
+            titles[0] = "카풀";
+            titles[1] = "위치";
+
+            if ( application.NotificationCount == 0 )
+                titles[2] = "알림";
+            else
+                titles[2] = "알림(" + application.NotificationCount + ")";
+        }
+        else
+        {
+            titles = new String[5];
+            titles[0] = "카풀";
+
+            if ( application.friendRequestCount == 0 )
+                titles[1] = "친구";
+            else
+                titles[1] = "친구(" + application.friendRequestCount + ")";
+
+            if ( application.messageCount == 0 )
+                titles[2] = "채팅";
+            else
+                titles[2] = "채팅(" + application.messageCount + ")";
+
+            titles[3] = "위치";
+            titles[4] = "알림";
+
+            if ( application.NotificationCount == 0 )
+                titles[4] = "알림";
+            else
+                titles[4] = "알림(" + application.NotificationCount + ")";
+        }
+
+        if ( position < titles.length )
+        {
+            return titles[position];
+        }
         else return "";
     }
 

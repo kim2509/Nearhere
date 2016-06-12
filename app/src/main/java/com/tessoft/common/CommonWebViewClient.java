@@ -1,18 +1,23 @@
 package com.tessoft.common;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.tessoft.nearhere.NearhereApplication;
+import com.tessoft.nearhere.PhotoViewer;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.BaseActivity;
+import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
+import com.tessoft.nearhere.activities.UserMessageActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 
 /**
@@ -115,6 +120,85 @@ public class CommonWebViewClient extends WebViewClient {
             view.clearHistory();
             return true;
         }
+        else if ( url.startsWith("nearhere://openPhotoViewer?url=") ||
+                url.startsWith("nearhere://openExternalURL?url="))
+        {
+            String params = url.substring( url.indexOf("?") + 1);
+            String[] paramAr = params.split("&");
+            for ( int i = 0; i < paramAr.length; i++ ) {
+                if (paramAr[i].indexOf("=") >= 0) {
+                    String key = paramAr[i].split("=")[0];
+                    String value = paramAr[i].split("=")[1];
+
+                    if (key != null && key.equals("url")) {
+                        if (url.startsWith("nearhere://openPhotoViewer?url="))
+                        {
+                            Intent intent = new Intent( activity, PhotoViewer.class);
+                            intent.putExtra("imageURL", value );
+                            activity.startActivity(intent);
+                            activity.overridePendingTransition(R.anim.fade_in, R.anim.stay);
+                        }
+                        else if ( url.startsWith("nearhere://openExternalURL?url=") ) {
+                            value = URLDecoder.decode(value);
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(value));
+                            activity.startActivity(browserIntent);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+        else if (url.startsWith("nearhere://openURL?")) {
+            Intent intent = new Intent( activity , PopupWebViewActivity.class);
+            String params = url.substring(url.indexOf("?") + 1);
+
+            String[] paramAr = params.split("&");
+            for (int i = 0; i < paramAr.length; i++) {
+                if (paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1) {
+                    String key = paramAr[i].split("=")[0];
+                    String value = paramAr[i].split("=")[1];
+
+                    if (key != null && key.equals("title")) {
+                        intent.putExtra("title", java.net.URLDecoder.decode(value));
+                    } else if (key != null && key.equals("url")) {
+                        intent.putExtra("url", java.net.URLDecoder.decode(value));
+                    } else if (key != null && key.equals("showNewButton")) {
+                        intent.putExtra("showNewButton", value);
+                    }
+                }
+            }
+
+            activity.startActivity(intent);
+
+            return true;
+        }
+        else if ( url.startsWith("nearhere://goUserMessageActivity") )
+        {
+            Intent intent = new Intent( activity , UserMessageActivity.class);
+            String params = url.substring(url.indexOf("?") + 1);
+
+            HashMap hash = new HashMap();
+
+            String[] paramAr = params.split("&");
+
+            for (int i = 0; i < paramAr.length; i++) {
+                if (paramAr[i].indexOf("=") >= 0 && paramAr[i].split("=").length > 1) {
+                    String key = paramAr[i].split("=")[0];
+                    String value = paramAr[i].split("=")[1];
+
+                    if (key != null && key.equals("userID")) {
+                        hash.put("fromUserID", value );
+                    }
+                }
+            }
+
+            hash.put("userID",  activity.application.getLoginUser().getUserID() );
+            intent.putExtra("messageInfo", hash );
+            activity.startActivity(intent);
+
+            return true;
+        }
 
         return false;
     }
@@ -129,6 +213,12 @@ public class CommonWebViewClient extends WebViewClient {
     public String getUserID()
     {
         return activity.application.getLoginUser().getUserID();
+    }
+
+    @JavascriptInterface
+    public String getUserType()
+    {
+        return activity.application.getLoginUser().getType();
     }
 
     @JavascriptInterface
@@ -207,5 +297,19 @@ public class CommonWebViewClient extends WebViewClient {
     public void setNewPostURL( String url )
     {
         activity.doAction(Constants.ACTION_SET_NEW_POST_URL, url);
+    }
+
+    @JavascriptInterface
+    public void refreshFriendTabCount()
+    {
+        Intent intent = new Intent("updateUnreadCount");
+        intent.putExtra("type", "friendRequest" );
+        activity.sendBroadcast(intent);
+    }
+
+    @JavascriptInterface
+    public void showNewButton( String visibleYN )
+    {
+        activity.doAction("showNewButton", visibleYN );
     }
 }
