@@ -58,6 +58,7 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
         tabs.setOnPageChangeListener(this);
 
         btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
+        btnRefresh.setVisibility(ViewGroup.VISIBLE);
         btnRefresh.setOnClickListener(this);
         return rootView;
     }
@@ -96,22 +97,12 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
     @Override
     public void onPageSelected(int position) {
-
         selectedTabIndex = position;
 
-        if ( "Guest".equals( application.getLoginUser().getType() ) ) {
-            if ( position == 1 )
-                btnRefresh.setVisibility(ViewGroup.GONE);
-            else
-                btnRefresh.setVisibility(ViewGroup.VISIBLE);
-        }
+        if ( position == 2 )
+            btnRefresh.setVisibility(ViewGroup.GONE);
         else
-        {
-            if ( position == 3 )
-                btnRefresh.setVisibility(ViewGroup.GONE);
-            else
-                btnRefresh.setVisibility(ViewGroup.VISIBLE);
-        }
+            btnRefresh.setVisibility(ViewGroup.VISIBLE);
     }
 
     @Override
@@ -136,21 +127,14 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
                 {
                     Intent intent = null;
 
-                    if ( "Guest".equals( application.getLoginUser().getType() ) ) {
-                        if ( selectedTabIndex == 2 )
-                            intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
-                        else
-                            intent = new Intent(Constants.BROADCAST_REFRESH);
-                    }
+                    if ( selectedTabIndex == 1 )
+                        intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
+                    else if ( selectedTabIndex == 3 )
+                        intent = new Intent(Constants.BROADCAST_REFRESH_LOCATION_HISTORY);
+                    else if ( selectedTabIndex == 4 )
+                        intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
                     else
-                    {
-                        if ( selectedTabIndex == 1 )
-                            intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
-                        else if ( selectedTabIndex == 4 )
-                            intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
-                        else
-                            intent = new Intent(Constants.BROADCAST_REFRESH);
-                    }
+                        intent = new Intent(Constants.BROADCAST_REFRESH);
 
                     if ( intent != null )
                         getActivity().sendBroadcast(intent);

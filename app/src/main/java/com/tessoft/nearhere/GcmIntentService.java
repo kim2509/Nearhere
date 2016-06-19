@@ -217,6 +217,11 @@ public class GcmIntentService extends IntentService {
                 intent = new Intent("showToastMessage");
                 intent.putExtra("msg", "친구 요청이 수락되었습니다." );
             }
+            else if ("askLocationRequest".equals(type) )
+            {
+                intent = new Intent("showToastMessage");
+                intent.putExtra("msg", msg );
+            }
             else
             {
             	return;
