@@ -310,6 +310,12 @@ public class CommonWebViewClient extends WebViewClient {
     @JavascriptInterface
     public void showNewButton( String visibleYN )
     {
-        activity.doAction("showNewButton", visibleYN );
+        activity.doAction("showNewButton", visibleYN);
+    }
+
+    @JavascriptInterface
+    public void respondLocationRequest( String visibleYN )
+    {
+        activity.doAction("respondLocationRequest", visibleYN );
     }
 }
