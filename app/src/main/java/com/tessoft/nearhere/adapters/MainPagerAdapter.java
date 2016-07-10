@@ -8,8 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.fragments.CarPoolTaxiFragment;
 import com.tessoft.nearhere.fragments.FriendFragment;
-import com.tessoft.nearhere.fragments.LocationHistoryFragment;
+import com.tessoft.nearhere.fragments.LocationFragment;
 import com.tessoft.nearhere.fragments.MessageBoxFragment;
+import com.tessoft.nearhere.fragments.NewsFragment;
 import com.tessoft.nearhere.fragments.NotificationFragment;
 
 /**
@@ -25,13 +26,14 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         this.application = application;
 
-        fragments = new Fragment[5];
+        fragments = new Fragment[6];
 
         fragments[0] = CarPoolTaxiFragment.newInstance();
-        fragments[1] = FriendFragment.newInstance();
-        fragments[2] = MessageBoxFragment.newInstance();
-        fragments[3] = LocationHistoryFragment.newInstance();
-        fragments[4] = NotificationFragment.newInstance();
+        fragments[1] = NewsFragment.newInstance();
+        fragments[2] = FriendFragment.newInstance();
+        fragments[3] = MessageBoxFragment.newInstance();
+        fragments[4] = LocationFragment.newInstance();
+        fragments[5] = NotificationFragment.newInstance();
     }
 
     public void setApplication( NearhereApplication application )
@@ -44,26 +46,26 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         String[] titles = null;
 
-        titles = new String[5];
+        titles = new String[6];
         titles[0] = "카풀";
+        titles[1] = "소식";
 
         if ( application.friendRequestCount == 0 )
-            titles[1] = "친구";
+            titles[2] = "친구";
         else
-            titles[1] = "친구(" + application.friendRequestCount + ")";
+            titles[2] = "친구(" + application.friendRequestCount + ")";
 
         if ( application.messageCount == 0 )
-            titles[2] = "채팅";
+            titles[3] = "메시지";
         else
-            titles[2] = "채팅(" + application.messageCount + ")";
+            titles[3] = "메시지(" + application.messageCount + ")";
 
-        titles[3] = "위치";
-        titles[4] = "알림";
+        titles[4] = "위치";
 
         if ( application.NotificationCount == 0 )
-            titles[4] = "알림";
+            titles[5] = "알림";
         else
-            titles[4] = "알림(" + application.NotificationCount + ")";
+            titles[5] = "알림(" + application.NotificationCount + ")";
 
         if ( position < titles.length )
         {

@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.nearhere.R;
 
 public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener{
@@ -44,16 +45,20 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_popup_web_view);
 
-            CommonWebViewClient commonWebViewClient = new CommonWebViewClient(this);
+            CommonWebViewClient commonWebViewClient = new CommonWebViewClient(this, application );
 
             webView = (WebView) findViewById(R.id.webView);
             webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setBuiltInZoomControls(true);
+            webView.getSettings().setDisplayZoomControls(false);
+            webView.setInitialScale(1);
+            webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setUseWideViewPort(true);
+
             webView.setWebChromeClient(new WebChromeClient() {
 
             });
 
-            webView.addJavascriptInterface(commonWebViewClient, "Android");
-            webView.setWebViewClient(commonWebViewClient);
             webView.setBackgroundColor(0);
 
             if (getIntent() != null && getIntent().getExtras() != null )
@@ -61,12 +66,17 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 if ( getIntent().getExtras().containsKey("title") )
                     setTitle( getIntent().getExtras().get("title").toString() );
 
-                if ( getIntent().getExtras().containsKey("url") ) {
+                if ( getIntent().getExtras().containsKey("fullURL") ) {
+                    String url = getIntent().getExtras().getString("fullURL");
+                    webView.loadUrl( url );
+                }
+                else if ( getIntent().getExtras().containsKey("url") ) {
                     String url = getIntent().getExtras().getString("url");
+
                     if ( url.indexOf("?") >= 0 )
-                        webView.loadUrl(getIntent().getExtras().getString("url") + "&isApp=Y");
+                        webView.loadUrl( url + "&isApp=Y");
                     else
-                        webView.loadUrl(getIntent().getExtras().getString("url") + "?isApp=Y");
+                        webView.loadUrl( getIntent().getExtras().getString("url") + "?isApp=Y");
                 }
 
                 if ( getIntent().getExtras().containsKey("showNewButton") )
@@ -82,7 +92,10 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 else
                     findViewById(R.id.btnAddPost).setVisibility(ViewGroup.GONE);
 
-
+                if ( !getIntent().getExtras().containsKey("disableWebViewClient")) {
+                    webView.setWebViewClient(commonWebViewClient);
+                    webView.addJavascriptInterface(commonWebViewClient, "Android");
+                }
             }
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
@@ -145,6 +158,15 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 findViewById(R.id.btnAddPost).setVisibility(ViewGroup.VISIBLE);
             else
                 findViewById(R.id.btnAddPost).setVisibility(ViewGroup.GONE);
+        }
+        else if ("finishActivity".equals( actionName ))
+        {
+            if ( !Util.isEmptyString( param.toString() ) )
+            {
+                sendBroadcast( new Intent( param.toString() ) );
+            }
+
+            finish();
         }
     }
 

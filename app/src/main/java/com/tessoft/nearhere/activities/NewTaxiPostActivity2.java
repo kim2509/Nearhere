@@ -38,7 +38,7 @@ public class NewTaxiPostActivity2 extends BaseActivity
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_new_taxi_post2);
 
-            CommonWebViewClient commonWebViewClient = new CommonWebViewClient(this);
+            CommonWebViewClient commonWebViewClient = new CommonWebViewClient( this, application );
 
             webView = (WebView) findViewById(R.id.webView);
             webView.getSettings().setJavaScriptEnabled(true);

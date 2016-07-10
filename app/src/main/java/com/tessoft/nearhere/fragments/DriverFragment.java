@@ -71,7 +71,7 @@ public class DriverFragment extends BaseFragment implements View.OnClickListener
             {
                 rootView =  inflater.inflate(R.layout.fragment_driver, container, false);
 
-                CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity());
+                CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity(), application );
 
                 webView = (WebView) rootView.findViewById(R.id.webView);
                 webView.getSettings().setJavaScriptEnabled(true);

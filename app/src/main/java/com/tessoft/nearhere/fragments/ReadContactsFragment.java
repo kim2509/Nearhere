@@ -1,12 +1,5 @@
 package com.tessoft.nearhere.fragments;
 
-import com.tessoft.common.AdapterDelegate;
-import com.tessoft.nearhere.adapters.ReadContactArrayAdapter;
-import com.tessoft.domain.Contact;
-
-import com.tessoft.nearhere.R.id;
-import com.tessoft.nearhere.R.layout;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,6 +16,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.domain.Contact;
+import com.tessoft.nearhere.R.id;
+import com.tessoft.nearhere.R.layout;
+import com.tessoft.nearhere.adapters.ReadContactArrayAdapter;
 
 public class ReadContactsFragment extends DialogFragment implements OnClickListener, AdapterDelegate
 {
@@ -167,6 +166,12 @@ public class ReadContactsFragment extends DialogFragment implements OnClickListe
 	public void doAction(String actionName, Object param) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getStringValueForKey( String keyname )
+	{
+		return "";
 	}
 
 }

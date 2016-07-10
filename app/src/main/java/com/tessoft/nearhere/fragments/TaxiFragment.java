@@ -658,4 +658,10 @@ public class TaxiFragment extends BaseFragment
 			mainActivity.kakaoLogout();
 		}
 	}
+
+	@Override
+	public String getStringValueForKey( String keyName )
+	{
+		return "";
+	}
 }

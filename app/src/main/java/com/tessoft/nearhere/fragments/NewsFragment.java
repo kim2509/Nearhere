@@ -16,26 +16,19 @@ import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.BaseActivity;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import java.net.URLEncoder;
 
 /**
- * Created by Daeyong on 2016-06-17.
+ * Created by Daeyong on 2016-04-18.
  */
-public class LocationHistoryFragment extends BaseFragment {
+public class NewsFragment extends BaseFragment {
 
-    View rootView = null;
-    WebView webView = null;
-
-
-    public LocationHistoryFragment() {
-        // Required empty public constructor
-    }
+    protected View rootView = null;
+    private WebView webView = null;
 
     // TODO: Rename and change types and number of parameters
-    public static LocationHistoryFragment newInstance() {
-        LocationHistoryFragment fragment = new LocationHistoryFragment();
+    public static NewsFragment newInstance() {
+        NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
         return fragment;
     }
@@ -43,25 +36,37 @@ public class LocationHistoryFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mapper = new ObjectMapper();
-
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_LOCATION_HISTORY));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_NEWS ));
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try
+            {
+                if ( intent.getAction().equals(Constants.BROADCAST_REFRESH_NEWS))
+                    webView.reload();
+            }
+            catch( Exception ex )
+            {
+                catchException(this, ex);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         try
         {
             // Inflate the layout for this fragment
             if ( rootView == null )
             {
-                rootView =  inflater.inflate(R.layout.fragment_location_history, container, false);
-                webView = (WebView) rootView.findViewById(R.id.webView);
+                rootView = inflater.inflate(R.layout.fragment_car_pool_taxi, container, false);
 
                 CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity(), application );
+
+                webView = (WebView) rootView.findViewById(R.id.webView);
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.setWebChromeClient(new WebChromeClient() {
 
@@ -70,45 +75,25 @@ public class LocationHistoryFragment extends BaseFragment {
                 webView.addJavascriptInterface(commonWebViewClient, "Android");
 
                 webView.setBackgroundColor(0);
-                webView.loadUrl(Constants.getServerSSLURL() + "/location/history.do?isApp=Y&userID="
-                        + application.getLoginUser().getUserID()
-                        + "&userHash=" + URLEncoder.encode(application.getMetaInfoString("hash")) +
-                        "&appVersion=" + application.getPackageVersion());
+                webView.loadUrl(Constants.getServerSSLURL() + "/news/list.do?isApp=Y"
+                        + "&userHash=" + URLEncoder.encode(application.getMetaInfoString("hash"))
+                        + "&userID=" + URLEncoder.encode(application.getLoginUser().getUserID())
+                        + "&appVersion=" + application.getPackageVersion());
 
                 webView.setWebViewClient(commonWebViewClient);
             }
         }
         catch( Exception ex )
         {
-            showToastMessage( ex.getMessage() );
+            application.catchException(this , ex );
         }
 
         return rootView;
     }
 
-    //This is the handler that will manager to process the broadcast intent
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try
-            {
-                if ( intent == null ) return;
-
-                if ( Constants.BROADCAST_REFRESH_LOCATION_HISTORY.equals(intent.getAction()) )
-                {
-                    webView.reload();
-                }
-            }
-            catch( Exception ex )
-            {
-                application.catchException(this, ex);
-            }
-        }
-    };
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         getActivity().unregisterReceiver(mMessageReceiver);
     }
 }

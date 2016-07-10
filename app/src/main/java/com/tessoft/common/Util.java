@@ -184,7 +184,15 @@ public class Util {
 	public static boolean isEmptyString( String str )
 	{
 		if ( str == null ) return true;
+		if ( "null".equals( str.toLowerCase() ) ) return true;
 		if ( "".equals(str.trim())) return true;
+		return false;
+	}
+
+	public static boolean isEmptyString( Object obj )
+	{
+		if ( obj == null ) return true;
+		if ( "".equals( obj.toString().trim())) return true;
 		return false;
 	}
 

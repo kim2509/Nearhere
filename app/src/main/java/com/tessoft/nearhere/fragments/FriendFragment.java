@@ -64,7 +64,7 @@ public class FriendFragment extends BaseFragment {
             {
                 rootView = inflater.inflate(R.layout.fragment_car_pool_taxi, container, false);
 
-                CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity());
+                CommonWebViewClient commonWebViewClient = new CommonWebViewClient((BaseActivity) getActivity(), application );
 
                 webView = (WebView) rootView.findViewById(R.id.webView);
                 webView.getSettings().setJavaScriptEnabled(true);
