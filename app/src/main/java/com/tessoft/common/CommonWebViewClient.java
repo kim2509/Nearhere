@@ -180,19 +180,19 @@ public class CommonWebViewClient extends WebViewClient {
     @JavascriptInterface
     public void openMap( String param )
     {
-        delegate.doAction("openMap", param );
+        delegate.doAction( Constants.ACTION_SEARCH_MAP, param);
     }
 
     @JavascriptInterface
     public void openDatePicker()
     {
-        delegate.doAction("openDatePicker", null );
+        delegate.doAction( Constants.ACTION_OPEN_DATE_PICKER, null );
     }
 
     @JavascriptInterface
     public void openTimePicker()
     {
-        delegate.doAction("openTimePicker", null );
+        delegate.doAction( Constants.ACTION_OPEN_TIME_PICKER, null );
     }
 
     @JavascriptInterface
@@ -208,7 +208,7 @@ public class CommonWebViewClient extends WebViewClient {
     @JavascriptInterface
     public void finishActivity( String param )
     {
-        delegate.doAction("finishActivity", param );
+        delegate.doAction( Constants.ACTION_FINISH_ACTIVITY, param);
     }
 
     @JavascriptInterface
@@ -250,7 +250,7 @@ public class CommonWebViewClient extends WebViewClient {
     @JavascriptInterface
     public void setNewPostURL( String url )
     {
-        delegate.doAction("setNewPostURL", url );
+        delegate.doAction( Constants.ACTION_SET_NEW_POST_URL , url );
     }
 
     @JavascriptInterface

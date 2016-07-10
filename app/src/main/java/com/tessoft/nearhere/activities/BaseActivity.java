@@ -133,7 +133,8 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 			if ( !Util.isEmptyString( userID ) )
 				user.setUserID(userID);
 
-			application.setLoginUser(user);
+			if ( !Util.isEmptyString( userNo ) && !Util.isEmptyString( userID ) )
+				application.setLoginUser(user);
 
 			application.setMetaInfo("registerUserFinished", "true");
 			application.setMetaInfo("logout", "false");
@@ -216,7 +217,7 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 	
 	public void sendHttp( String url, Object request, int requestCode )
 	{
-		new HttpTransactionReturningString( this, url, requestCode ).execute( request );
+		new HttpTransactionReturningString( this, url, requestCode ).execute(request);
 	}
 	
 	public void doPostTransaction( int requestCode, Object result )

@@ -1,6 +1,10 @@
 package com.tessoft.nearhere;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import android.app.Service;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.IBinder;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -12,20 +16,18 @@ import com.google.android.gms.location.LocationServices;
 import com.tessoft.common.AddressTaskDelegate;
 import com.tessoft.common.Constants;
 import com.tessoft.common.GetAddressTask;
+import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
 import com.tessoft.domain.User;
 import com.tessoft.domain.UserLocation;
 
-import android.app.Service;
-import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
-import android.os.IBinder;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.HashMap;
 
 public class LocationUpdateService extends Service 
-	implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, AddressTaskDelegate{
+	implements ConnectionCallbacks, OnConnectionFailedListener,
+		LocationListener, AddressTaskDelegate, TransactionDelegate {
 
 	GoogleApiClient mGoogleApiClient = null;
 	ObjectMapper mapper = null;
@@ -44,7 +46,13 @@ public class LocationUpdateService extends Service
 			super.onCreate();
 			
 			application = (NearhereApplication) getApplication();
-			
+			mapper = new ObjectMapper();
+
+			HashMap requestHash = application.getDefaultRequest();
+			requestHash.put("userID", application.getLoginUser().getUserID());
+			application.sendHttp("/user/updateUserInfo.do", mapper.writeValueAsString(requestHash),
+					Constants.HTTP_UPDATE_LOCATION, null);
+
 			if ( application.isGooglePlayServicesAvailable() == false || application.checkIfGPSEnabled() == false )
 			{
 				stopSelf();
@@ -55,11 +63,11 @@ public class LocationUpdateService extends Service
 	        
 	        createLocationRequest();
 	        
-	    	mapper = new ObjectMapper();			
+
 		}
 		catch( Exception ex )
 		{
-			
+
 		}
 	}
 	
@@ -192,7 +200,7 @@ public class LocationUpdateService extends Service
 					sendBroadcast(broadcastIntent);
 
 					application.sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ),
-							Constants.HTTP_UPDATE_LOCATION, null );
+							Constants.HTTP_UPDATE_LOCATION, this );
 				}
 			}
 		}
@@ -200,7 +208,12 @@ public class LocationUpdateService extends Service
 		{
 			application.catchException(null, ex);
 		}
-		finally
+	}
+
+	@Override
+	public void doPostTransaction(int requestCode, Object result) {
+
+		if ( Constants.HTTP_UPDATE_LOCATION == requestCode )
 		{
 			stopSelf();
 		}

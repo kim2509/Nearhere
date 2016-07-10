@@ -1,6 +1,7 @@
 package com.tessoft.common;
 
-import java.security.KeyStore;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -22,8 +23,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.security.KeyStore;
 
 public class HttpTransactionReturningString extends AsyncTask<Object, Integer, String> {
 
@@ -162,6 +162,8 @@ public class HttpTransactionReturningString extends AsyncTask<Object, Integer, S
 		else if ( url.indexOf("/taxi/getUserMessage.do") >= 0 )
 			return Constants.getServerSSLURL() + url;
 		else if ( url.indexOf("/taxi/sendUserMessage.do") >= 0 )
+			return Constants.getServerSSLURL() + url;
+		else if ( url.indexOf("/user/updateUserInfo.do") >= 0 )
 			return Constants.getServerSSLURL() + url;
 		else
 			return Constants.getServerURL() + url;
