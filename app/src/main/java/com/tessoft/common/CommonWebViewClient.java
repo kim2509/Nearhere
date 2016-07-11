@@ -208,7 +208,10 @@ public class CommonWebViewClient extends WebViewClient {
     @JavascriptInterface
     public void finishActivity( String param )
     {
-        delegate.doAction( Constants.ACTION_FINISH_ACTIVITY, param);
+        if ( "refresh".equals( param ) )
+            delegate.doAction( Constants.ACTION_FINISH_ACTIVITY, param);
+        else
+            delegate.doAction( "finishActivity", param);
     }
 
     @JavascriptInterface
