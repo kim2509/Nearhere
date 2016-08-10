@@ -12,6 +12,7 @@ import com.tessoft.nearhere.fragments.LocationFragment;
 import com.tessoft.nearhere.fragments.MessageBoxFragment;
 import com.tessoft.nearhere.fragments.NewsFragment;
 import com.tessoft.nearhere.fragments.NotificationFragment;
+import com.tessoft.nearhere.fragments.TravelInfoFragment;
 
 /**
  * Created by Daeyong on 2015-12-14.
@@ -26,14 +27,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         this.application = application;
 
-        fragments = new Fragment[6];
+        fragments = new Fragment[7];
 
         fragments[0] = CarPoolTaxiFragment.newInstance();
         fragments[1] = NewsFragment.newInstance();
-        fragments[2] = FriendFragment.newInstance();
-        fragments[3] = MessageBoxFragment.newInstance();
-        fragments[4] = LocationFragment.newInstance();
-        fragments[5] = NotificationFragment.newInstance();
+        fragments[2] = TravelInfoFragment.newInstance();
+        fragments[3] = FriendFragment.newInstance();
+        fragments[4] = MessageBoxFragment.newInstance();
+        fragments[5] = LocationFragment.newInstance();
+        fragments[6] = NotificationFragment.newInstance();
     }
 
     public void setApplication( NearhereApplication application )
@@ -46,26 +48,27 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         String[] titles = null;
 
-        titles = new String[6];
+        titles = new String[7];
         titles[0] = "카풀";
         titles[1] = "소식";
+        titles[2] = "여행";
 
         if ( application.friendRequestCount == 0 )
-            titles[2] = "친구";
+            titles[3] = "친구";
         else
-            titles[2] = "친구(" + application.friendRequestCount + ")";
+            titles[3] = "친구(" + application.friendRequestCount + ")";
 
         if ( application.messageCount == 0 )
-            titles[3] = "메시지";
+            titles[4] = "메시지";
         else
-            titles[3] = "메시지(" + application.messageCount + ")";
+            titles[4] = "메시지(" + application.messageCount + ")";
 
-        titles[4] = "위치";
+        titles[5] = "위치";
 
         if ( application.NotificationCount == 0 )
-            titles[5] = "알림";
+            titles[6] = "알림";
         else
-            titles[5] = "알림(" + application.NotificationCount + ")";
+            titles[6] = "알림(" + application.NotificationCount + ")";
 
         if ( position < titles.length )
         {
