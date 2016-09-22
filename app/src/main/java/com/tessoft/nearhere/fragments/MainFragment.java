@@ -15,7 +15,10 @@ import android.widget.Button;
 import com.astuetz.PagerSlidingTabStrip;
 import com.tessoft.common.Constants;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.activities.PopupWebViewActivity;
 import com.tessoft.nearhere.adapters.MainPagerAdapter;
+
+import java.net.URLEncoder;
 
 public class MainFragment extends BaseFragment implements OnPageChangeListener, View.OnClickListener {
 
@@ -23,6 +26,7 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
 
     View rootView = null;
     Button btnRefresh = null;
+    Button btnNotification = null;
     MainPagerAdapter pagerAdapter = null;
     PagerSlidingTabStrip tabs = null;
     public int selectedTabIndex = 0;
@@ -60,6 +64,11 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
         btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
         btnRefresh.setVisibility(ViewGroup.VISIBLE);
         btnRefresh.setOnClickListener(this);
+
+        btnNotification = (Button) rootView.findViewById(R.id.btnNotification);
+        btnNotification.setVisibility(ViewGroup.VISIBLE);
+        btnNotification.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -135,14 +144,23 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
                         intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
                     else if ( selectedTabIndex == 5 )
                         intent = new Intent(Constants.BROADCAST_REFRESH_LOCATION_HISTORY);
-                    else if ( selectedTabIndex == 6 )
-                        intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
                     else
                         intent = new Intent(Constants.BROADCAST_REFRESH);
 
                     if ( intent != null )
                         getActivity().sendBroadcast(intent);
                 }
+            }
+            else if ( v.getId() == R.id.btnNotification )
+            {
+                Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
+                String url = Constants.getServerSSLURL() +
+                        "/notification/list.do?isApp=Y&userID=" + application.getLoginUser().getUserID() +
+                        "&userHash=" + URLEncoder.encode(application.getMetaInfoString("hash")) +
+                        "&appVersion=" + application.getPackageVersion();
+                intent.putExtra("url", url);
+                intent.putExtra("title", "알림");
+                startActivity(intent);
             }
         }
         catch( Exception ex )

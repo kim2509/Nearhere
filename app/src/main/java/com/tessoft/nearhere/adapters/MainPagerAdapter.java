@@ -11,7 +11,6 @@ import com.tessoft.nearhere.fragments.FriendFragment;
 import com.tessoft.nearhere.fragments.LocationFragment;
 import com.tessoft.nearhere.fragments.MessageBoxFragment;
 import com.tessoft.nearhere.fragments.NewsFragment;
-import com.tessoft.nearhere.fragments.NotificationFragment;
 import com.tessoft.nearhere.fragments.TravelInfoFragment;
 
 /**
@@ -27,7 +26,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         this.application = application;
 
-        fragments = new Fragment[7];
+        fragments = new Fragment[6];
 
         fragments[0] = CarPoolTaxiFragment.newInstance();
         fragments[1] = NewsFragment.newInstance();
@@ -35,7 +34,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         fragments[3] = FriendFragment.newInstance();
         fragments[4] = MessageBoxFragment.newInstance();
         fragments[5] = LocationFragment.newInstance();
-        fragments[6] = NotificationFragment.newInstance();
     }
 
     public void setApplication( NearhereApplication application )
@@ -48,7 +46,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         String[] titles = null;
 
-        titles = new String[7];
+        titles = new String[6];
         titles[0] = "카풀";
         titles[1] = "소식";
         titles[2] = "여행";
@@ -64,11 +62,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             titles[4] = "메시지(" + application.messageCount + ")";
 
         titles[5] = "위치";
-
-        if ( application.NotificationCount == 0 )
-            titles[6] = "알림";
-        else
-            titles[6] = "알림(" + application.NotificationCount + ")";
 
         if ( position < titles.length )
         {
