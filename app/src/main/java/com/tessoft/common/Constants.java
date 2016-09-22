@@ -68,7 +68,7 @@ public class Constants {
 	public static String getServerSSLURL()
 	{
 		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://172.30.1.200:8080/nearhere";
-//		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
+//		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
 	}
 
 	public static String getThumbnailImageURL()
