@@ -1,6 +1,7 @@
 package com.tessoft.common;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -148,6 +149,18 @@ public class CommonWebViewClient extends WebViewClient {
         }
 
         return false;
+    }
+
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        delegate.doAction(Constants.SHOW_PROGRESS_BAR, url);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        delegate.doAction(Constants.HIDE_PROGRESS_BAR, url );
     }
 
     @JavascriptInterface

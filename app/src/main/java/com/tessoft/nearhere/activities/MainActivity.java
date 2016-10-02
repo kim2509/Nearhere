@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -734,6 +735,18 @@ public class MainActivity extends BaseActivity {
 						Intent intent = new Intent(Constants.BROADCAST_REFRESH_NOTIFICATION);
 						getApplicationContext().sendBroadcast(intent);
 					}
+
+					if ( findViewById(R.id.btnNotification) != null )
+					{
+						Button btnNotification = (Button) findViewById(R.id.btnNotification);
+
+						if ( application.NotificationCount > 0 )
+							btnNotification.setBackgroundResource(R.drawable.top_noti_new_off);
+						else
+							btnNotification.setBackgroundResource(R.drawable.top_noti_off);
+					}
+
+
 
 					bUpdateUnreadCountFinished = true;
 				}

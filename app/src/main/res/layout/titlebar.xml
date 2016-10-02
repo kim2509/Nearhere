@@ -7,11 +7,11 @@
 
     <Button
         android:id="@+id/btnLeftMenu"
-        android:layout_width="26dp"
-        android:layout_height="20dp"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="20dp"
         android:background="@drawable/top_ic_menu_off"
         android:onClick="openDrawerMenu"/>
 
@@ -51,7 +51,7 @@
         android:layout_height="26dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/btn_refresh_selector"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/top_noti_off"
         android:padding="10dp" />
 </RelativeLayout>
