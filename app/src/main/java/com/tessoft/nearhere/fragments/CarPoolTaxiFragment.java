@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
+import com.tessoft.common.Util;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.activities.BaseActivity;
 import com.tessoft.nearhere.activities.MainActivity;
@@ -27,6 +28,8 @@ import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
 
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -236,10 +239,45 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         try
         {
             super.onResume();
+
+            showReviewDialog();
         }
         catch( Exception ex )
         {
 
+        }
+    }
+
+    private void showReviewDialog() {
+        Date now = new Date();
+        Date lastReviewShowDt = new Date();
+        int reviewShowCount = 0;
+
+        boolean bShouldShow = false;
+        if ( Util.isEmptyString(application.getMetaInfoString("lastReviewShowDt")))
+            bShouldShow = true;
+        else
+        {
+            reviewShowCount = application.getMetaInfoInt("ReviewShowCount");
+
+            if ( reviewShowCount > 1 ) return ;
+
+            lastReviewShowDt.setTime( Long.parseLong( application.getMetaInfoString("lastReviewShowDt") ) );
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(lastReviewShowDt);
+            c.add(Calendar.MONTH, 1);
+            lastReviewShowDt = c.getTime();
+
+            if(lastReviewShowDt.before(now))
+                bShouldShow = true;
+        }
+
+        if ( bShouldShow )
+        {
+            application.setMetaInfo("ReviewShowCount", String.valueOf(reviewShowCount + 1) );
+            application.setMetaInfo("lastReviewShowDt", String.valueOf( now.getTime() ));
+            showYesNoDialog("리뷰", "리뷰를 쓰러 가시겠습니까?", Constants.YESNO_REVIEW);
         }
     }
 
@@ -358,6 +396,11 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         {
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.yesClicked("logout");
+        }
+        else if ( Constants.YESNO_REVIEW.equals( param ) )
+        {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + application.getPackageName())) ;
+            startActivity(i);
         }
 
         super.yesClicked(param);

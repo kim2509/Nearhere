@@ -53,6 +53,8 @@ public class Constants {
 	public static final String SHOW_PROGRESS_BAR = "SHOW_PROGRESS_BAR";
 	public static final String HIDE_PROGRESS_BAR = "HIDE_PROGRESS_BAR";
 
+	public static final String YESNO_REVIEW = "YESNO_REVIEW";
+
 	public static final String METAINFO_LOCATION_MAP_VISIBILITY = "METAINFO_LOCATION_MAP_VISIBILITY";
 
 	public static final int STATISTICS_DEBUG = 1234;
