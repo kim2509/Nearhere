@@ -3,7 +3,7 @@
     android:id="@+id/titleBar"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="#7BA2C8" >
+    android:background="#7bafe3" >
 
     <Button
         android:id="@+id/btnLeftMenu"
@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:paddingBottom="5dp"
         android:src="@drawable/top_tit" />
     
     <TextView
