@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.tessoft.nearhere.NearhereApplication;
+import com.tessoft.nearhere.fragments.CafeFragment;
 import com.tessoft.nearhere.fragments.CarPoolTaxiFragment;
 import com.tessoft.nearhere.fragments.FriendFragment;
 import com.tessoft.nearhere.fragments.LocationFragment;
@@ -26,14 +27,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         this.application = application;
 
-        fragments = new Fragment[6];
+        fragments = new Fragment[7];
 
         fragments[0] = CarPoolTaxiFragment.newInstance();
-        fragments[1] = NewsFragment.newInstance();
-        fragments[2] = TravelInfoFragment.newInstance();
-        fragments[3] = FriendFragment.newInstance();
-        fragments[4] = MessageBoxFragment.newInstance();
-        fragments[5] = LocationFragment.newInstance();
+        fragments[1] = CafeFragment.newInstance();
+        fragments[2] = NewsFragment.newInstance();
+        fragments[3] = TravelInfoFragment.newInstance();
+        fragments[4] = FriendFragment.newInstance();
+        fragments[5] = MessageBoxFragment.newInstance();
+        fragments[6] = LocationFragment.newInstance();
     }
 
     public void setApplication( NearhereApplication application )
@@ -46,22 +48,23 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
         String[] titles = null;
 
-        titles = new String[6];
+        titles = new String[7];
         titles[0] = "카풀";
-        titles[1] = "소식";
-        titles[2] = "여행";
+        titles[1] = "카페";
+        titles[2] = "소식";
+        titles[3] = "여행";
 
         if ( application.friendRequestCount == 0 )
-            titles[3] = "친구";
+            titles[4] = "친구";
         else
-            titles[3] = "친구(" + application.friendRequestCount + ")";
+            titles[4] = "친구(" + application.friendRequestCount + ")";
 
         if ( application.messageCount == 0 )
-            titles[4] = "메시지";
+            titles[5] = "메시지";
         else
-            titles[4] = "메시지(" + application.messageCount + ")";
+            titles[5] = "메시지(" + application.messageCount + ")";
 
-        titles[5] = "위치";
+        titles[6] = "위치";
 
         if ( position < titles.length )
         {

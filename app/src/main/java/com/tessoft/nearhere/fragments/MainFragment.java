@@ -139,10 +139,12 @@ public class MainFragment extends BaseFragment implements OnPageChangeListener, 
                     if ( selectedTabIndex == 1 )
                         intent = new Intent(Constants.BROADCAST_REFRESH_NEWS);
                     else if ( selectedTabIndex == 2 )
-                        intent = new Intent(Constants.BROADCAST_REFRESH_TRAVEL_INFO);
+                        intent = new Intent(Constants.BROADCAST_REFRESH_CAFE);
                     else if ( selectedTabIndex == 3 )
+                        intent = new Intent(Constants.BROADCAST_REFRESH_TRAVEL_INFO);
+                    else if ( selectedTabIndex == 4 )
                         intent = new Intent(Constants.BROADCAST_REFRESH_FRIEND_LIST);
-                    else if ( selectedTabIndex == 5 )
+                    else if ( selectedTabIndex == 6 )
                         intent = new Intent(Constants.BROADCAST_REFRESH_LOCATION_HISTORY);
                     else
                         intent = new Intent(Constants.BROADCAST_REFRESH);
