@@ -63,7 +63,13 @@ public class Constants {
 	public static final int ACTIVITY_REQ_CODE_FB_CONNECT = 3000;
 
 	public static String DAUM_MAP_API_KEY = "1ce23b1035fde7488e6be71df90904d7";
-	
+
+	public static String getServerHost()
+	{
+		return Constants.bReal ? "http://www.hereby.co.kr" : "http://192.168.0.200:8080";
+//		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.43.137:8080/nearhere";
+	}
+
 	public static String getServerURL()
 	{
 		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.0.200:8080/nearhere";

@@ -10,10 +10,12 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.webkit.CookieManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.tessoft.common.Constants;
 import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.Util;
@@ -85,6 +87,8 @@ public class NearhereApplication extends Application{
 		String loginUserInfo = mapper.writeValueAsString(user);
 		loginUserInfo = Util.encodeBase64(loginUserInfo);
 		setMetaInfo("loginUserInfo", loginUserInfo );
+		String cookieString = "token=" + user.getUserToken();
+		CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
 	}
 	
 	public User getLoginUser()

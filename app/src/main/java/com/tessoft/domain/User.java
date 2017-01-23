@@ -1,8 +1,8 @@
 package com.tessoft.domain;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import com.tessoft.common.Util;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends ListItemModel{
@@ -36,6 +36,7 @@ public class User extends ListItemModel{
 	private String facebookID;
 	private String facebookProfileImageURL;
 	private String facebookURL;
+	private String userToken;
 	
 	private boolean moreFlag;
 
@@ -240,5 +241,13 @@ public class User extends ListItemModel{
 
 	public void setFacebookURL(String facebookURL) {
 		this.facebookURL = facebookURL;
+	}
+
+	public String getUserToken() {
+		return userToken;
+	}
+
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
 	}
 }

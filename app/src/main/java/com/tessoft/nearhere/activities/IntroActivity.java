@@ -143,7 +143,13 @@ public class IntroActivity extends BaseActivity {
 			super.doPostTransaction(requestCode, result);
 			
 			APIResponse response = mapper.readValue(result.toString(), new TypeReference<APIResponse>(){});
-			
+
+			if ( !"0000".equals(response.getResCode()) )
+			{
+				showOKDialog( response.getResMsg(), null);
+				return;
+			}
+
 			if ( requestCode == Constants.HTTP_GET_RANDOM_ID_FOR_GUEST || requestCode == HTTP_LOGIN_BACKGROUND )
 			{
 				String userString = mapper.writeValueAsString( response.getData() );

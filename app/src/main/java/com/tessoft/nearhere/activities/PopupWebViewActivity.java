@@ -96,6 +96,11 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                     webView.setWebViewClient(commonWebViewClient);
                     webView.addJavascriptInterface(commonWebViewClient, "Android");
                 }
+
+                if ( "Y".equals( getIntent().getExtras().getString("titleBarHidden") ) )
+                    findViewById(R.id.titleBar).setVisibility(ViewGroup.GONE);
+                else
+                    findViewById(R.id.titleBar).setVisibility(ViewGroup.VISIBLE);
             }
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
