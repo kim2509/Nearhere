@@ -1,17 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
-
-import com.tessoft.common.Constants;
-import com.tessoft.domain.APIResponse;
-import com.tessoft.domain.User;
-import com.tessoft.nearhere.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.tessoft.common.Constants;
+import com.tessoft.domain.APIResponse;
+import com.tessoft.domain.User;
+import com.tessoft.nearhere.R;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.type.TypeReference;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class RegisterUserActivity extends BaseActivity {
 
@@ -47,7 +47,7 @@ public class RegisterUserActivity extends BaseActivity {
 		request.put("user", application.getLoginUser());
 		sendHttp("/taxi/getRandomIDV2.do", mapper.writeValueAsString(request), 2);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

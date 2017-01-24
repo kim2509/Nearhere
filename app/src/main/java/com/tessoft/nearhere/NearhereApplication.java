@@ -25,6 +25,7 @@ import com.tessoft.nearhere.fragments.MainFragment;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -86,9 +87,13 @@ public class NearhereApplication extends Application{
 	{
 		String loginUserInfo = mapper.writeValueAsString(user);
 		loginUserInfo = Util.encodeBase64(loginUserInfo);
-		setMetaInfo("loginUserInfo", loginUserInfo );
-		String cookieString = "token=" + user.getUserToken();
-		CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
+		setMetaInfo("loginUserInfo", loginUserInfo);
+
+		if ( !Util.isEmptyString( user.getUserToken() ) )
+		{
+			String cookieString = "userToken=" + URLEncoder.encode(user.getUserToken(), "utf-8");
+			CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
+		}
 	}
 	
 	public User getLoginUser()
