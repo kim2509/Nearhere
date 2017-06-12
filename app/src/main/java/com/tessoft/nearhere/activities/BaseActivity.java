@@ -90,6 +90,7 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 			String pw = "";
 			String pushOffOnNewPost = "";
 			String server = "";
+			String loginHash = "";
 
 			for ( int i = 0; i < tokens.length; i++ )
 			{
@@ -105,6 +106,8 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 					pushOffOnNewPost = value;
 				else if ( "server".equals( key ) )
 					server = value.trim();
+				else if ( "hash".equals( key ) )
+					loginHash = URLDecoder.decode(value.trim(), "UTF-8");
 			}
 
 			if (!"이근처합승".equals(pw.trim()))
@@ -132,6 +135,9 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 
 			if ( !Util.isEmptyString( userID ) )
 				user.setUserID(userID);
+
+			if ( !Util.isEmptyString( loginHash ) )
+				application.setMetaInfo("hash", loginHash);
 
 			if ( !Util.isEmptyString( userNo ) && !Util.isEmptyString( userID ) )
 				application.setLoginUser(user);

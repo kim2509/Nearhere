@@ -1,5 +1,8 @@
 package com.tessoft.nearhere.activities;
 
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +13,19 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.common.Util;
 import com.tessoft.nearhere.R;
+import com.tessoft.nearhere.fragments.DatePickerFragment;
+import com.tessoft.nearhere.fragments.TimePickerFragment;
 
-public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener{
+import java.util.Date;
+
+public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener{
 
     private WebView webView = null;
 
@@ -177,6 +186,16 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
             findViewById(R.id.marker_progress).setVisibility(ViewGroup.VISIBLE);
         else if ( Constants.HIDE_PROGRESS_BAR.equals( actionName ) )
             findViewById(R.id.marker_progress).setVisibility(ViewGroup.GONE);
+        else if ( Constants.ACTION_OPEN_DATE_PICKER.equals( actionName ) )
+        {
+            DialogFragment newFragment = new DatePickerFragment( this );
+            newFragment.show(getFragmentManager(), "datePicker");
+        }
+        else if ( Constants.ACTION_OPEN_TIME_PICKER.equals( actionName ) )
+        {
+            DialogFragment newFragment = new TimePickerFragment( this );
+            newFragment.show(getFragmentManager(), "timePicker");
+        }
     }
 
     @Override
@@ -191,6 +210,24 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         super.yesClicked(param);
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                          int dayOfMonth) {
+        // TODO Auto-generated method stub
+        String dateString = Util.getDateStringFromDate(new Date(year - 1900, monthOfYear, dayOfMonth), "yyyy-MM-dd");
+        webView.loadUrl("javascript:onDateSet('" + dateString + "');");
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        // TODO Auto-generated method stub
+        Date date = new Date();
+        date.setHours( hourOfDay );
+        date.setMinutes( minute );
+
+        String timeString = Util.getDateStringFromDate( date, "HH:mm" );
+        webView.loadUrl("javascript:onTimeSet('" + timeString + "');");
+    }
 
     @Override
     protected void onDestroy() {

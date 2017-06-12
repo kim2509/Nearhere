@@ -1,9 +1,5 @@
 package com.tessoft.nearhere.adapters;
 
-import com.tessoft.common.AdapterDelegate;
-import com.tessoft.domain.SettingListItem;
-import com.tessoft.nearhere.R;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+
+import com.tessoft.common.AdapterDelegate;
+import com.tessoft.domain.SettingListItem;
+import com.tessoft.nearhere.R;
 
 public class SettingsAdapter extends ArrayAdapter<SettingListItem> implements OnCheckedChangeListener{
 
@@ -40,7 +40,7 @@ public class SettingsAdapter extends ArrayAdapter<SettingListItem> implements On
 			SettingListItem item = getItem(position);
 
 			CheckBox setting = null;
-			
+
 			if (row == null) {
 				row = inflater.inflate(R.layout.list_setting_item, parent, false);
 				setting = (CheckBox) row.findViewById(R.id.checkSetting);
@@ -48,10 +48,10 @@ public class SettingsAdapter extends ArrayAdapter<SettingListItem> implements On
 			}
 
 			if ( setting == null )
-				setting = (CheckBox) row.findViewById(R.id.checkSetting);
-			
+			setting = (CheckBox) row.findViewById(R.id.checkSetting);
+
 			setting.setText( item.getSettingName() );
-			
+
 			if ( "Y".equals( item.getSettingValue() ) )
 				setting.setChecked(true);
 			else
