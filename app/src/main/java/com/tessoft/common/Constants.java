@@ -45,6 +45,8 @@ public class Constants {
 	public static final String BROADCAST_REFRESH_NEWS = "BROADCAST_REFRESH_NEWS";
 	public static final String BROADCAST_REFRESH_TRAVEL_INFO = "BROADCAST_REFRESH_TRAVEL_INFO";
 	public static final String BROADCAST_REFRESH_CAFE = "BROADCAST_REFRESH_CAFE";
+	public static final String BROADCAST_REFRESH_PAGE = "BROADCAST_REFRESH_PAGE";
+	public static final String BROADCAST_FINISH_ACTIVITY = "BROADCAST_FINISH_ACTIVITY";
 
 	public static final String ACTION_SEARCH_MAP = "ACTION_SEARCH_MAP";
 	public static final String ACTION_OPEN_DATE_PICKER = "ACTION_OPEN_DATE_PICKER";

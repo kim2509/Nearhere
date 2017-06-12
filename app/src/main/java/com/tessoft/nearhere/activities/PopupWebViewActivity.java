@@ -23,11 +23,16 @@ import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.fragments.DatePickerFragment;
 import com.tessoft.nearhere.fragments.TimePickerFragment;
 
+import org.codehaus.jackson.type.TypeReference;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class PopupWebViewActivity extends BaseActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener{
 
     private WebView webView = null;
+    private String pageID = "";
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -38,6 +43,16 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                 if ( Constants.BROADCAST_REFRESH.equals( intent.getAction() ) )
                 {
                     webView.reload();
+                }
+                else if ( Constants.BROADCAST_REFRESH_PAGE.equals( intent.getAction() ))
+                {
+                    if ( intent.getExtras() != null && pageID.equals(intent.getExtras().get("broadcastParam")) )
+                        webView.reload();
+                }
+                else if ( Constants.BROADCAST_FINISH_ACTIVITY.equals( intent.getAction() ))
+                {
+                    if ( intent.getExtras() != null && pageID.equals(intent.getExtras().get("broadcastParam")) )
+                        finish();
                 }
             }
             catch( Exception ex )
@@ -110,12 +125,17 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                     findViewById(R.id.titleBar).setVisibility(ViewGroup.GONE);
                 else
                     findViewById(R.id.titleBar).setVisibility(ViewGroup.VISIBLE);
+
+                if ( getIntent().getExtras().containsKey("pageID") )
+                    pageID =  getIntent().getExtras().get("pageID").toString();
             }
 
             Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
             btnRefresh.setOnClickListener(this);
 
             registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH));
+            registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_PAGE));
+            registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_FINISH_ACTIVITY));
         }
         catch( Exception ex )
         {
@@ -182,6 +202,15 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
             finish();
         }
+        else if ("finishActivity2".equals(actionName))
+        {
+            if ( !Util.isEmptyString( param.toString() ) )
+            {
+                handleJSONParam( param.toString() );
+            }
+
+            finish();
+        }
         else if ( Constants.SHOW_PROGRESS_BAR.equals( actionName ) )
             findViewById(R.id.marker_progress).setVisibility(ViewGroup.VISIBLE);
         else if ( Constants.HIDE_PROGRESS_BAR.equals( actionName ) )
@@ -195,6 +224,30 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         {
             DialogFragment newFragment = new TimePickerFragment( this );
             newFragment.show(getFragmentManager(), "timePicker");
+        }
+    }
+
+    public void handleJSONParam( String jsonString )
+    {
+        try
+        {
+            HashMap param = mapper.readValue(jsonString, new TypeReference<HashMap>(){});
+
+            if ( !Util.isEmptyForKey(param, "broadcastList") )
+            {
+                List<HashMap> broadcastList = (List<HashMap>) param.get("broadcastList");
+
+                for ( int i = 0; i < broadcastList.size(); i++ )
+                {
+                    Intent intent = new Intent( Util.getStringFromHash( broadcastList.get(i), "broadcastName") );
+                    intent.putExtra("broadcastParam", Util.getStringFromHash( broadcastList.get(i), "broadcastParam") );
+                    sendBroadcast(intent);
+                }
+            }
+        }
+        catch( Exception ex )
+        {
+            catchException(null, ex);
         }
     }
 

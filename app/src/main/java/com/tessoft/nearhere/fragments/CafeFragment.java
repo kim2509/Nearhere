@@ -25,6 +25,7 @@ public class CafeFragment extends BaseFragment {
 
     protected View rootView = null;
     private WebView webView = null;
+    private String pageID = "P0000";
 
     // TODO: Rename and change types and number of parameters
     public static CafeFragment newInstance() {
@@ -36,7 +37,8 @@ public class CafeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_CAFE ));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_CAFE));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_PAGE));
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -46,6 +48,11 @@ public class CafeFragment extends BaseFragment {
             {
                 if ( intent.getAction().equals(Constants.BROADCAST_REFRESH_CAFE))
                     webView.reload();
+                else if ( Constants.BROADCAST_REFRESH_PAGE.equals( intent.getAction() ))
+                {
+                    if ( intent.getExtras() != null && pageID.equals(intent.getExtras().get("broadcastParam")) )
+                        webView.reload();
+                }
             }
             catch( Exception ex )
             {

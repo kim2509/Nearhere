@@ -228,6 +228,12 @@ public class CommonWebViewClient extends WebViewClient {
     }
 
     @JavascriptInterface
+    public void finishActivity2( String param )
+    {
+        delegate.doAction( "finishActivity2", param);
+    }
+
+    @JavascriptInterface
     public String getDefaultInfo()
     {
         try

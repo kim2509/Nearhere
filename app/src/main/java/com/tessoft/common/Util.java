@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -194,6 +195,22 @@ public class Util {
 		if ( obj == null ) return true;
 		if ( "".equals( obj.toString().trim())) return true;
 		return false;
+	}
+
+	public static boolean isEmptyForKey( Map hash, String key )
+	{
+		if ( hash == null ) return true;
+
+		if ( !hash.containsKey(key) || Util.isEmptyString(hash.get(key)) ) return true;
+
+		return false;
+	}
+
+	public static String getStringFromHash( Map hash, String key )
+	{
+		if ( Util.isEmptyForKey(hash, key) ) return "";
+
+		return hash.get(key).toString();
 	}
 
 	public static double getDouble( String str )
