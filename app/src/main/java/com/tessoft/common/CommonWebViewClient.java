@@ -234,6 +234,12 @@ public class CommonWebViewClient extends WebViewClient {
     }
 
     @JavascriptInterface
+    public void sendBroadcasts( String param )
+    {
+        delegate.doAction( "sendBroadcasts", param);
+    }
+
+    @JavascriptInterface
     public String getDefaultInfo()
     {
         try

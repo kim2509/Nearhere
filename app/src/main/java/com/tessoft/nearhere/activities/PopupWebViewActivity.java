@@ -211,6 +211,13 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
             finish();
         }
+        else if ("sendBroadcasts".equals(actionName))
+        {
+            if ( !Util.isEmptyString( param.toString() ) )
+            {
+                handleJSONParam( param.toString() );
+            }
+        }
         else if ( Constants.SHOW_PROGRESS_BAR.equals( actionName ) )
             findViewById(R.id.marker_progress).setVisibility(ViewGroup.VISIBLE);
         else if ( Constants.HIDE_PROGRESS_BAR.equals( actionName ) )
