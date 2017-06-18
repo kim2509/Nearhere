@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +83,8 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 	DisplayImageOptions options = null;
 	
 	MainActivity mainActivity = null;
+
+	private int RESULT_LOAD_IMAGE = 3;
 
 	public MyInfoFragment( MainActivity mainActivity )
 	{
@@ -312,10 +316,8 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 				// TODO Auto-generated method stub
 				try
 				{
-					Intent intent = new Intent();
-					intent.setType("image/*");
-					intent.setAction(Intent.ACTION_GET_CONTENT);
-					startActivityForResult(Intent.createChooser(intent, "Select Picture"), 3);
+					Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
 				}
 				catch( Exception ex )
 				{
@@ -561,31 +563,29 @@ public class MyInfoFragment extends BaseFragment implements OnClickListener {
 					sendHttp("/taxi/updateUserLocation.do", mapper.writeValueAsString( userLocation ), 2);
 				}	
 			}
-			else if ( requestCode == 3 )
+			else if ( requestCode == RESULT_LOAD_IMAGE )
 			{
-				sendHttp("/taxi/statistics.do?name=changeImageButtonClick",
-						mapper.writeValueAsString( application.getLoginUser() ), Constants.STATISTICS_DEBUG);
+				if( data != null && data.getData() != null && resultCode == getActivity().RESULT_OK ) {
 
-				if( data != null && data.getData() != null) {
 					Uri _uri = data.getData();
 
-					sendHttp("/taxi/statistics.do?name=ImageDataNotNull",
-							mapper.writeValueAsString( application.getLoginUser() ), Constants.STATISTICS_DEBUG);
+					String[] filePathColumn = { MediaStore.Images.Media.DATA };
+					Cursor cursor = getActivity().getContentResolver().query(_uri, filePathColumn, null, null, null);
+					cursor.moveToFirst();
+					int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+					String picturePath = cursor.getString(columnIndex);
+					cursor.close();
 
-					String imageFilePath = _uri.getPath();
-
-					ExifInterface exif = new ExifInterface(imageFilePath);
+					ExifInterface exif = new ExifInterface(picturePath);
 
 					int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);	    
 					int exifDegree = exifOrientationToDegrees(exifOrientation);
 					if(exifDegree != 0) {
-						Bitmap bitmap = getBitmap( imageFilePath );			    	
+						Bitmap bitmap = getBitmap( picturePath);
 						Bitmap rotatePhoto = rotate(bitmap, exifDegree);
-						saveBitmap(rotatePhoto, imageFilePath );
+						saveBitmap(rotatePhoto, picturePath );
 
-						sendHttp("/taxi/statistics.do?name=ImageRotationFinished",
-								mapper.writeValueAsString(application.getLoginUser()), Constants.STATISTICS_DEBUG);
-					}	    			
+					}
 
 					cropImage( _uri );
 				}

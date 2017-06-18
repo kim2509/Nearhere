@@ -33,6 +33,7 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
     private WebView webView = null;
     private String pageID = "";
+    private int RESULT_LOAD_IMAGE = 3;
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -216,6 +217,14 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
             if ( !Util.isEmptyString( param.toString() ) )
             {
                 handleJSONParam( param.toString() );
+            }
+        }
+        else if ("selectPhotoUpload".equals(actionName))
+        {
+            if ( !Util.isEmptyString( param.toString() ) )
+            {
+                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
             }
         }
         else if ( Constants.SHOW_PROGRESS_BAR.equals( actionName ) )

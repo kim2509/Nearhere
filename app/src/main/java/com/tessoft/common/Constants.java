@@ -66,25 +66,25 @@ public class Constants {
 
 	public static String DAUM_MAP_API_KEY = "1ce23b1035fde7488e6be71df90904d7";
 
-	public static String devHostName = "192.168.0.200:8080";
-//	public static String devHostName = "192.168.43.137:8080";
+	public static String devHostName = "192.168.0.200";
+//	public static String devHostName = "192.168.43.137";
 
 	public static String getServerHost()
 	{
 //		return Constants.bReal ? "http://www.hereby.co.kr" : Constants.devHostName;
-		return Constants.bReal ? "http://www.hereby.co.kr" : "http://" + Constants.devHostName + "/nearhere";
+		return Constants.bReal ? "http://www.hereby.co.kr" : "http://" + Constants.devHostName + ":8080/nearhere";
 	}
 
 	public static String getServerURL()
 	{
 //		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://192.168.0.200:8080/nearhere";
-		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://" + Constants.devHostName + "/nearhere";
+		return Constants.bReal ? "http://www.hereby.co.kr/nearhere" : "http://" + Constants.devHostName + ":8080/nearhere";
 	}
 
 	public static String getServerSSLURL()
 	{
 //		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://192.168.0.200:8080/nearhere";
-		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://" + Constants.devHostName + "/nearhere";
+		return Constants.bReal ? "https://www.hereby.co.kr/nearhere" : "http://" + Constants.devHostName + ":8080/nearhere";
 	}
 
 	public static String getThumbnailImageURL()

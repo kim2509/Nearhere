@@ -239,6 +239,14 @@ public class CommonWebViewClient extends WebViewClient {
         delegate.doAction( "sendBroadcasts", param);
     }
 
+
+    @JavascriptInterface
+    public void selectPhotoUpload( String param )
+    {
+        delegate.doAction( "selectPhotoUpload", param);
+    }
+
+
     @JavascriptInterface
     public String getDefaultInfo()
     {
