@@ -7,7 +7,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -18,13 +25,21 @@ import android.widget.TimePicker;
 
 import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
+import com.tessoft.common.UploadImageTask;
 import com.tessoft.common.Util;
+import com.tessoft.domain.User;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.fragments.DatePickerFragment;
 import com.tessoft.nearhere.fragments.TimePickerFragment;
 
 import org.codehaus.jackson.type.TypeReference;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +49,8 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
     private WebView webView = null;
     private String pageID = "";
     private int RESULT_LOAD_IMAGE = 3;
+    private int REQUEST_IMAGE_CROP = 4;
+    private int IMAGE_UPLOAD = 5;
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -296,6 +313,234 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
         String timeString = Util.getDateStringFromDate( date, "HH:mm" );
         webView.loadUrl("javascript:onTimeSet('" + timeString + "');");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        try {
+
+            if ( requestCode == RESULT_LOAD_IMAGE )
+            {
+                if( data != null && data.getData() != null && resultCode == RESULT_OK ) {
+
+                    Uri _uri = data.getData();
+
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = getContentResolver().query(_uri, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    ExifInterface exif = new ExifInterface(picturePath);
+
+                    int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int exifDegree = exifOrientationToDegrees(exifOrientation);
+                    if(exifDegree != 0) {
+                        Bitmap bitmap = getBitmap( picturePath);
+                        Bitmap rotatePhoto = rotate(bitmap, exifDegree);
+                        saveBitmap(rotatePhoto, picturePath );
+
+                    }
+
+                    cropImage( _uri );
+                }
+
+            }
+            else if ( requestCode == REQUEST_IMAGE_CROP )
+            {
+                if ( data == null )
+                    return;
+
+                Bundle extras = data.getExtras();
+                if(extras != null) {
+
+                    Bitmap bitmap = (Bitmap)extras.get("data");
+                    bitmap = resizeBitmapImageFn( bitmap, 1024 );
+
+                    sendPhoto(bitmap);
+
+                }
+            }
+
+        } catch (Exception ex) {
+            catchException(null, ex);
+        }
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation)
+    {
+        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
+        {
+            return 90;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180)
+        {
+            return 180;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270)
+        {
+            return 270;
+        }
+        return 0;
+    }
+
+    public Bitmap getBitmap( String imagePath ) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inDither=false;
+        options.inTempStorage=new byte[32 * 1024];
+        options.inPurgeable = true;
+        options.inJustDecodeBounds = false;
+
+        File f = new File(imagePath);
+
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(f);
+        } catch (FileNotFoundException e) {
+            //TODO do something intelligent
+            e.printStackTrace();
+        }
+
+        Bitmap bm = null;
+
+        try {
+            if(fs!=null) bm=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, options);
+        } catch (IOException e) {
+            //TODO do something intelligent
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bm;
+    }
+
+    public static Bitmap rotate(Bitmap image, int degrees)
+    {
+        if(degrees != 0 && image != null)
+        {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float)image.getWidth(), (float)image.getHeight());
+
+            try
+            {
+                Bitmap b = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), m, true);
+
+                if(image != b)
+                {
+                    image.recycle();
+                    image = b;
+                }
+
+                image = b;
+            }
+            catch(OutOfMemoryError ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        return image;
+    }
+
+    public void saveBitmap(Bitmap bitmap, String mCurrentPhotoPath ) {
+        File file = new File( mCurrentPhotoPath );
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out) ;
+        try {
+            out.close();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void cropImage(Uri contentUri) throws Exception{
+
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        //indicate image type and Uri of image
+        cropIntent.setDataAndType(contentUri, "image/*");
+        //set crop properties
+        cropIntent.putExtra("crop", "true");
+        //indicate aspect of desired crop
+        cropIntent.putExtra("aspectX", 1);
+        cropIntent.putExtra("aspectY", 1);
+        //indicate output X and Y
+        cropIntent.putExtra("outputX", 256);
+        cropIntent.putExtra("outputY", 256);
+        //retrieve data on return
+        cropIntent.putExtra("return-data", true);
+        startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);
+
+    }
+
+    /*
+	 * 비트맵(Bitmap) 이미지의 가로, 세로 이미지를 리사이징
+	 * @param bmpSource 원본 Bitmap 객체
+	 * @param maxResolution 제한 해상도
+	 * @return 리사이즈된 이미지 Bitmap 객체
+	 */
+    public Bitmap resizeBitmapImageFn(
+            Bitmap bmpSource, int maxResolution){
+        int iWidth = bmpSource.getWidth();      //비트맵이미지의 넓이
+        int iHeight = bmpSource.getHeight();     //비트맵이미지의 높이
+        int newWidth = iWidth ;
+        int newHeight = iHeight ;
+        float rate = 0.0f;
+
+        //이미지의 가로 세로 비율에 맞게 조절
+        if(iWidth > iHeight ){
+            if(maxResolution < iWidth ){
+                rate = maxResolution / (float) iWidth ;
+                newHeight = (int) (iHeight * rate);
+                newWidth = maxResolution;
+            }
+        }else{
+            if(maxResolution < iHeight ){
+                rate = maxResolution / (float) iHeight ;
+                newWidth = (int) (iWidth * rate);
+                newHeight = maxResolution;
+            }
+        }
+
+        return Bitmap.createScaledBitmap(
+                bmpSource, newWidth, newHeight, true);
+    }
+
+    private void sendPhoto(Bitmap f) throws Exception {
+        User user = application.getLoginUser();
+        new UploadImageTask( this, user.getUserID() , IMAGE_UPLOAD, this ).execute(f);
+    }
+
+    @Override
+    public void doPostTransaction(int requestCode, Object result) {
+
+        try
+        {
+            super.doPostTransaction(requestCode, result);
+
+            webView.loadUrl("javascript:onImageUploaded('" + result.toString() + "');");
+        }
+        catch( Exception ex )
+        {
+            catchException(null, ex);
+        }
     }
 
     @Override
