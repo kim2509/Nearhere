@@ -27,7 +27,6 @@ import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.common.UploadImageTask;
 import com.tessoft.common.Util;
-import com.tessoft.domain.User;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.fragments.DatePickerFragment;
 import com.tessoft.nearhere.fragments.TimePickerFragment;
@@ -51,6 +50,7 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
     private int RESULT_LOAD_IMAGE = 3;
     private int REQUEST_IMAGE_CROP = 4;
     private int IMAGE_UPLOAD = 5;
+    private String photoUploadParam = "";
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -240,6 +240,7 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         {
             if ( !Util.isEmptyString( param.toString() ) )
             {
+                photoUploadParam = param.toString();
                 Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
             }
@@ -344,14 +345,21 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
 
                     }
 
-                    cropImage( _uri );
+//                    cropImage( _uri );
+
+                    Bitmap bitmap = getBitmap( picturePath);
+                    bitmap = resizeBitmapImageFn( bitmap, 1024 );
+                    sendPhoto(bitmap);
                 }
 
             }
             else if ( requestCode == REQUEST_IMAGE_CROP )
             {
                 if ( data == null )
+                {
+                    application.showToastMessage("이미지 자르기 결과 데이터를 읽을 수 없습니다.");
                     return;
+                }
 
                 Bundle extras = data.getExtras();
                 if(extras != null) {
@@ -360,11 +368,15 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                     bitmap = resizeBitmapImageFn( bitmap, 1024 );
 
                     sendPhoto(bitmap);
-
+                }
+                else
+                {
+                    application.showToastMessage("이미지 자르기 결과가 올바르지 않습니다.");
                 }
             }
 
         } catch (Exception ex) {
+            photoUploadParam = "";
             catchException(null, ex);
         }
     }
@@ -524,8 +536,8 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void sendPhoto(Bitmap f) throws Exception {
-        User user = application.getLoginUser();
-        new UploadImageTask( this, user.getUserID() , IMAGE_UPLOAD, this ).execute(f);
+        new UploadImageTask( this, photoUploadParam , IMAGE_UPLOAD, this ).execute(f);
+        photoUploadParam = "";
     }
 
     @Override
@@ -534,8 +546,7 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
         try
         {
             super.doPostTransaction(requestCode, result);
-
-            webView.loadUrl("javascript:onImageUploaded('" + result.toString() + "');");
+            webView.loadUrl("javascript:onImageUploaded(" +  result.toString() +  ");");
         }
         catch( Exception ex )
         {

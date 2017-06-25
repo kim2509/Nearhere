@@ -17,14 +17,14 @@ import java.io.InputStream;
 public class UploadImageTask extends AsyncTask<Bitmap, Void, String> {
 
 	Context context = null;
-	String fileName = "";
+	String requestInfo = "";
 	private TransactionDelegate delegate;
 	int requestCode = 0;
 
-	public UploadImageTask(Context context, String fileName, int requestCode, TransactionDelegate delegate)
+	public UploadImageTask(Context context, String requestInfo, int requestCode, TransactionDelegate delegate)
 	{
 		this.context = context;
-		this.fileName = fileName;
+		this.requestInfo = requestInfo;
 		this.delegate = delegate;
 		this.requestCode = requestCode;
 	}
@@ -48,7 +48,7 @@ public class UploadImageTask extends AsyncTask<Bitmap, Void, String> {
 
 			MultipartEntity reqEntity = new MultipartEntity();
 
-			reqEntity.addPart("requestInfo", "엄청나구만...");
+			reqEntity.addPart("requestInfo", requestInfo );
 			reqEntity.addPart("file", "image", in);
 			httppost.setEntity(reqEntity);
 
