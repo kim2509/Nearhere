@@ -339,6 +339,9 @@ public class SearchMapActivity extends BaseActivity
                     addMarker(MapPoint.mapPointWithGeoCoord(loc.getLatitude(), loc.getLongitude()),
                             address, param , false);
                 }
+                else if ( !Util.isEmptyForKey( resultMap, "errorMsg") ){
+                    showOKDialog(Util.getStringFromHash(resultMap, "errorMsg"), null);
+                }
             }
         }, 100).execute(locs);
     }

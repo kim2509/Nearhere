@@ -72,7 +72,7 @@ public class Constants {
 	public static String getServerHost()
 	{
 //		return Constants.bReal ? "http://www.hereby.co.kr" : Constants.devHostName;
-		return Constants.bReal ? "http://www.hereby.co.kr" : "http://" + Constants.devHostName + ":8080/nearhere";
+		return Constants.bReal ? "http://www.hereby.co.kr" : "http://" + Constants.devHostName + ":8080";
 	}
 
 	public static String getServerURL()

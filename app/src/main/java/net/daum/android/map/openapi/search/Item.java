@@ -1,5 +1,8 @@
 package net.daum.android.map.openapi.search;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
 	public String title;
 	public String imageUrl;

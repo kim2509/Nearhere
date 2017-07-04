@@ -136,8 +136,9 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 			if ( !Util.isEmptyString( userID ) )
 				user.setUserID(userID);
 
-			if ( !Util.isEmptyString( loginHash ) )
+			if ( !Util.isEmptyString( loginHash ) ) {
 				application.setMetaInfo("hash", loginHash);
+			}
 
 			if ( !Util.isEmptyString( userNo ) && !Util.isEmptyString( userID ) )
 				application.setLoginUser(user);
@@ -147,7 +148,7 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 		}
 		catch( Exception ex )
 		{
-
+			application.showToastMessage(ex.getMessage());
 		}
 	}
 

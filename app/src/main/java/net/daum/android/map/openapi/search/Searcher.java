@@ -35,18 +35,27 @@ public class Searcher {
 	private class SearchTask extends AsyncTask<String, Void, Void> {
 		@Override
 		protected Void doInBackground(String... urls) {
-			String url = urls[0];
-			Map<String, String> header = new HashMap<String, String>();
-			header.put(HEADER_NAME_X_APPID, appId);
-			header.put(HEADER_NAME_X_PLATFORM, HEADER_VALUE_X_PLATFORM_ANDROID);
-			String json = fetchData(url, header);
-			List<Item> itemList = parse(json);
-			if (onFinishSearchListener != null) {
-				if (itemList == null) {
-					onFinishSearchListener.onFail();
-				} else {
-					onFinishSearchListener.onSuccess(itemList);
+
+			try
+			{
+				String url = urls[0];
+				Map<String, String> header = new HashMap<String, String>();
+				header.put(HEADER_NAME_X_APPID, appId);
+				header.put(HEADER_NAME_X_PLATFORM, HEADER_VALUE_X_PLATFORM_ANDROID);
+				String json = fetchData(url, header);
+				List<Item> itemList = parse(json);
+				if (onFinishSearchListener != null) {
+					if (itemList == null) {
+						onFinishSearchListener.onFail();
+					} else {
+						onFinishSearchListener.onSuccess(itemList);
+					}
 				}
+
+			}
+			catch ( Exception ex )
+			{
+
 			}
 			return null;
 		}

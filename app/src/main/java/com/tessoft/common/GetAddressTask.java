@@ -1,15 +1,14 @@
 package com.tessoft.common;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class GetAddressTask extends AsyncTask<Location, Void, HashMap> {
 
@@ -82,16 +81,13 @@ public class GetAddressTask extends AsyncTask<Location, Void, HashMap> {
 			}
 
 			// Catch network or other I/O problems.
-		} catch (IOException exception1) {
+		} catch (Exception exception1) {
 
 			// print the stack trace
 			exception1.printStackTrace();
 
+			resultMap.put("errorMsg", exception1.getMessage());
 			// Catch incorrect latitude or longitude values
-		} catch (IllegalArgumentException exception2) {
-
-			exception2.printStackTrace();
-
 		}
 
 		return resultMap;
