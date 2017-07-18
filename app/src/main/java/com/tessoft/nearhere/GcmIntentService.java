@@ -313,6 +313,7 @@ public class GcmIntentService extends IntentService {
                 intent = new Intent(this, PopupWebViewActivity.class);
                 intent.putExtra("url", extras.getString("url"));
                 intent.putExtra("title", extras.getString("param"));
+                intent.putExtra("titleBarHidden", extras.getString("titleBarHidden") );
 
                 if ( extras.containsKey("sound") && "on".equals( extras.getString("sound") ) )
                     mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
