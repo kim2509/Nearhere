@@ -2,7 +2,7 @@ package com.tessoft.common;
 
 public class Constants {
 
-	public static boolean bReal = true;
+	public static boolean bReal = false;
 	
 	public static String protocol = "http://";
 	
