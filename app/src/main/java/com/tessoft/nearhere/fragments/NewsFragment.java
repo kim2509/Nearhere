@@ -25,6 +25,7 @@ public class NewsFragment extends BaseFragment {
 
     protected View rootView = null;
     private WebView webView = null;
+    private String pageID = "P5001";
 
     // TODO: Rename and change types and number of parameters
     public static NewsFragment newInstance() {
@@ -36,7 +37,8 @@ public class NewsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_NEWS ));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_NEWS));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_REFRESH_PAGE));
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -46,6 +48,11 @@ public class NewsFragment extends BaseFragment {
             {
                 if ( intent.getAction().equals(Constants.BROADCAST_REFRESH_NEWS))
                     webView.reload();
+                else if ( Constants.BROADCAST_REFRESH_PAGE.equals( intent.getAction() ))
+                {
+                    if ( intent.getExtras() != null && pageID.equals(intent.getExtras().get("broadcastParam")) )
+                        webView.reload();
+                }
             }
             catch( Exception ex )
             {

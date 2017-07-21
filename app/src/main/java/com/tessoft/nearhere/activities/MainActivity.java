@@ -666,6 +666,7 @@ public class MainActivity extends BaseActivity {
 					String userString = mapper.writeValueAsString( response.getData2() );
 					User user = mapper.readValue( userString, new TypeReference<User>(){});
 					application.setLoginUser( user );
+					application.removeUserTokenCookie();
 
 					LoginManager.getInstance().logOut();
 					kakaoLogout();

@@ -240,7 +240,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         {
             super.onResume();
 
-            showReviewDialog();
+            //showReviewDialog();
         }
         catch( Exception ex )
         {

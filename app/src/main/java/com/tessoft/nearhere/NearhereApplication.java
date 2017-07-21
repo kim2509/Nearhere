@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -95,11 +96,26 @@ public class NearhereApplication extends Application{
 			CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
 		}
 	}
-	
-	public User getLoginUser()
+
+	public void removeUserTokenCookie() throws Exception
 	{
-		try
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			CookieManager.getInstance().removeAllCookies(null);
+			CookieManager.getInstance().flush();
+		} else
 		{
+			CookieSyncManager cookieSyncMngr=CookieSyncManager.createInstance( this );
+			cookieSyncMngr.startSync();
+			CookieManager cookieManager=CookieManager.getInstance();
+			cookieManager.removeAllCookie();
+			cookieManager.removeSessionCookie();
+			cookieSyncMngr.stopSync();
+			cookieSyncMngr.sync();
+		}
+	}
+
+	public User getLoginUser() {
+		try {
 			try
 			{
 				String result = getMetaInfoString("loginUserInfo");
