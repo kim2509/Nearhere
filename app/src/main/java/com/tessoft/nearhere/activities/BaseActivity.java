@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -36,6 +37,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class BaseActivity extends FragmentActivity implements TransactionDelegate, AdapterDelegate {
@@ -106,8 +108,13 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 					pushOffOnNewPost = value;
 				else if ( "server".equals( key ) )
 					server = value.trim();
-				else if ( "hash".equals( key ) )
+				else if ( "devHost".equals( key ) )
+					Constants.devHostName = value.trim();
+				else if ( "hash".equals( key ) ) {
 					loginHash = URLDecoder.decode(value.trim(), "UTF-8");
+					String cookieString = "userToken=" + URLEncoder.encode( loginHash, "utf-8");
+					CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
+				}
 			}
 
 			if (!"이근처합승".equals(pw.trim()))

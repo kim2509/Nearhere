@@ -1,15 +1,5 @@
 package com.tessoft.nearhere.activities;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.util.HashMap;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,14 +21,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-/*
-import com.kakao.APIErrorResult;
-import com.kakao.LogoutResponseCallback;
-import com.kakao.Session;
-import com.kakao.UserManagement;
-import com.kakao.template.loginbase.SampleLoginActivity;
-*/
-
 import com.kakao.APIErrorResult;
 import com.kakao.LogoutResponseCallback;
 import com.kakao.UserManagement;
@@ -55,6 +37,24 @@ import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.R;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.HashMap;
+
+/*
+import com.kakao.APIErrorResult;
+import com.kakao.LogoutResponseCallback;
+import com.kakao.Session;
+import com.kakao.UserManagement;
+import com.kakao.template.loginbase.SampleLoginActivity;
+*/
 
 public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 
@@ -142,7 +142,7 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 	protected void setTitle( String title ) {
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 		findViewById(R.id.txtTitle).setVisibility(ViewGroup.VISIBLE);
-		txtTitle.setText( title );
+		txtTitle.setText(title);
 	}
 	
 	private void getAppKeyHash() {
@@ -260,7 +260,7 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 		
 		request.put("user", user );
 		
-		application.debug(this, "getRandomIDV2 : " + mapper.writeValueAsString( request ) );
+		application.debug(this, "getRandomIDV2 : " + mapper.writeValueAsString(request));
 		
 		new HttpTransactionReturningString( new TransactionDelegate() {
 			@Override
@@ -277,15 +277,16 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 					Log.e("error", "uploadProfileImage", ex );
 				}
 			}
-		}, "/taxi/getRandomIDV2.do", Constants.HTTP_GET_RANDOM_ID_V2 ).execute( mapper.writeValueAsString(request) );
+		}, "/taxi/getRandomIDV2.do", Constants.HTTP_GET_RANDOM_ID_V2 ).execute(mapper.writeValueAsString(request));
 	}
 	
 	public void uploadProfileImage( String result ) throws Exception 
 	{
-    	application.debug(this, "uploadProfileImage" );
+    	application.debug(this, "uploadProfileImage");
     	
-		APIResponse response = mapper.readValue(result, new TypeReference<APIResponse>(){}); 
-		String userString = mapper.writeValueAsString( response.getData() );
+		APIResponse response = mapper.readValue(result, new TypeReference<APIResponse>() {
+		});
+		String userString = mapper.writeValueAsString(response.getData());
 		final User user = mapper.readValue(userString, new TypeReference<User>(){}); 
 		
 		HashMap addInfo = null;
@@ -395,5 +396,23 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 		finish();
+	}
+
+	public void goNewMemberActivity( View v )
+	{
+		try
+		{
+			Intent intent = new Intent( this , PopupWebViewActivity.class);
+			String url = Constants.getServerSSLURL() + "/user/registerNewMember.do?isApp=Y"
+					+ "&appVersion=" + application.getPackageVersion();
+			intent.putExtra("url", url);
+			intent.putExtra("title", "회원가입");
+			intent.putExtra("titleBarHidden","Y");
+			startActivity(intent);
+		}
+		catch( Exception ex )
+		{
+			catchException(this, ex);
+		}
 	}
 }

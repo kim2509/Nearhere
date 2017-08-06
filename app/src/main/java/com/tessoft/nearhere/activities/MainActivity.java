@@ -110,6 +110,7 @@ public class MainActivity extends BaseActivity {
 
 			setContentView(R.layout.activity_main);
 
+			// 왼쪽 메뉴 셋팅
 			initLeftMenu();
 
 			currentFragment = new MainFragment();
@@ -666,7 +667,7 @@ public class MainActivity extends BaseActivity {
 					String userString = mapper.writeValueAsString( response.getData2() );
 					User user = mapper.readValue( userString, new TypeReference<User>(){});
 					application.setLoginUser( user );
-					application.removeUserTokenCookie();
+					//application.removeUserTokenCookie();
 
 					LoginManager.getInstance().logOut();
 					kakaoLogout();
