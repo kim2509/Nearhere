@@ -70,13 +70,13 @@ public class GetAddressTask extends AsyncTask<Location, Void, HashMap> {
 			if (addresses != null && addresses.size() > 0) {
 				// Get the first address
 				Address address = addresses.get(0);
-				String city = address.getAdminArea();
+				String city = Util.getString( address.getAdminArea() );
 				// Locality is usually a city
-				String gu = address.getLocality();
+				String gu = Util.getString( address.getLocality() );
 				if ( Util.isEmptyString( gu ) )
-					gu = address.getSubLocality();
+					gu = Util.getString(address.getSubLocality());
 				// The country of the address
-				String country = address.getCountryName();
+				String country = Util.getString(address.getCountryName());
 				resultMap.put("address", country + "|" + city + "|" + gu + "|" + address.getThoroughfare() + "|" + address.getFeatureName() );
 			}
 

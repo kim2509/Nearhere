@@ -409,6 +409,7 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 			intent.putExtra("title", "회원가입");
 			intent.putExtra("titleBarHidden","Y");
 			startActivity(intent);
+			finish();
 		}
 		catch( Exception ex )
 		{

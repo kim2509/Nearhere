@@ -27,6 +27,7 @@ import com.tessoft.common.CommonWebViewClient;
 import com.tessoft.common.Constants;
 import com.tessoft.common.UploadImageTask;
 import com.tessoft.common.Util;
+import com.tessoft.domain.User;
 import com.tessoft.nearhere.R;
 import com.tessoft.nearhere.fragments.DatePickerFragment;
 import com.tessoft.nearhere.fragments.TimePickerFragment;
@@ -277,6 +278,21 @@ public class PopupWebViewActivity extends BaseActivity implements View.OnClickLi
                     intent.putExtra("broadcastParam", Util.getStringFromHash( broadcastList.get(i), "broadcastParam") );
                     sendBroadcast(intent);
                 }
+            }
+
+            if ( !Util.isEmptyForKey(param, "loginUserInfo") )
+            {
+                String userInfo = mapper.writeValueAsString( param.get("loginUserInfo") );
+                User user = mapper.readValue(userInfo, new TypeReference<User>() {});
+                application.setLoginUser( user );
+            }
+
+            if ( "true".equals( Util.getStringFromHash(param, "goMainActivity")) )
+            {
+                Intent intent = new Intent( this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
             }
         }
         catch( Exception ex )

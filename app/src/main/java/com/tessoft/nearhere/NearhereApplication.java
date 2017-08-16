@@ -1,7 +1,9 @@
 package com.tessoft.nearhere;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -46,7 +48,36 @@ public class NearhereApplication extends Application{
 	public static int friendRequestCount = 0;
 
 	public MainFragment mainFragment = null;
-	
+
+	//This is the handler that will manager to process the broadcast intent
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			try
+			{
+
+			}
+			catch( Exception ex )
+			{
+				catchException(this, ex);
+			}
+		}
+	};
+	@Override
+	public void onCreate() {
+		try
+		{
+			super.onCreate();
+
+			//getApplicationContext().registerReceiver(mMessageReceiver,
+			//		new IntentFilter(Constants.BROADCAST_REFRESH_PAGE));
+		}
+		catch( Exception ex )
+		{
+			catchException(this, ex);
+		}
+	}
+
 	public int getMetaInfoInt( String key )
 	{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences( this );

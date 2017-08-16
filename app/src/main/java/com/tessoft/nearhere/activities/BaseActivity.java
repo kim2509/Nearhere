@@ -51,7 +51,7 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 
 		application = (NearhereApplication) getApplication();
 
-		Constants.bReal = true;
+		Constants.bReal = false;
 
 		checkIfAdminUser();
 
