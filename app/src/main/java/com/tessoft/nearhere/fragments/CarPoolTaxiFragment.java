@@ -27,6 +27,7 @@ import com.tessoft.nearhere.activities.SearchMapActivity;
 import com.tessoft.nearhere.activities.TaxiPostDetailActivity;
 import com.tessoft.nearhere.activities.UserProfileActivity;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
@@ -210,6 +211,23 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                             intent.putExtra("broadcastKey", Constants.BROADCAST_OPEN_SEARCH_PAGE);
                             startActivity(intent);
                         }
+                        else if ( url.startsWith("nearhere://openPhotoViewer?url=") ||
+                                url.startsWith("nearhere://openExternalURL?url=")) {
+                            String params = url.substring(url.indexOf("?") + 1);
+                            String[] paramAr = params.split("&");
+                            for (int i = 0; i < paramAr.length; i++) {
+                                if (paramAr[i].indexOf("=") >= 0) {
+                                    String key = paramAr[i].split("=")[0];
+                                    String value = paramAr[i].split("=")[1];
+
+                                    if (key != null && key.equals("url")) {
+                                        if (url.startsWith("nearhere://openExternalURL?url=")) {
+                                            openExternalURL(value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         else
                         {
                             Intent intent = new Intent(getActivity(), PopupWebViewActivity.class);
@@ -296,6 +314,15 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    public void openExternalURL( String url ){
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLDecoder.decode( url, "utf-8")));
+            startActivity(browserIntent);
+        } catch( Exception ex ) {
+            catchException(this, ex);
         }
     }
 
