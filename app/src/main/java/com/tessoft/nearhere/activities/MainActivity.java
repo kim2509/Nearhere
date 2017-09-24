@@ -149,6 +149,7 @@ public class MainActivity extends BaseActivity {
 			registerReceiver(mMessageReceiver, new IntentFilter("showToastMessage"));
 			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_LOGOUT));
 			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_START_LOCATION_UPDATE));
+			registerReceiver(mMessageReceiver, new IntentFilter(Constants.BROADCAST_RECREATE_ACTIVITY));
 
 			HashMap mainInfo = application.getDefaultRequest();
 			mainInfo.put("userID", application.getLoginUser().getUserID());
@@ -374,9 +375,11 @@ public class MainActivity extends BaseActivity {
 
 			try
 			{
-				if ( "updateUnreadCount".equals( intent.getAction() ) )
+				if ( Constants.BROADCAST_RECREATE_ACTIVITY.equals( intent.getAction() ) )
+					recreate();
+				else if ( "updateUnreadCount".equals( intent.getAction() ) )
 					getUnreadCount();
-				if ( Constants.BROADCAST_LOGOUT.equals( intent.getAction() ) )
+				else if ( Constants.BROADCAST_LOGOUT.equals( intent.getAction() ) )
 					yesClicked("logout");
 				else if ( Constants.BROADCAST_START_LOCATION_UPDATE.equals( intent.getAction() ) )
 				{
@@ -666,15 +669,13 @@ public class MainActivity extends BaseActivity {
 				{
 					String userString = mapper.writeValueAsString( response.getData2() );
 					User user = mapper.readValue( userString, new TypeReference<User>(){});
-					application.setLoginUser( user );
+					application.setLoginUser(user);
 					//application.removeUserTokenCookie();
 
 					LoginManager.getInstance().logOut();
 					kakaoLogout();
-					finish();
-					
-					overridePendingTransition(android.R.anim.fade_in, 
-							android.R.anim.fade_out);
+
+					recreate();
 				}
 				else if ( requestCode == GET_UNREAD_COUNT )
 				{
@@ -822,12 +823,11 @@ public class MainActivity extends BaseActivity {
 		UserManagement.requestLogout(new LogoutResponseCallback() {
 			@Override
 			protected void onSuccess(final long userId) {
-				goKaKaoLoginActivity();
 			}
 
 			@Override
 			protected void onFailure(final APIErrorResult apiErrorResult) {
-				goKaKaoLoginActivity();
+
 			}
 		});
 	}

@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -28,6 +29,10 @@ import com.tessoft.nearhere.fragments.MainFragment;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.UUID;
@@ -71,10 +76,116 @@ public class NearhereApplication extends Application{
 
 			//getApplicationContext().registerReceiver(mMessageReceiver,
 			//		new IntentFilter(Constants.BROADCAST_REFRESH_PAGE));
+
+			Constants.bReal = false;
+
+			checkIfAdminUser();
 		}
 		catch( Exception ex )
 		{
 			catchException(this, ex);
+		}
+	}
+
+	public void checkIfAdminUser()
+	{
+		try
+		{
+			File sdcard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+			//Get the text file
+			File file = new File(sdcard,"nearhere.txt");
+
+			if ( !file.exists() ) return;
+
+			//Read text from file
+			StringBuilder text = new StringBuilder();
+
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				text.append(line);
+				text.append('\n');
+			}
+			br.close();
+
+			String loginInfo = text.toString();
+
+			if ( Util.isEmptyString(loginInfo) ) return;
+
+			String[] tokens = loginInfo.split("\\;");
+
+			String userNo = "";
+			String userID = "";
+			String pw = "";
+			String pushOffOnNewPost = "";
+			String server = "";
+			String loginHash = "";
+			String userToken = "";
+
+			for ( int i = 0; i < tokens.length; i++ )
+			{
+				String key = tokens[i].split("\\=")[0];
+				String value = tokens[i].split("\\=")[1];
+				if ( "userNo".equals( key ) )
+					userNo = value;
+				else if ( "userID".equals( key ) )
+					userID = value;
+				else if ( "pw".equals( key ) )
+					pw = value;
+				else if ( "pushOffOnNewPost".equals( key ) )
+					pushOffOnNewPost = value;
+				else if ( "server".equals( key ) )
+					server = value.trim();
+				else if ( "devHost".equals( key ) )
+					Constants.devHostName = value.trim();
+				else if ( "hash".equals( key ) ) {
+					loginHash = URLDecoder.decode(value.trim(), "UTF-8");
+					String cookieString = "userToken=" + URLEncoder.encode( loginHash, "utf-8");
+					CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
+					userToken = loginHash;
+				}
+			}
+
+			if (!"이근처합승".equals(pw.trim()))
+			{
+				Constants.bAdminMode = false;
+				return;
+			}
+
+			if ( "Y".equals( pushOffOnNewPost.trim() ) ) Constants.bPushOffOnNewPost = true;
+			else Constants.bPushOffOnNewPost = false;
+
+			if ( "REAL".equals( server ) )
+				Constants.bReal = true;
+			else if ( "DEV".equals( server ) )
+				Constants.bReal = false;
+			else
+				Constants.bReal = true;
+
+			Constants.bAdminMode = true;
+
+			User user = getLoginUser();
+
+			if ( !Util.isEmptyString( userNo ) )
+				user.setUserNo(userNo);
+
+			if ( !Util.isEmptyString( userID ) )
+				user.setUserID(userID);
+
+			if ( !Util.isEmptyString(userToken))
+				user.setUserToken(userToken);
+
+			if ( !Util.isEmptyString( userNo ) && !Util.isEmptyString( userID ) )
+				setLoginUser(user);
+
+			setMetaInfo("registerUserFinished", "true");
+			setMetaInfo("logout", "false");
+		}
+		catch( Exception ex )
+		{
+			showToastMessage(ex.getMessage());
 		}
 	}
 

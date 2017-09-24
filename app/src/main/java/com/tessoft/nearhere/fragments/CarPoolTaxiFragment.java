@@ -177,7 +177,8 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
                         }
                         else if ( url.startsWith("nearhere://snsLogin") )
                         {
-                            showYesNoDialog("확인", "SNS 계정으로 로그인하시겠습니까?", "snsLogin");
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.goKaKaoLoginActivity();
                         }
                         else if ( url.startsWith("nearhere://showOKDialog?") )
                         {
@@ -264,6 +265,18 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
         {
 
         }
+    }
+
+    public void reloadPage(){
+
+        String snsLoginYN = "";
+
+        if ( "Guest".equals(application.getLoginUser().getType()))
+            snsLoginYN = "snsLogin=Y";
+
+        webView.loadUrl( Constants.getServerURL() +
+                "/taxi/index.do?isApp=Y&showSearchDiv=Y&showHotSpot=Y&showRecentPosts=Y&" + snsLoginYN +
+                "&appVersion=" + application.getPackageVersion() );
     }
 
     private void showReviewDialog() {
@@ -384,7 +397,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
             try
             {
                 if ( intent.getAction().equals(Constants.BROADCAST_REFRESH))
-                    webView.reload();
+                    reloadPage();
                 else if ( intent.getAction().equals(Constants.BROADCAST_OPEN_SEARCH_PAGE))
                 {
                     if ( intent.getExtras() != null && intent.getExtras().containsKey("resultData") )
@@ -419,12 +432,7 @@ public class CarPoolTaxiFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void yesClicked(Object param) {
 
-        if ( "snsLogin".equals( param ))
-        {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.yesClicked("logout");
-        }
-        else if ( Constants.YESNO_REVIEW.equals( param ) )
+        if ( Constants.YESNO_REVIEW.equals(param) )
         {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + application.getPackageName())) ;
             startActivity(i);

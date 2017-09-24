@@ -27,7 +27,9 @@ public class Constants {
 	public static final int HTTP_SEARCH_USER_DESTINATIONS = 1110;
 	public static final int HTTP_INSERT_USER_TERMS_AGREEMENT = 1120;
 	public static final int HTTP_GET_MAIN_INFO = 1130;
+	public static final int HTTP_LOGIN = 1140;
 
+	public static final String BROADCAST_RECREATE_ACTIVITY = "BROADCAST_RECREATE_ACTIVITY";
 	public static final String BROADCAST_REFRESH = "BROADCAST_REFRESH";
 	public static final String BROADCAST_TAXI_REFRESH = "BROADCAST_TAXI_REFRESH";
 	public static final String BROADCAST_SET_DESTINATION = "BROADCAST_SET_DESTINATION";
@@ -66,8 +68,8 @@ public class Constants {
 
 	public static String DAUM_MAP_API_KEY = "1ce23b1035fde7488e6be71df90904d7";
 
-	public static String devHostName = "192.168.0.200";
-//	public static String devHostName = "192.168.43.137";
+//	public static String devHostName = "192.168.0.200";
+	public static String devHostName = "192.168.43.137";
 
 	public static String getServerHost()
 	{

@@ -21,54 +21,97 @@
         <RelativeLayout
             android:id="@+id/layoutLogin"
             android:layout_width="match_parent"
+            android:layout_marginTop="60dp"
             android:layout_height="match_parent" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/layoutRandom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/edtID"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="아이디를 입력해 주세요."
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+                <EditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edtID"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
+                    android:hint="비밀번호를 입력해 주세요."/>
+
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/edtPassword"
+                    android:background="#7bafe3"
+                    android:textColor="#f7f7f7"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:text="이근처 합승에 오신걸 환영합니다." />
-            </LinearLayout>
+                    android:layout_weight="100"
+                    android:layout_marginRight="5dp"
+                    android:text="로그인"
+                    android:onClick="login"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnLogin"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_weight="100"
+                        android:textColor="#4141f9"
+                        android:text="아이디 찾기"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_weight="100"
+                        android:gravity="center_horizontal"
+                        android:textColor="#4141f9"
+                        android:text="비밀번호 찾기"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_weight="100"
+                        android:gravity="right"
+                        android:textColor="#4141f9"
+                        android:text="회원가입"
+                        android:onClick="goNewMemberActivity"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical" >
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#7bafe3"
-                    android:textColor="#f7f7f7"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="로그인"/>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#7bafe3"
-                    android:textColor="#f7f7f7"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:onClick="goNewMemberActivity"
-                    android:text="회원가입"/>
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/login_button"

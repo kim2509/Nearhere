@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -33,6 +34,7 @@ import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.OKDialogListener;
 import com.tessoft.common.TransactionDelegate;
 import com.tessoft.common.UploadTask;
+import com.tessoft.common.Util;
 import com.tessoft.domain.APIResponse;
 import com.tessoft.domain.User;
 import com.tessoft.nearhere.NearhereApplication;
@@ -56,7 +58,8 @@ import com.kakao.UserManagement;
 import com.kakao.template.loginbase.SampleLoginActivity;
 */
 
-public class KakaoLoginActivity extends KakaoSampleLoginActivity{
+public class KakaoLoginActivity extends KakaoSampleLoginActivity
+	implements TransactionDelegate{
 
 	static NearhereApplication application = null;
 	
@@ -77,7 +80,7 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 			
 			application = (NearhereApplication) getApplication();
 			
-			setTitle("SNS 계정 로그인");
+			setTitle("이근처 로그인");
 			findViewById(R.id.btnRefresh).setVisibility(ViewGroup.GONE);
 			
 			setupFacebookLogin();
@@ -414,6 +417,72 @@ public class KakaoLoginActivity extends KakaoSampleLoginActivity{
 		catch( Exception ex )
 		{
 			catchException(this, ex);
+		}
+	}
+
+	public void login( View v ){
+		try {
+			EditText edtID = (EditText) findViewById(R.id.edtID);
+
+			if (Util.isEmptyString( edtID.getText().toString() )) {
+				edtID.setError("아이디를 입력해 주십시오");
+				return;
+			}
+
+			EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
+
+			if (Util.isEmptyString( edtPassword.getText().toString() )) {
+				edtPassword.setError("비밀번호를 입력해 주십시오");
+				return;
+			}
+
+			HashMap param = application.getDefaultRequest();
+			param.put( "loginID", edtID.getText().toString() );
+			param.put("password", edtPassword.getText().toString());
+			User user = application.getLoginUser();
+			param.put( "userNo", user.getUserNo()) ;
+			param.put( "userToken", user.getUserToken()) ;
+
+			sendHttp("/user/loginAjax.do", mapper.writeValueAsString( param ), Constants.HTTP_LOGIN );
+		} catch ( Exception ex ) {
+			catchException(this, ex);
+		}
+	}
+
+	@Override
+	public void doPostTransaction(int requestCode, Object result) {
+		try {
+
+			if ( Constants.FAIL.equals(result) )
+			{
+				showOKDialog("통신중 오류가 발생했습니다.\r\n다시 시도해 주십시오.", null);
+				return;
+			}
+
+			super.doPostTransaction(requestCode, result);
+
+			APIResponse response = mapper.readValue(result.toString(), new TypeReference<APIResponse>(){});
+
+			if ( "0000".equals( response.getResCode() ) )
+			{
+				if ( requestCode == Constants.HTTP_LOGIN )
+				{
+					String userString = mapper.writeValueAsString( response.getData() );
+					User user = mapper.readValue( userString, new TypeReference<User>(){});
+					application.setLoginUser(user);
+
+					goMainActivity();
+
+					Intent intent = new Intent(Constants.BROADCAST_RECREATE_ACTIVITY);
+					sendBroadcast(intent);
+				}
+			} else {
+				showOKDialog("경고", response.getResMsg(), null);
+				return;
+			}
+
+		} catch ( Exception ex ) {
+
 		}
 	}
 }

@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -22,22 +20,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.tessoft.common.AdapterDelegate;
-import com.tessoft.common.Constants;
 import com.tessoft.common.HttpTransactionReturningString;
 import com.tessoft.common.TransactionDelegate;
-import com.tessoft.common.Util;
-import com.tessoft.domain.User;
 import com.tessoft.nearhere.NearhereApplication;
 import com.tessoft.nearhere.PhotoViewer;
 import com.tessoft.nearhere.R;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class BaseActivity extends FragmentActivity implements TransactionDelegate, AdapterDelegate {
@@ -51,112 +42,7 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 
 		application = (NearhereApplication) getApplication();
 
-		Constants.bReal = false;
-
-		checkIfAdminUser();
-
 		initImageLoader();
-	}
-
-	public void checkIfAdminUser()
-	{
-		try
-		{
-			File sdcard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-			//Get the text file
-			File file = new File(sdcard,"nearhere.txt");
-
-			if ( !file.exists() ) return;
-
-			//Read text from file
-			StringBuilder text = new StringBuilder();
-
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				text.append(line);
-				text.append('\n');
-			}
-			br.close();
-
-			String loginInfo = text.toString();
-
-			if ( Util.isEmptyString(loginInfo) ) return;
-
-			String[] tokens = loginInfo.split("\\;");
-
-			String userNo = "";
-			String userID = "";
-			String pw = "";
-			String pushOffOnNewPost = "";
-			String server = "";
-			String loginHash = "";
-
-			for ( int i = 0; i < tokens.length; i++ )
-			{
-				String key = tokens[i].split("\\=")[0];
-				String value = tokens[i].split("\\=")[1];
-				if ( "userNo".equals( key ) )
-					userNo = value;
-				else if ( "userID".equals( key ) )
-					userID = value;
-				else if ( "pw".equals( key ) )
-					pw = value;
-				else if ( "pushOffOnNewPost".equals( key ) )
-					pushOffOnNewPost = value;
-				else if ( "server".equals( key ) )
-					server = value.trim();
-				else if ( "devHost".equals( key ) )
-					Constants.devHostName = value.trim();
-				else if ( "hash".equals( key ) ) {
-					loginHash = URLDecoder.decode(value.trim(), "UTF-8");
-					String cookieString = "userToken=" + URLEncoder.encode( loginHash, "utf-8");
-					CookieManager.getInstance().setCookie(Constants.getServerHost(), cookieString);
-				}
-			}
-
-			if (!"이근처합승".equals(pw.trim()))
-			{
-				Constants.bAdminMode = false;
-				return;
-			}
-
-			if ( "Y".equals( pushOffOnNewPost.trim() ) ) Constants.bPushOffOnNewPost = true;
-			else Constants.bPushOffOnNewPost = false;
-
-			if ( "REAL".equals( server ) )
-				Constants.bReal = true;
-			else if ( "DEV".equals( server ) )
-				Constants.bReal = false;
-			else
-				Constants.bReal = true;
-
-			Constants.bAdminMode = true;
-
-			User user = application.getLoginUser();
-
-			if ( !Util.isEmptyString( userNo ) )
-				user.setUserNo(userNo);
-
-			if ( !Util.isEmptyString( userID ) )
-				user.setUserID(userID);
-
-			if ( !Util.isEmptyString( loginHash ) ) {
-				application.setMetaInfo("hash", loginHash);
-			}
-
-			if ( !Util.isEmptyString( userNo ) && !Util.isEmptyString( userID ) )
-				application.setLoginUser(user);
-
-			application.setMetaInfo("registerUserFinished", "true");
-			application.setMetaInfo("logout", "false");
-		}
-		catch( Exception ex )
-		{
-			application.showToastMessage(ex.getMessage());
-		}
 	}
 
 	public void showOKDialog( String message, final Object param )
@@ -308,11 +194,11 @@ public class BaseActivity extends FragmentActivity implements TransactionDelegat
 	}
 	
 	public void goKaKaoLoginActivity() {
+
 		Intent intent = new Intent( getApplicationContext(), KakaoLoginActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
-		overridePendingTransition(android.R.anim.fade_in, 
-				android.R.anim.fade_out);
+
 	}
 	
 	protected void setTitle( String title ) {
